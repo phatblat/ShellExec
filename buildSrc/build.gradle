@@ -1,0 +1,24 @@
+// https://github.com/gradle/kotlin-dsl/blob/234bbd7fbeedf66794345298a59f5ac6996a6f67/buildSrc/build.gradle
+buildscript {
+    ext.kotlinVersion = file('../kotlin-version.txt').text.trim()
+
+    configure([repositories, project.repositories]) {
+        maven { url 'https://repo.gradle.org/gradle/repo' }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+apply plugin: 'kotlin'
+
+dependencies {
+    compile gradleApi()
+    compile "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    compile 'org.ow2.asm:asm-all:5.1'
+    testCompile 'junit:junit:4.12'
+    testCompile gradleTestKit()
+}
