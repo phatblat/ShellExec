@@ -1,0 +1,21 @@
+/**
+ * build.gradle
+ * SimpleExecExample
+ */
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'at.phatbl:simple-exec:+'
+    }
+}
+
+apply plugin: 'simple-exec'
+
+import at.phatbl.simple_exec.SimpleExec
+
+task helloWorld(type: SimpleExec) {
+    command "Hello World!"
+}

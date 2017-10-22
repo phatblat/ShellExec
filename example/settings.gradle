@@ -1,0 +1,12 @@
+/**
+ * settings.gradle
+ * SimpleExecExample
+ */
+
+rootProject.name = 'SimpleExecExample'
+
+includeBuild('../') {
+    dependencySubstitution {
+        substitute module('at.phatbl:simple-exec') with project(':')
+    }
+}
