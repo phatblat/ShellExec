@@ -110,18 +110,18 @@ junitPlatform {
 // Deployment
 /* -------------------------------------------------------------------------- */
 
-val artifactName = name.toLowerCase()
-val javaPackage = "$group.$artifactName"
+val artifactName = "simple-exec"
+val javaPackage = "$group.simple_exec"
 val pluginClass =  "${name}Plugin"
 
 configure<BasePluginConvention> {
-    // at.phatbl.swiftpm-1.0.0.jar
+    // at.phatbl.simple-exec-1.0.0.jar
     archivesBaseName = javaPackage
 }
 
 gradlePlugin {
     plugins {
-        create("swiftpm") {
+        create("simple-exec") {
             id = artifactName
             implementationClass = "$javaPackage.$pluginClass"
         }
