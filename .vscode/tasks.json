@@ -6,7 +6,13 @@
         {
             "taskName": "build",
             "type": "shell",
-            "command": "./gradlew --offline build -x test"
+            "command": "./gradlew --offline --console plain build -x test"
+        },
+        {
+            "taskName": "run examle",
+            "type": "shell",
+            "command": "./gradlew --offline --console plain --project-dir example helloWorld",
+            "problemMatcher": []
         }
     ]
 }
