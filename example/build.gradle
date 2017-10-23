@@ -20,3 +20,10 @@ task helloWorld(type: SimpleExec) {
     group "Example"
     command "echo Hello World!"
 }
+
+task customPath(type: SimpleExec) {
+    group "Example"
+    prePath = "/Library/Java/JavaVirtualMachines/jdk-9.jdk/Contents/Home/bin"
+    postPath = ""
+    command "java -version"
+}

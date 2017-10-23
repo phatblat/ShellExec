@@ -25,11 +25,47 @@ open class SimpleExec: Exec() {
             commandLine = field.trim().split(" ")
         }
 
+    /** Property containing a copy of the PATH environment variable. */
+    @Input
+    protected var systemPath: String
+
+    /** Value to be prepaneded to the PATH. */
+    @Input
+    protected var prePath: String? = null
+        get() = field
+        set(value) {
+            field = value
+            buildPath()
+        }
+
+    /** Value to be appaneded to the PATH. */
+    @Input
+    protected var postPath: String? = null
+        get() = field
+        set(value) {
+            field = value
+            buildPath()
+        }
+
     init {
-        environment(PATH, "$pathAdditions:${System.getenv(PATH)}")
+        systemPath = System.getenv(PATH)
         doFirst {
             project.logger.info("System.env.PATH: ${System.getenv(PATH)}")
-            project.logger.info("Custom PATH: ${environment[PATH]}")
+            project.logger.info("SimpleExec PATH: ${environment[PATH]}")
         }
+    }
+
+    /**
+     * Builds a custom value for the PATH variable.
+     */
+    private fun buildPath() {
+        var path = systemPath
+        prePath?.let { pre: String ->
+            path = "$pre:$path"
+        }
+        postPath?.let { post: String ->
+            path = "$path:$post"
+        }
+        environment(PATH, path)
     }
 }
