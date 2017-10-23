@@ -17,5 +17,6 @@ apply plugin: 'simple-exec'
 import at.phatbl.simple_exec.SimpleExec
 
 task helloWorld(type: SimpleExec) {
-    command "Hello World!"
+    group "Example"
+    command "echo Hello World!"
 }
