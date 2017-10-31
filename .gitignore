@@ -8,3 +8,7 @@ Pods/
 bin/
 build/
 .gradle/
+
+# IntelliJ IDEA
+.idea/
+*.iml
