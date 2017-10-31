@@ -15,7 +15,7 @@ open class SimpleExec: Exec() {
      * String of commands to be executed by Gradle, split on space before being passed to commandLine.
      */
     @Input
-    protected var command: String = ""
+    var command: String = ""
         get() {
             field = commandLine.joinToString(" ")
             return field
@@ -30,7 +30,7 @@ open class SimpleExec: Exec() {
     protected var systemPath: String
 
     /** Value to be prepended to the PATH. */
-    @Input
+//    @Input
     protected var prePath: String? = null
         get() = field
         set(value) {
@@ -39,7 +39,7 @@ open class SimpleExec: Exec() {
         }
 
     /** Value to be appended to the PATH. */
-    @Input
+//    @Input
     protected var postPath: String? = null
         get() = field
         set(value) {
