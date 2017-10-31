@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Spek Tests" type="org.spekframework.spek-jvm" factoryName="Spek">
+    <module name="SimpleExec_test" />
+    <option name="target" value="spec" />
+    <option name="spec" value="at.phatbl.simple_exec.SimpleExecSpec" />
+    <option name="vm-parameters" value="" />
+    <option name="program-parameters" value="" />
+    <option name="working-directory" value="" />
+    <option name="alternative-jre-path" value="" />
+    <option name="pass-parent-envs" value="true" />
+    <envs />
+    <method />
+  </configuration>
+</component>
