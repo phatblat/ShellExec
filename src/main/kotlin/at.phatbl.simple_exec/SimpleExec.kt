@@ -29,7 +29,7 @@ open class SimpleExec: Exec() {
     @Input
     protected var systemPath: String
 
-    /** Value to be prepaneded to the PATH. */
+    /** Value to be prepended to the PATH. */
     @Input
     protected var prePath: String? = null
         get() = field
@@ -38,7 +38,7 @@ open class SimpleExec: Exec() {
             buildPath()
         }
 
-    /** Value to be appaneded to the PATH. */
+    /** Value to be appended to the PATH. */
     @Input
     protected var postPath: String? = null
         get() = field
