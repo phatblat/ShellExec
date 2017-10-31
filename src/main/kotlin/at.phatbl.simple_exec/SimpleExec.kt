@@ -7,8 +7,8 @@ import org.gradle.api.tasks.TaskAction
 open class SimpleExec: Exec() {
     companion object {
         // Directories to be prepended to PATH
-        const val pathAdditions = "./bin:/usr/local/bin"
-        const val PATH = "PATH"
+        private const val pathAdditions = "./bin:/usr/local/bin"
+        private const val PATH = "PATH"
     }
 
     /**
