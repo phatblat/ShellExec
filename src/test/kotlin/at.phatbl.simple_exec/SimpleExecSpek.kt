@@ -34,9 +34,9 @@ class SimpleExecSpec: Spek({
             task.setIgnoreExitValue(true)
 
             task.execute()
-            synchronized(task.state) {
+            synchronized(task) {
                 while (task.state.executing || !task.state.executed) {
-                    Object().wait(10)
+                    Object().wait(100)
                 }
             }
 
