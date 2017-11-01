@@ -7,15 +7,15 @@ import org.gradle.api.tasks.TaskAction
 open class SimpleExec: Exec() {
     companion object {
         // Directories to be prepended to PATH
-        const val pathAdditions = "./bin:/usr/local/bin"
-        const val PATH = "PATH"
+        private const val pathAdditions = "./bin:/usr/local/bin"
+        private const val PATH = "PATH"
     }
 
     /**
      * String of commands to be executed by Gradle, split on space before being passed to commandLine.
      */
     @Input
-    protected var command: String = ""
+    var command: String = ""
         get() {
             field = commandLine.joinToString(" ")
             return field
@@ -29,8 +29,8 @@ open class SimpleExec: Exec() {
     @Input
     protected var systemPath: String
 
-    /** Value to be prepaneded to the PATH. */
-    @Input
+    /** Value to be prepended to the PATH. */
+//    @Input
     protected var prePath: String? = null
         get() = field
         set(value) {
@@ -38,8 +38,8 @@ open class SimpleExec: Exec() {
             buildPath()
         }
 
-    /** Value to be appaneded to the PATH. */
-    @Input
+    /** Value to be appended to the PATH. */
+//    @Input
     protected var postPath: String? = null
         get() = field
         set(value) {
