@@ -2,7 +2,6 @@ package at.phatbl.simple_exec
 
 import org.gradle.api.tasks.Exec
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.TaskAction
 
 open class SimpleExec: Exec() {
     companion object {
