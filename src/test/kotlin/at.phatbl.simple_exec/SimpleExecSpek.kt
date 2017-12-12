@@ -1,5 +1,6 @@
 package at.phatbl.simple_exec
 
+import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
@@ -9,8 +10,13 @@ import kotlin.test.assertNotNull
 
 class SimpleExecSpec: Spek({
     describe("Simple Exec Task") {
-        val project = ProjectBuilder.builder().build()
-        val task: SimpleExec = project.tasks.create("exec",  SimpleExec::class.java)
+        var project: Project = ProjectBuilder.builder().build()
+        var task: SimpleExec = project.tasks.create("exec",  SimpleExec::class.java)
+
+        beforeEachTest {
+            project = ProjectBuilder.builder().build()
+            task = project.tasks.create("exec",  SimpleExec::class.java)
+        }
 
         it("can be created") {
             assertNotNull(task)
@@ -18,11 +24,7 @@ class SimpleExecSpec: Spek({
 
         it("can run a simple command") {
             task.command = "true"
-
             task.execute()
-            while (task.state.executing || !task.state.executed) {
-                Object().wait(10)
-            }
 
             val result = task.execResult
             assertNotNull(result)
@@ -32,13 +34,7 @@ class SimpleExecSpec: Spek({
         it("can run a failing command") {
             task.command = "false"
             task.setIgnoreExitValue(true)
-
             task.execute()
-            synchronized(task) {
-                while (task.state.executing || !task.state.executed) {
-                    Object().wait(100)
-                }
-            }
 
             val result = task.execResult
             assertNotNull(result)
