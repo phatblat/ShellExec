@@ -2,7 +2,6 @@ package at.phatbl.simple_exec
 
 import org.gradle.api.tasks.Exec
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.TaskAction
 
 open class SimpleExec: Exec() {
     companion object {
@@ -49,10 +48,6 @@ open class SimpleExec: Exec() {
 
     init {
         systemPath = System.getenv(PATH)
-        doFirst {
-            project.logger.info("System.env.PATH: ${System.getenv(PATH)}")
-            project.logger.info("SimpleExec PATH: ${environment[PATH]}")
-        }
     }
 
     /**
@@ -60,6 +55,7 @@ open class SimpleExec: Exec() {
      */
     private fun buildPath() {
         var path = systemPath
+        project.logger.info("System.env.PATH: $systemPath")
         prePath?.let { pre: String ->
             path = "$pre:$path"
         }
@@ -67,5 +63,6 @@ open class SimpleExec: Exec() {
             path = "$path:$post"
         }
         environment(PATH, path)
+        project.logger.info("PATH: ${environment[PATH]}")
     }
 }
