@@ -3,7 +3,8 @@
 
 # Gradle
 .gradle/
-build/
+/build/
+/buildSrc/build/
 out/
 
 # IntelliJ IDEA
