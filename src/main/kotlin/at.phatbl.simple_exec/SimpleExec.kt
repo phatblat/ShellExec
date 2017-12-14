@@ -1,9 +1,10 @@
 package at.phatbl.simple_exec
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecResult
-import org.gradle.process.ProcessForkOptions
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -15,16 +16,28 @@ open class SimpleExec: DefaultTask() { //, GradleExec<SimpleExec> {
         private const val PATH = "PATH"
     }
 
-    var commandLine: List<String> = ArrayList()
+    var commandLine = listOf<String>()
     var executable: String? = null
-    var args: List<String> = ArrayList()
-    var environment: MutableMap<String, Any> = mutableMapOf()
-    var workingDir: File? = null
-    var standardInput: InputStream? = null
-    var standardOutput: OutputStream? = null
-    var errorOutput: OutputStream? = null
+    var args = listOf<String>()
+    var environment = mutableMapOf<String, Any>()
+    lateinit var workingDir: File
+
+    val standardInput: OutputStream
+        get() = shellCommand.process.outputStream
+
+    val standardOutput: InputStream
+        get() = shellCommand.process.inputStream
+
+    val errorOutput: InputStream
+        get() = shellCommand.process.errorStream
+
     var ignoreExitValue: Boolean = false
     var execResult: ExecResult? = null
+
+    val exitValue: Int
+        get() = shellCommand.exitValue
+
+    private lateinit var shellCommand: ShellCommand
 
     /**
      * String of commands to be executed by Gradle, split on space before being passed to commandLine.
@@ -66,12 +79,33 @@ open class SimpleExec: DefaultTask() { //, GradleExec<SimpleExec> {
         systemPath = System.getenv(PATH)
     }
 
+    @TaskAction
+    fun exec() {
+        if (workingDir == null) {
+            throw GradleException("workingDir must be specified")
+        }
+        if (command == "") {
+            throw GradleException("command must be specified")
+        }
+
+        shellCommand = ShellCommand(workingDir, command)
+        shellCommand.start()
+
+        if (shellCommand.failed) {
+            val message = "command failed with exit code $exitValue"
+            if (!ignoreExitValue) {
+                throw GradleException(message)
+            }
+            logger.error(message)
+        }
+    }
+
     /**
      * Builds a custom value for the PATH variable.
      */
     private fun buildPath() {
         var path = systemPath
-        project.logger.info("System.env.PATH: $systemPath")
+        logger.info("System.env.PATH: $systemPath")
         prePath?.let { pre: String ->
             path = "$pre:$path"
         }
@@ -79,6 +113,6 @@ open class SimpleExec: DefaultTask() { //, GradleExec<SimpleExec> {
             path = "$path:$post"
         }
         environment.put(PATH, path)
-        project.logger.info("PATH: ${environment[PATH]}")
+        logger.info("PATH: ${environment[PATH]}")
     }
 }

@@ -1,10 +1,8 @@
 package at.phatbl.simple_exec
 
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStream
-import java.io.InputStreamReader
+import java.io.*
 import java.util.concurrent.TimeUnit
+
 
 /**
  * Wrapper for running several commands inside a Bash shell.
@@ -55,5 +53,23 @@ data class ShellCommand(
             builder.append(lineSeparator)
         }
         return builder.toString()
+    }
+
+    private val BUFFER_SIZE = 2 * 1024 * 1024
+
+    @Throws(IOException::class)
+    private fun copy(input: InputStream, output: OutputStream) {
+        try {
+            val buffer = ByteArray(BUFFER_SIZE)
+            var bytesRead = input.read(buffer)
+            while (bytesRead != -1) {
+                output.write(buffer, 0, bytesRead)
+                bytesRead = input.read(buffer)
+            }
+            //If needed, close streams.
+        } finally {
+            input.close()
+            output.close()
+        }
     }
 }

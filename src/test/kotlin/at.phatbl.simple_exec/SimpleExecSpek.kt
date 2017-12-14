@@ -5,8 +5,10 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.xit
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class SimpleExecSpec: Spek({
     describe("Simple Exec Task") {
@@ -22,7 +24,7 @@ class SimpleExecSpec: Spek({
             assertNotNull(task)
         }
 
-        it("can run a simple command") {
+        xit("can run a simple command") {
             task.command = "true"
             task.execute()
 
@@ -31,7 +33,7 @@ class SimpleExecSpec: Spek({
             result?.assertNormalExitValue()
         }
 
-        it("can run a failing command") {
+        xit("can run a failing command") {
             task.command = "false"
             task.ignoreExitValue = true
             task.execute()
@@ -39,6 +41,21 @@ class SimpleExecSpec: Spek({
             val result = task.execResult
             assertNotNull(result)
             assertEquals(1, result?.exitValue)
+        }
+
+        it("can run a simple command") {
+            task.command = "true"
+            task.execute()
+
+            assertEquals(task.exitValue, 0)
+        }
+
+        it("can run a failing command") {
+            task.command = "false"
+            task.ignoreExitValue = true
+            task.execute()
+
+            assertEquals(task.exitValue, 1)
         }
     }
 })
