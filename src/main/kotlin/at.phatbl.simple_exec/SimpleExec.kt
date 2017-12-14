@@ -1,14 +1,30 @@
 package at.phatbl.simple_exec
 
-import org.gradle.api.tasks.Exec
+import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
+import org.gradle.process.ExecResult
+import org.gradle.process.ProcessForkOptions
+import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
 
-open class SimpleExec: Exec() {
+open class SimpleExec: DefaultTask() { //, GradleExec<SimpleExec> {
     companion object {
         // Directories to be prepended to PATH
         private const val pathAdditions = "./bin:/usr/local/bin"
         private const val PATH = "PATH"
     }
+
+    var commandLine: List<String> = ArrayList()
+    var executable: String? = null
+    var args: List<String> = ArrayList()
+    var environment: MutableMap<String, Any> = mutableMapOf()
+    var workingDir: File? = null
+    var standardInput: InputStream? = null
+    var standardOutput: OutputStream? = null
+    var errorOutput: OutputStream? = null
+    var ignoreExitValue: Boolean = false
+    var execResult: ExecResult? = null
 
     /**
      * String of commands to be executed by Gradle, split on space before being passed to commandLine.
@@ -62,7 +78,7 @@ open class SimpleExec: Exec() {
         postPath?.let { post: String ->
             path = "$path:$post"
         }
-        environment(PATH, path)
+        environment.put(PATH, path)
         project.logger.info("PATH: ${environment[PATH]}")
     }
 }

@@ -28,17 +28,17 @@ class SimpleExecSpec: Spek({
 
             val result = task.execResult
             assertNotNull(result)
-            result.assertNormalExitValue()
+            result?.assertNormalExitValue()
         }
 
         it("can run a failing command") {
             task.command = "false"
-            task.setIgnoreExitValue(true)
+            task.ignoreExitValue = true
             task.execute()
 
             val result = task.execResult
             assertNotNull(result)
-            assertEquals(1, result.exitValue)
+            assertEquals(1, result?.exitValue)
         }
     }
 })
