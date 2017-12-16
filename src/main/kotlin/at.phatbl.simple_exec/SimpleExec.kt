@@ -101,10 +101,7 @@ open class SimpleExec: DefaultTask() { //, GradleExec<SimpleExec> {
 
     @TaskAction
     fun exec() {
-        if (workingDir == null) {
-            throw GradleException("workingDir must be specified")
-        }
-        if (command == "") {
+        if (commandLine.isEmpty()) {
             throw GradleException("command must be specified")
         }
 
