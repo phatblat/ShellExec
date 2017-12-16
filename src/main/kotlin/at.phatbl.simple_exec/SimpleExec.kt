@@ -16,12 +16,38 @@ open class SimpleExec: DefaultTask() { //, GradleExec<SimpleExec> {
         private const val PATH = "PATH"
     }
 
-    var commandLine = listOf<String>()
-    var executable: String? = null
-    var args = listOf<String>()
-    var environment = mutableMapOf<String, Any>()
-    lateinit var workingDir: File
+    /** Core storage of command line to be executed */
+    @Input
+    var commandLine = mutableListOf<String>()
 
+    /** Convenience property for managing the first element of commandLine */
+    var executable: String?
+        get() = commandLine.firstOrNull()
+        set(value) {
+            value?.let {
+                commandLine.set(index = 0, element = value)
+                return
+            }
+            commandLine.removeAt(index = 0)
+        }
+
+    /** Convenience property for managing the elements of commandLine after the first */
+    var args: List<String>
+        get() {
+            if (commandLine.count() >= 2) {
+                return commandLine.subList(fromIndex = 1, toIndex = commandLine.count() - 1)
+            }
+            return listOf()
+        }
+        set(value) {
+            val exec = executable ?: "???"
+            commandLine.clear()
+            commandLine.set(index = 0, element = exec)
+            commandLine.addAll(value)
+        }
+
+    var environment = mutableMapOf<String, Any>()
+    var workingDir: File = project.projectDir
     val standardInput: OutputStream
         get() = shellCommand.process.outputStream
 
@@ -40,18 +66,12 @@ open class SimpleExec: DefaultTask() { //, GradleExec<SimpleExec> {
     private lateinit var shellCommand: ShellCommand
 
     /**
-     * String of commands to be executed by Gradle, split on space before being passed to commandLine.
+     * Convenience property for populating commandLine using a single script.
+     * Given string has whitespace trimmed and is split on space before being passed to commandLine.
      */
-    @Input
-    var command: String = ""
-        get() {
-            field = commandLine.joinToString(" ")
-            return field
-        }
-        set(value) {
-            field = value
-            commandLine = field.trim().split(" ")
-        }
+    var command: String
+        get() = commandLine.joinToString(" ")
+        set(value) { commandLine = value.trim().split(" ").toMutableList() }
 
     /** Property containing a copy of the PATH environment variable. */
     @Input
