@@ -2,6 +2,7 @@ package at.phatbl.simple_exec
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecResult
@@ -48,14 +49,11 @@ open class SimpleExec: DefaultTask() { //, GradleExec<SimpleExec> {
 
     var environment = mutableMapOf<String, Any>()
     var workingDir: File = project.projectDir
-    val standardInput: OutputStream
-        get() = shellCommand.process.outputStream
 
-    val standardOutput: InputStream
-        get() = shellCommand.process.inputStream
-
-    val errorOutput: InputStream
-        get() = shellCommand.process.errorStream
+    val standardOutput: OutputStream = LogOutputStream(logger, LogLevel.INFO)
+    val errorOutput: OutputStream = LogOutputStream(logger, LogLevel.ERROR)
+//    val standardInput: InputStream
+//        get() = shellCommand.process.outputStream
 
     var ignoreExitValue: Boolean = false
     var execResult: ExecResult? = null
@@ -106,6 +104,8 @@ open class SimpleExec: DefaultTask() { //, GradleExec<SimpleExec> {
         }
 
         shellCommand = ShellCommand(workingDir, command)
+        shellCommand.standardOutput = standardOutput
+        shellCommand.errorOutput = errorOutput
         shellCommand.start()
 
         if (shellCommand.failed) {

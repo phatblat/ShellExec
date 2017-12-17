@@ -3,7 +3,6 @@ package at.phatbl.simple_exec
 import java.io.*
 import java.util.concurrent.TimeUnit
 
-
 /**
  * Wrapper for running several commands inside a Bash shell.
  */
@@ -12,6 +11,10 @@ data class ShellCommand(
         val command: String
 ) {
     lateinit var process: Process
+
+    var standardOutput: OutputStream? = null
+    var errorOutput: OutputStream? = null
+//    val standardInput: InputStream
 
     val stdout: String
         get() = stream2String(process.inputStream)
@@ -31,10 +34,17 @@ data class ShellCommand(
      * Runs the command.
      */
     fun start() {
-        val pb = ProcessBuilder("bash", "-c", "mkdir -p $baseDir && cd $baseDir && $command")
-        
         baseDir.mkdir()
+        val pb = ProcessBuilder("bash", "-c", "cd $baseDir && $command")
         process = pb.start()
+
+        if (standardOutput != null) {
+            copy(input = process.inputStream, output = standardOutput!!)
+        }
+        if (errorOutput != null) {
+            copy(input = process.errorStream, output = errorOutput!!)
+        }
+
         // 20m
         process.waitFor(1200, TimeUnit.SECONDS)
 
