@@ -12,6 +12,6 @@
 .idea/modules/
 .idea/vcs.xml
 .idea/workspace.xml
-build/
+/build/
+/buildSrc/build/
 out/
-
