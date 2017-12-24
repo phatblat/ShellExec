@@ -44,6 +44,7 @@ buildscript {
 }
 
 plugins {
+    jacoco
     `java-gradle-plugin`
     `kotlin-dsl` // 0.11.1
 }
@@ -105,6 +106,37 @@ junitPlatform {
             include("spek", "junit-jupiter", "junit-vintage")
         }
     }
+}
+
+// https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
+jacoco {
+    toolVersion = "0.7.9"
+    reportsDir = file("$buildDir/reports/jacoco")
+}
+
+tasks.withType<JacocoReport> {
+    reports {
+        sourceDirectories = fileTree("src/main/kotlin")
+        classDirectories = fileTree("$buildDir/classes/kotlin/main")
+
+        xml.apply {
+            isEnabled = true
+            destination = File("$buildDir/reports/jacoco.xml")
+        }
+        csv.apply {
+            isEnabled = false
+        }
+        html.apply {
+            destination = File("${buildDir}/jacocoHtml")
+        }
+
+        executionData(tasks.withType<Test>())
+    }
+}
+
+val codeCoverageReport by tasks.creating(JacocoReport::class) {
+    dependsOn("test")
+//    sourceSets(project.sourceSets.main)
 }
 
 /* -------------------------------------------------------------------------- */

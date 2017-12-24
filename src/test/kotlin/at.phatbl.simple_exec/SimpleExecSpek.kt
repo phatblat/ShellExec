@@ -8,7 +8,6 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.dsl.xit
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 class SimpleExecSpec: Spek({
     describe("Simple Exec Task") {
