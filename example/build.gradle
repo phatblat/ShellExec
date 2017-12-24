@@ -17,7 +17,11 @@ task helloWorld(type: SimpleExec) {
 
 task customPath(type: SimpleExec) {
     group "Example"
-    prePath = "/Library/Java/JavaVirtualMachines/jdk-9.jdk/Contents/Home/bin"
+    prePath = "/Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home/bin"
     postPath = ""
-    command "java -version"
+    command 'env | grep PATH= && java -version'
+}
+
+task lolCowFortune(type: SimpleExec) {
+    command "fortune | cowsay | lolcat"
 }

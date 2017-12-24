@@ -76,6 +76,7 @@ repositories {
 dependencies {
     compile(gradleKotlinDsl())
     compile(kotlin("stdlib", kotlinVersion))
+    compile("org.apache.commons:commons-exec:1.3")
 
     // Speck
     compile("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
