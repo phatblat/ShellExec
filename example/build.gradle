@@ -15,6 +15,22 @@ task helloWorld(type: SimpleExec) {
     command "echo Hello World!"
 }
 
+task successfulCommand(type: SimpleExec) {
+    command "true"
+}
+
+task failingCommand(type: SimpleExec) {
+    command "false"
+}
+
+task emptyCommand(type: SimpleExec) {
+    command ""
+}
+
+task errorLogging(type: SimpleExec) {
+    command "cat missingfile"
+}
+
 task customPath(type: SimpleExec) {
     group "Example"
     prePath = "/Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home/bin"
