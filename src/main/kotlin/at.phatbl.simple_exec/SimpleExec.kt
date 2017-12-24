@@ -65,6 +65,7 @@ open class SimpleExec : DefaultTask() {
     @TaskAction
     fun exec() {
         val cmd = command ?: throw GradleException("command must be specified")
+        if (cmd == "") throw GradleException("command must not be empty")
 
         shellCommand = ShellCommand(baseDir = workingDir, command = cmd)
         shellCommand.standardOutput = standardOutput
