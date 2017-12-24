@@ -44,6 +44,7 @@ buildscript {
 }
 
 plugins {
+    jacoco
     `java-gradle-plugin`
     `kotlin-dsl` // 0.11.1
 }
@@ -103,6 +104,22 @@ junitPlatform {
         includeClassNamePatterns("^.*Tests?$", ".*Spec", ".*Spek")
         engines {
             include("spek", "junit-jupiter", "junit-vintage")
+        }
+    }
+}
+
+// https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
+jacoco {
+    toolVersion = "0.7.9"
+    reportsDir = file("$buildDir/reports/jacoco")
+}
+
+tasks {
+    "jacocoTestReport"(JacocoReport::class) {
+        reports {
+            xml.setEnabled(false)
+            csv.setEnabled(false)
+            html.setDestination(file("${buildDir}/jacocoHtml"))
         }
     }
 }
