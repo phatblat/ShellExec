@@ -9,7 +9,7 @@ A simpler extension point than `Exec` for ad-hoc Gradle tasks that run shell com
 - [x] Specify entire command line in one string (instead of `List<CharSequence>`).
 - [x] Append/prepend to the current `PATH`.
 - [X] Execute a command pipe or conditional command chain.
-- [ ] Easy access to `stdout` and `stderr`.
+- [x] Easy access to `stdout` and `stderr`.
 
 ## Example `build.gradle`
 
