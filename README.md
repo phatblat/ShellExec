@@ -1,5 +1,7 @@
 # SimpleExec
 
+[![Pipeline Status](http://jenkins.log-g.co/buildStatus/icon?job=SimpleExec/master)](http://jenkins.log-g.co/job/SimpleExec/job/master/)
+
 A simpler extension point than `Exec` for ad-hoc Gradle tasks that run shell commands.
 
 ## Features
