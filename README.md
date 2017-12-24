@@ -21,7 +21,7 @@ buildscript {
 
 import at.phatbl.simple_exec.SimpleExec
 
-task shellCommand(type: SimpleExec) {
+task lolCowFortune(type: SimpleExec) {
     command "fortune | cowsay | lolcat"
 }
 ```
