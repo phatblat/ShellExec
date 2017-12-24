@@ -114,14 +114,29 @@ jacoco {
     reportsDir = file("$buildDir/reports/jacoco")
 }
 
-tasks {
-    "jacocoTestReport"(JacocoReport::class) {
-        reports {
-            xml.setEnabled(false)
-            csv.setEnabled(false)
-            html.setDestination(file("${buildDir}/jacocoHtml"))
+tasks.withType<JacocoReport> {
+    reports {
+        sourceDirectories = fileTree("src/main/kotlin")
+        classDirectories = fileTree("$buildDir/classes/kotlin/main")
+
+        xml.apply {
+            isEnabled = true
+            destination = File("$buildDir/reports/jacoco.xml")
         }
+        csv.apply {
+            isEnabled = false
+        }
+        html.apply {
+            destination = File("${buildDir}/jacocoHtml")
+        }
+
+        executionData(tasks.withType<Test>())
     }
+}
+
+val codeCoverageReport by tasks.creating(JacocoReport::class) {
+    dependsOn("test")
+//    sourceSets(project.sourceSets.main)
 }
 
 /* -------------------------------------------------------------------------- */
