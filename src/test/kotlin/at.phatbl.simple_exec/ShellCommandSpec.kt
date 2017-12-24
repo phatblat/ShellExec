@@ -6,6 +6,7 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import java.io.File
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -19,7 +20,16 @@ class ShellCommandSpec : Spek({
             shellCommand.start()
 
             assertTrue(shellCommand.succeeded)
+            assertFalse(shellCommand.failed)
             assertEquals(0, shellCommand.exitValue)
+        }
+        it("can run a failing command") {
+            shellCommand = ShellCommand(baseDir = File("."), command = "false")
+            shellCommand.start()
+
+            assertTrue(shellCommand.failed)
+            assertFalse(shellCommand.succeeded)
+            assertEquals(1, shellCommand.exitValue)
         }
     }
 })
