@@ -31,5 +31,19 @@ class ShellCommandSpec : Spek({
             assertFalse(shellCommand.succeeded)
             assertEquals(1, shellCommand.exitValue)
         }
+        it("can generate standard output") {
+            shellCommand = ShellCommand(baseDir = File("."), command = "echo Hello World!")
+            shellCommand.start()
+
+            assertTrue(shellCommand.succeeded)
+            assertEquals("Hello World!\n", shellCommand.stdout)
+        }
+        it("can generate error output") {
+            shellCommand = ShellCommand(baseDir = File("."), command = "echo This is an error. >&2")
+            shellCommand.start()
+
+            assertTrue(shellCommand.succeeded)
+            assertEquals("This is an error.\n", shellCommand.stderr)
+        }
     }
 })
