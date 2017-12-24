@@ -22,7 +22,7 @@ open class SimpleExec : DefaultTask() {
     var workingDir: File = project.projectDir
 
     val standardOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.LIFECYCLE)
-    val errorOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.LIFECYCLE)
+    val errorOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.ERROR)
 //    val standardInput: InputStream
 //        get() = shellCommand.process.outputStream
 
