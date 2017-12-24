@@ -73,7 +73,7 @@ open class SimpleExec: DefaultTask() {
 
     /** Property containing a copy of the PATH environment variable. */
     @Input
-    protected var systemPath: String
+    private var systemPath: String
 
     /** Value to be prepended to the PATH. */
 //    @Input
