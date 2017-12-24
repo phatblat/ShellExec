@@ -10,7 +10,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
-open class SimpleExec: DefaultTask() { //, GradleExec<SimpleExec> {
+open class SimpleExec: DefaultTask() {
     companion object {
         // Directories to be prepended to PATH
         private const val pathAdditions = "./bin:/usr/local/bin"
