@@ -14,6 +14,13 @@ A simpler extension point than `Exec` for ad-hoc Gradle tasks that run shell com
 ## Example `build.gradle`
 
 ```gradle
+buildscript {
+    repositories.jcenter()
+    dependencies.classpath 'at.phatbl:simple-exec:+'
+}
+
+import at.phatbl.simple_exec.SimpleExec
+
 task shellCommand(type: SimpleExec) {
     command "fortune | cowsay | lolcat"
 }
