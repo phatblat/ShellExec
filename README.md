@@ -26,6 +26,25 @@ task shellCommand(type: SimpleExec) {
 }
 ```
 
+### Task Output
+
+```
+> Task :lolCowFortune
+ _________________________________________
+/ Do not clog intellect's sluices with    \
+\ bits of knowledge of questionable uses. /
+ -----------------------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+
+
+BUILD SUCCESSFUL in 2s
+1 actionable task: 1 executed
+```
+
 ## License
 
 This repo is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for rights and limitations.
