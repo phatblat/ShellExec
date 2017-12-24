@@ -16,18 +16,22 @@ task helloWorld(type: SimpleExec) {
 }
 
 task successfulCommand(type: SimpleExec) {
+    group "Example"
     command "true"
 }
 
 task failingCommand(type: SimpleExec) {
+    group "Example"
     command "false"
 }
 
 task emptyCommand(type: SimpleExec) {
+    group "Example"
     command ""
 }
 
 task errorLogging(type: SimpleExec) {
+    group "Example"
     command "cat missingfile"
 }
 
@@ -39,5 +43,6 @@ task customPath(type: SimpleExec) {
 }
 
 task lolCowFortune(type: SimpleExec) {
+    group "Example"
     command "fortune | cowsay | lolcat"
 }
