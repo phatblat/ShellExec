@@ -4,6 +4,7 @@
  */
 
 import com.jfrog.bintray.gradle.BintrayExtension
+import java.util.Date
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -171,13 +172,13 @@ bintray {
         repo = "generic"
         name = "gradle-project"
         userOrg = "bintray_user"
-        licenses = arrayOf("Apache-2.0")
+        setLicenses("Apache-2.0")
         vcsUrl = "https://github.com/phatblat/SimpleExec.git"
         version.apply {
-            name = project.version
+            name = project.version.toString()
             desc = "SimpleExec Gradle Plugin ${project.version}"
-            released  = Date()
-            vcsTag = project.version
+            released  = Date().toString()
+            vcsTag = project.version.toString()
             attributes = mapOf("gradle-plugin" to "${project.group}:com.use.less.gradle:gradle-useless-plugin")
         }
     }
