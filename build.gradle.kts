@@ -50,6 +50,9 @@ plugins {
     jacoco
     `java-gradle-plugin`
 
+    // Kotlin plugins
+    kotlin("jvm")
+
     // Gradle plugin portal - https://plugins.gradle.org/
     id("com.jfrog.bintray") version "1.8.0"
 }
@@ -100,6 +103,11 @@ configure<JavaPluginConvention> {
 }
 
 tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = sourceCompatibility }
+
+val sourcesJar by tasks.creating(Jar::class) {
+    classifier = "sources"
+    from(java.sourceSets["main"].allSource)
+}
 
 /* -------------------------------------------------------------------------- */
 // Testing
