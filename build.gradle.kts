@@ -220,7 +220,7 @@ bintray {
     dryRun = false
     publish = true
     pkg.apply {
-        repo = "SimpleExec"
+        repo = "maven-open-source"
         name = "SimpleExec"
         desc = "Gradle plugin with a simpler Exec task."
         websiteUrl = "https://github.com/phatblat/SimpleExec"
