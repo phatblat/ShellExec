@@ -3,9 +3,9 @@
  * SimpleExec
  */
 
+import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
-import org.gradle.kotlin.dsl.`kotlin-dsl`
-import org.gradle.kotlin.dsl.kotlin
+import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.junit.platform.gradle.plugin.EnginesExtension
 import org.junit.platform.gradle.plugin.FiltersExtension
@@ -33,6 +33,7 @@ buildscript {
     val kotlinRepo: String by extra
     repositories {
         maven(kotlinRepo)
+        jcenter()
     }
 
     val kotlinVersion: String by extra
@@ -40,6 +41,7 @@ buildscript {
     dependencies {
         classpath(kotlin("gradle-plugin", kotlinVersion))
         classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
+        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0")
     }
 }
 
@@ -51,6 +53,7 @@ plugins {
 
 apply {
     plugin("org.junit.platform.gradle.plugin") // org.junit.platform:junit-platform-gradle-plugin
+    plugin("com.jfrog.bintray")
 }
 
 val removeBatchFile by tasks.creating(Delete::class) { delete("gradlew.bat") }
@@ -161,6 +164,25 @@ gradlePlugin {
     }
 }
 
+bintray {
+    user = "bintray_user"
+    key = "bintray_api_key"
+    pkg.apply {
+        repo = "generic"
+        name = "gradle-project"
+        userOrg = "bintray_user"
+        licenses = arrayOf("Apache-2.0")
+        vcsUrl = "https://github.com/phatblat/SimpleExec.git"
+        version.apply {
+            name = project.version
+            desc = "SimpleExec Gradle Plugin ${project.version}"
+            released  = Date()
+            vcsTag = project.version
+            attributes = mapOf("gradle-plugin" to "${project.group}:com.use.less.gradle:gradle-useless-plugin")
+        }
+    }
+}
+
 /* -------------------------------------------------------------------------- */
 // Groovy-like DSL
 /* -------------------------------------------------------------------------- */
@@ -188,3 +210,15 @@ val Project.`gradlePlugin`: GradlePluginDevelopmentExtension get() =
  */
 fun Project.`gradlePlugin`(configure: GradlePluginDevelopmentExtension.() -> Unit) =
         extensions.configure(GradlePluginDevelopmentExtension::class.java, configure)
+
+/**
+ * Retrieves the [bintray][com.jfrog.bintray.gradle.BintrayExtension] project extension.
+ */
+val Project.`bintray`: BintrayExtension get() =
+    extensions.getByType(BintrayExtension::class.java)
+
+/**
+ * Configures the [bintray][com.jfrog.bintray.gradle.BintrayExtension] project extension.
+ */
+fun Project.`bintray`(configure: BintrayExtension.() -> Unit) =
+        extensions.configure(BintrayExtension::class.java, configure)
