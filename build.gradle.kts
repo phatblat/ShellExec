@@ -121,6 +121,7 @@ val javadocJar by tasks.creating(Jar::class) {
 artifacts.add("archives", sourcesJar)
 artifacts.add("archives", javadocJar)
 
+
 /* -------------------------------------------------------------------------- */
 // Testing
 /* -------------------------------------------------------------------------- */
@@ -229,7 +230,7 @@ bintray {
     }
 }
 
-val deploy by tasks.creating(DefaultTask::class) {
+val deploy by tasks.creating {
     description = "Deploys the artifact."
     group = "Deployment"
     dependsOn("bintrayUpload")
