@@ -156,13 +156,9 @@ configure<BasePluginConvention> {
     archivesBaseName = javaPackage
 }
 
-gradlePlugin {
-    plugins {
-        create("simple-exec") {
-            id = artifactName
-            implementationClass = "$javaPackage.$pluginClass"
-        }
-    }
+gradlePlugin.plugins.create("simple-exec") {
+    id = artifactName
+    implementationClass = "$javaPackage.$pluginClass"
 }
 
 bintray {
