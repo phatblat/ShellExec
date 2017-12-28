@@ -181,7 +181,7 @@ bintray {
         websiteUrl = "https://github.com/phatblat/SimpleExec"
         issueTrackerUrl = "https://github.com/phatblat/SimpleExec/issues"
         vcsUrl = "https://github.com/phatblat/SimpleExec.git"
-        setLicenses("Apache-2.0")
+        setLicenses("MIT")
         setLabels("gradle", "plugin", "exec", "shell", "bash")
         publicDownloadNumbers = true
         version.apply {
