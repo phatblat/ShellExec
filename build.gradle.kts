@@ -6,7 +6,6 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import java.util.Date
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
-import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.junit.platform.gradle.plugin.EnginesExtension
 import org.junit.platform.gradle.plugin.FiltersExtension
@@ -95,8 +94,10 @@ dependencies {
 // java
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = sourceCompatibility
 }
+
+tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = sourceCompatibility }
 
 /* -------------------------------------------------------------------------- */
 // Testing
