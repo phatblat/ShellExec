@@ -105,9 +105,20 @@ configure<JavaPluginConvention> {
 tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = sourceCompatibility }
 
 val sourcesJar by tasks.creating(Jar::class) {
+    dependsOn("classes")
     classifier = "sources"
     from(java.sourceSets["main"].allSource)
 }
+
+val javadocJar by tasks.creating(Jar::class) {
+    dependsOn("javadoc")
+    classifier = "javadoc"
+    val javadoc = tasks.withType<Javadoc>().first()
+    from(javadoc.destinationDir)
+}
+
+artifacts.add("archives", sourcesJar)
+artifacts.add("archives", javadocJar)
 
 /* -------------------------------------------------------------------------- */
 // Testing
@@ -151,7 +162,7 @@ tasks.withType<JacocoReport> {
 
 val codeCoverageReport by tasks.creating(JacocoReport::class) {
     dependsOn("test")
-//    sourceSets(project.sourceSets.main)
+    sourceSets(java.sourceSets["main"])
 }
 
 /* -------------------------------------------------------------------------- */
