@@ -20,7 +20,7 @@ group = "at.phatbl"
 version = "0.1.0"
 
 val kotlinVersion: String by extra
-println("kotlinVersion: $kotlinVersion")
+logger.lifecycle("kotlinVersion: $kotlinVersion")
 val junitPlatformVersion: String by extra
 val spekVersion: String by extra
 
