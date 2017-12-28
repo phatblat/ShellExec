@@ -217,7 +217,7 @@ bintray {
     key = property("bintray.api.key")
     setPublications("mavenJava")
     setConfigurations("archives")
-    dryRun = true
+    dryRun = false
     publish = true
     pkg.apply {
         repo = "SimpleExec"
