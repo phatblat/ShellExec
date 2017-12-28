@@ -49,6 +49,7 @@ plugins {
     // Gradle built-in
     jacoco
     `java-gradle-plugin`
+    `maven-publish`
 
     // Kotlin plugins
     kotlin("jvm")
@@ -58,7 +59,8 @@ plugins {
 }
 
 apply {
-    plugin("org.junit.platform.gradle.plugin") // org.junit.platform:junit-platform-gradle-plugin
+    // org.junit.platform:junit-platform-gradle-plugin doesn't support new plugin style
+    plugin("org.junit.platform.gradle.plugin")
 }
 
 val removeBatchFile by tasks.creating(Delete::class) { delete("gradlew.bat") }
@@ -83,7 +85,6 @@ repositories {
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-//    compile(gradleKotlinDsl())
     compile(kotlin("stdlib", kotlinVersion))
     compile("org.apache.commons:commons-exec:1.3")
 
@@ -181,6 +182,17 @@ configure<BasePluginConvention> {
 gradlePlugin.plugins.create("simple-exec") {
     id = artifactName
     implementationClass = "$javaPackage.$pluginClass"
+}
+
+publishing {
+    (publications) {
+        "mavenJava"(MavenPublication::class) {
+            from(components["java"])
+
+            artifact(sourcesJar)
+            artifact(javadocJar)
+        }
+    }
 }
 
 bintray {
