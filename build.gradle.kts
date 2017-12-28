@@ -6,6 +6,8 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import java.util.Date
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
+import org.gradle.kotlin.dsl.extra
+import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.junit.platform.gradle.plugin.EnginesExtension
 import org.junit.platform.gradle.plugin.FiltersExtension
@@ -19,7 +21,7 @@ group = "at.phatbl"
 version = "0.1.0"
 
 val kotlinVersion: String by extra
-logger.lifecycle("kotlinVersion: $kotlinVersion")
+project.logger.lifecycle("kotlinVersion: $kotlinVersion")
 val junitPlatformVersion: String by extra
 val spekVersion: String by extra
 
@@ -41,14 +43,17 @@ buildscript {
     dependencies {
         classpath(kotlin("gradle-plugin", kotlinVersion))
         classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
-        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0")
     }
 }
 
 plugins {
+    // Gradle built-in
     jacoco
     `java-gradle-plugin`
-    `kotlin-dsl` // 0.11.1
+    `kotlin-dsl`
+
+    // Gradle plugin portal - https://plugins.gradle.org/
+    id("com.jfrog.bintray") version "1.8.0"
 }
 
 apply {
