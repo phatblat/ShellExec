@@ -162,27 +162,51 @@ gradlePlugin.plugins.create("simple-exec") {
 }
 
 bintray {
-    user = "bintray_user"
-    key = "bintray_api_key"
+    user = property("bintray.user")
+    key = property("bintray.api.key")
+    setPublications("mavenJava")
+    setConfigurations("archives")
+    dryRun = true
+    publish = true
     pkg.apply {
-        repo = "generic"
-        name = "gradle-project"
-        userOrg = "bintray_user"
-        setLicenses("Apache-2.0")
+        repo = "SimpleExec"
+        name = "SimpleExec"
+        desc = "Gradle plugin with a simpler Exec task."
+        websiteUrl = "https://github.com/phatblat/SimpleExec"
+        issueTrackerUrl = "https://github.com/phatblat/SimpleExec/issues"
         vcsUrl = "https://github.com/phatblat/SimpleExec.git"
+        setLicenses("Apache-2.0")
+        setLabels("gradle", "plugin", "exec", "shell", "bash")
+        publicDownloadNumbers = true
         version.apply {
             name = project.version.toString()
             desc = "SimpleExec Gradle Plugin ${project.version}"
-            released  = Date().toString()
+            released = Date().toString()
             vcsTag = project.version.toString()
             attributes = mapOf("gradle-plugin" to "${project.group}:com.use.less.gradle:gradle-useless-plugin")
+
+            mavenCentralSync.apply {
+                sync = false //Optional (true by default). Determines whether to sync the version to Maven Central.
+                user = "userToken" //OSS user token
+                password = "password" //OSS user password
+                close = "1" //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+            }
         }
     }
 }
 
+val deploy by tasks.creating(DefaultTask::class) {
+    description = "Deploys the artifact."
+    group = "Deployment"
+    dependsOn("bintrayUpload")
+}
+
 /* -------------------------------------------------------------------------- */
-// Groovy-like DSL
+// DSL
 /* -------------------------------------------------------------------------- */
+
+/** Retrieves property by key. Useful when properties contain dots. */
+fun property(name: String) = properties[name] as String
 
 /**
  * Retrieves the [junitPlatform][org.junit.platform.gradle.plugin.JUnitPlatformExtension] project extension.
