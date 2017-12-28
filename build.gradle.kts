@@ -33,15 +33,14 @@ buildscript {
     build.loadExtraPropertiesOf(project)
 
     val kotlinRepo: String by extra
+    val junitPlatformVersion: String by extra
+
     repositories {
         maven(kotlinRepo)
         jcenter()
     }
 
-    val kotlinVersion: String by extra
-    val junitPlatformVersion: String by extra
     dependencies {
-        classpath(kotlin("gradle-plugin", kotlinVersion))
         classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
     }
 }
@@ -50,7 +49,6 @@ plugins {
     // Gradle built-in
     jacoco
     `java-gradle-plugin`
-    `kotlin-dsl`
 
     // Gradle plugin portal - https://plugins.gradle.org/
     id("com.jfrog.bintray") version "1.8.0"
@@ -58,7 +56,6 @@ plugins {
 
 apply {
     plugin("org.junit.platform.gradle.plugin") // org.junit.platform:junit-platform-gradle-plugin
-    plugin("com.jfrog.bintray")
 }
 
 val removeBatchFile by tasks.creating(Delete::class) { delete("gradlew.bat") }
@@ -83,14 +80,14 @@ repositories {
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-    compile(gradleKotlinDsl())
+//    compile(gradleKotlinDsl())
     compile(kotlin("stdlib", kotlinVersion))
     compile("org.apache.commons:commons-exec:1.3")
 
     // Speck
-    compile("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-    testCompile("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
-    testCompile("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
+    compile(kotlin("reflect", kotlinVersion))
+    testCompile(kotlin("test", kotlinVersion))
+    testCompile(kotlin("test-junit", kotlinVersion))
     testCompile("org.jetbrains.spek:spek-api:$spekVersion")
     testCompile("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
     testCompile("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
