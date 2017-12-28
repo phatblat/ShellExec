@@ -105,6 +105,22 @@ configure<JavaPluginConvention> {
 
 tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = sourceCompatibility }
 
+// Include resources
+java.sourceSets["main"].resources {
+    setSrcDirs(mutableListOf("src/main/resources"))
+    include("VERSION.txt")
+}
+
+val updateVersionFile by tasks.creating {
+    description = "Updates the VERSION.txt file included with the plugin"
+    group = "Build"
+    doLast {
+        val versionFile = project.file("src/main/resources/VERSION.txt").writeText(version.toString())
+    }
+}
+
+tasks.getByName("assemble").dependsOn(updateVersionFile)
+
 val sourcesJar by tasks.creating(Jar::class) {
     dependsOn("classes")
     classifier = "sources"
