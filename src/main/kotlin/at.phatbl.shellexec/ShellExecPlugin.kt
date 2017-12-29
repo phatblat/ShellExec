@@ -1,14 +1,14 @@
-package at.phatbl.simple_exec
+package at.phatbl.shellexec
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 /**
  * Plugin class which currently does nothing.
- *   apply plugin: 'simple-exec'
+ *   apply plugin: 'shellexec'
  */
-class SimpleExecPlugin: Plugin<Project> {
+class ShellExecPlugin: Plugin<Project> {
     override fun apply(project: Project) {
-        println("Applying SimpleExecPlugin")
+        println("Applying ShellExecPlugin")
     }
 }

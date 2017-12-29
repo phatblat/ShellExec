@@ -1,4 +1,4 @@
-package at.phatbl.simple_exec
+package at.phatbl.shellexec
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
@@ -9,14 +9,14 @@ import org.jetbrains.spek.api.dsl.xit
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class SimpleExecSpec: Spek({
-    describe("Simple Exec Task") {
+class ShellExecSpec: Spek({
+    describe("Shell Exec Task") {
         var project: Project = ProjectBuilder.builder().build()
-        var task: SimpleExec = project.tasks.create("exec",  SimpleExec::class.java)
+        var task: ShellExec = project.tasks.create("exec", ShellExec::class.java)
 
         beforeEachTest {
             project = ProjectBuilder.builder().build()
-            task = project.tasks.create("exec",  SimpleExec::class.java)
+            task = project.tasks.create("exec", ShellExec::class.java)
         }
 
         it("can be created") {

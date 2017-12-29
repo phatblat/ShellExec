@@ -1,4 +1,4 @@
-package at.phatbl.simple_exec
+package at.phatbl.shellexec
 
 import java.io.*
 import java.util.concurrent.TimeUnit

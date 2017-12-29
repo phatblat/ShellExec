@@ -1,6 +1,6 @@
 /*
  * Jenkinsfile
- * SimpleExec
+ * ShellExec
  *
  * Declarative pipeline script - https://jenkins.io/doc/book/pipeline/
  */
@@ -22,14 +22,14 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Assemble') {
             steps {
-                sh './gradlew build --stacktrace'
+                sh './gradlew assemble --stacktrace'
             }
         }
         stage('Test') {
             steps {
-                sh './gradlew build --stacktrace'
+                sh './gradlew test --stacktrace'
             }
         }
     }

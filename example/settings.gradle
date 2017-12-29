@@ -1,12 +1,12 @@
 /*
  * settings.gradle
- * SimpleExecExample
+ * ShellExecExample
  */
 
-rootProject.name = 'SimpleExecExample'
+rootProject.name = 'ShellExecExample'
 
 includeBuild('../') {
     dependencySubstitution {
-        substitute module('at.phatbl:simple-exec') with project(':')
+        substitute module('at.phatbl:shellexec') with project(':')
     }
 }

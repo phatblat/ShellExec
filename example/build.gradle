@@ -1,51 +1,54 @@
 /*
  * build.gradle
- * SimpleExecExample
+ * ShellExecExample
  */
 
 buildscript {
     repositories {
         jcenter()
-        maven { url  "https://dl.bintray.com/phatblat/maven-open-source" }
+        maven { url "https://dl.bintray.com/phatblat/maven-open-source" }
     }
-    dependencies.classpath 'at.phatbl:simple-exec:+'
+    dependencies.classpath 'at.phatbl:shellexec:+'
 }
 
-import at.phatbl.simple_exec.SimpleExec
+import at.phatbl.shellexec.ShellExec
 
-task helloWorld(type: SimpleExec) {
+task helloWorld(type: ShellExec) {
     group "Example"
     command "echo Hello World!"
 }
 
-task successfulCommand(type: SimpleExec) {
+task successfulCommand(type: ShellExec) {
     group "Example"
     command "true"
 }
 
-task failingCommand(type: SimpleExec) {
+task failingCommand(type: ShellExec) {
     group "Example"
     command "false"
 }
 
-task emptyCommand(type: SimpleExec) {
+task emptyCommand(type: ShellExec) {
     group "Example"
     command ""
 }
 
-task errorLogging(type: SimpleExec) {
+task errorLogging(type: ShellExec) {
     group "Example"
     command "cat missingfile"
 }
 
-task customPath(type: SimpleExec) {
+task customPath(type: ShellExec) {
     group "Example"
     prePath = "/Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home/bin"
     postPath = ""
     command 'env | grep PATH= && java -version'
 }
 
-task lolCowFortune(type: SimpleExec) {
+task lolCowFortune(type: ShellExec) {
     group "Example"
     command "fortune | cowsay | lolcat"
 }
+
+/** No-op task to prevent issues when IDEA refreshes project. */
+task testClasses {}

@@ -1,6 +1,6 @@
-/**
+/*
  * build.gradle.kts
- * SimpleExec
+ * ShellExec
  */
 
 import com.jfrog.bintray.gradle.BintrayExtension
@@ -187,16 +187,16 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
 // Deployment
 /* -------------------------------------------------------------------------- */
 
-val artifactName = "simple-exec"
-val javaPackage = "$group.simple_exec"
+val artifactName = "shellexec"
+val javaPackage = "$group.$artifactName"
 val pluginClass =  "${name}Plugin"
 
 configure<BasePluginConvention> {
-    // at.phatbl.simple-exec-1.0.0.jar
+    // at.phatbl.shellexec-1.0.0.jar
     archivesBaseName = javaPackage
 }
 
-gradlePlugin.plugins.create("simple-exec") {
+gradlePlugin.plugins.create("shellexec") {
     id = artifactName
     implementationClass = "$javaPackage.$pluginClass"
 }
@@ -221,17 +221,17 @@ bintray {
     publish = true
     pkg.apply {
         repo = "maven-open-source"
-        name = "SimpleExec"
+        name = "ShellExec"
         desc = "Gradle plugin with a simpler Exec task."
-        websiteUrl = "https://github.com/phatblat/SimpleExec"
-        issueTrackerUrl = "https://github.com/phatblat/SimpleExec/issues"
-        vcsUrl = "https://github.com/phatblat/SimpleExec.git"
+        websiteUrl = "https://github.com/phatblat/ShellExec"
+        issueTrackerUrl = "https://github.com/phatblat/ShellExec/issues"
+        vcsUrl = "https://github.com/phatblat/ShellExec.git"
         setLicenses("MIT")
         setLabels("gradle", "plugin", "exec", "shell", "bash")
         publicDownloadNumbers = true
         version.apply {
             name = project.version.toString()
-            desc = "SimpleExec Gradle Plugin ${project.version}"
+            desc = "ShellExec Gradle Plugin ${project.version}"
             released = Date().toString()
             vcsTag = project.version.toString()
             attributes = mapOf("gradle-plugin" to "${project.group}:com.use.less.gradle:gradle-useless-plugin")
