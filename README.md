@@ -12,7 +12,7 @@ A simpler extension point than [`Exec`](https://docs.gradle.org/current/dsl/org.
 - Execute a `command | pipe` or `conditional && command || chain`.
 - Easy access to `stdout` and `stderr`.
 
-:warning: Not compatible with Exec tasks yet (#11), but the API is very similar.
+:warning: Not compatible with `Exec` tasks yet (see [#11](https://github.com/phatblat/ShellExec/issues/11)), but the current API is very similar.
 
 ## Example `build.gradle`
 
