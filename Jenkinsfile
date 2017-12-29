@@ -29,7 +29,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh './gradlew build --stacktrace'
+                sh './gradlew test --stacktrace'
             }
         }
     }
