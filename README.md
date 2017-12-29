@@ -3,14 +3,14 @@
 [![Pipeline Status](http://jenkins.log-g.co/buildStatus/icon?job=ShellExec/master)](http://jenkins.log-g.co/job/ShellExec/job/master/)
 [ ![Download](https://api.bintray.com/packages/phatblat/maven-open-source/ShellExec/images/download.svg) ](https://bintray.com/phatblat/maven-open-source/ShellExec/_latestVersion)
 
-A simpler extension point than `Exec` for ad-hoc Gradle tasks that run shell commands.
+A simpler extension point than [`Exec`](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.Exec.html) for ad-hoc Gradle tasks that run shell commands.
 
 ## Features
 
-- [x] Specify entire command line in one string (instead of `List<CharSequence>`).
-- [x] Append/prepend to the current `PATH`.
-- [X] Execute a command pipe or conditional command chain.
-- [x] Easy access to `stdout` and `stderr`.
+- Specify entire command line in one string (instead of `List<CharSequence>`).
+- Append/prepend to the current `PATH`.
+- Execute a `command | pipe` or `conditional && command || chain`.
+- Easy access to `stdout` and `stderr`.
 
 ## Example `build.gradle`
 
