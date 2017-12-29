@@ -21,6 +21,10 @@ import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 group = "at.phatbl"
 version = "1.0.0"
 
+val artifactName = "shellexec"
+val javaPackage = "$group.$artifactName"
+val pluginClass =  "${name}Plugin"
+
 val kotlinVersion: String by extra
 project.logger.lifecycle("kotlinVersion: $kotlinVersion")
 val junitPlatformVersion: String by extra
@@ -186,10 +190,6 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
 /* -------------------------------------------------------------------------- */
 // Deployment
 /* -------------------------------------------------------------------------- */
-
-val artifactName = "shellexec"
-val javaPackage = "$group.$artifactName"
-val pluginClass =  "${name}Plugin"
 
 configure<BasePluginConvention> {
     // at.phatbl.shellexec-1.0.0.jar
