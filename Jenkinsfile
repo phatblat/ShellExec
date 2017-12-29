@@ -22,9 +22,9 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Assemble') {
             steps {
-                sh './gradlew build --stacktrace'
+                sh './gradlew assemble --stacktrace'
             }
         }
         stage('Test') {
