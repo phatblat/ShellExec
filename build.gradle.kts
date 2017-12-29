@@ -3,6 +3,7 @@
  * ShellExec
  */
 
+import build.junitPlatform
 import com.jfrog.bintray.gradle.BintrayExtension
 import java.util.Date
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
@@ -55,7 +56,7 @@ plugins {
     kotlin("jvm")
 
     // Gradle plugin portal - https://plugins.gradle.org/
-    id("com.jfrog.bintray") version "1.8.0"
+    id("com.jfrog.bintray") //version "1.8.0"
 }
 
 apply {
@@ -137,7 +138,6 @@ val javadocJar by tasks.creating(Jar::class) {
 artifacts.add("archives", sourcesJar)
 artifacts.add("archives", javadocJar)
 
-
 /* -------------------------------------------------------------------------- */
 // Testing
 /* -------------------------------------------------------------------------- */
@@ -196,7 +196,7 @@ configure<BasePluginConvention> {
     archivesBaseName = javaPackage
 }
 
-gradlePlugin.plugins.create("shellexec") {
+gradlePlugin.plugins.create(artifactName) {
     id = artifactName
     implementationClass = "$javaPackage.$pluginClass"
 }
@@ -213,8 +213,8 @@ publishing {
 }
 
 bintray {
-    user = property("bintray.user")
-    key = property("bintray.api.key")
+    user = property("bintray.user") as String
+    key = property("bintray.api.key") as String
     setPublications("mavenJava")
     setConfigurations("archives")
     dryRun = false
@@ -251,46 +251,3 @@ val deploy by tasks.creating {
     group = "Deployment"
     dependsOn("bintrayUpload")
 }
-
-/* -------------------------------------------------------------------------- */
-// DSL
-/* -------------------------------------------------------------------------- */
-
-/** Retrieves property by key. Useful when properties contain dots. */
-fun property(name: String) = properties[name] as String
-
-/**
- * Retrieves the [junitPlatform][org.junit.platform.gradle.plugin.JUnitPlatformExtension] project extension.
- */
-val Project.`junitPlatform`: JUnitPlatformExtension get() =
-    extensions.getByType(JUnitPlatformExtension::class.java)
-
-/**
- * Configures the [junitPlatform][org.junit.platform.gradle.plugin.JUnitPlatformExtension] project extension.
- */
-fun Project.`junitPlatform`(configure: JUnitPlatformExtension.() -> Unit) =
-    extensions.configure(JUnitPlatformExtension::class.java, configure)
-
-/**
- * Retrieves the [gradlePlugin][org.gradle.plugin.devel.GradlePluginDevelopmentExtension] project extension.
- */
-val Project.`gradlePlugin`: GradlePluginDevelopmentExtension get() =
-    extensions.getByType(GradlePluginDevelopmentExtension::class.java)
-
-/**
- * Configures the [gradlePlugin][org.gradle.plugin.devel.GradlePluginDevelopmentExtension] project extension.
- */
-fun Project.`gradlePlugin`(configure: GradlePluginDevelopmentExtension.() -> Unit) =
-        extensions.configure(GradlePluginDevelopmentExtension::class.java, configure)
-
-/**
- * Retrieves the [bintray][com.jfrog.bintray.gradle.BintrayExtension] project extension.
- */
-val Project.`bintray`: BintrayExtension get() =
-    extensions.getByType(BintrayExtension::class.java)
-
-/**
- * Configures the [bintray][com.jfrog.bintray.gradle.BintrayExtension] project extension.
- */
-fun Project.`bintray`(configure: BintrayExtension.() -> Unit) =
-        extensions.configure(BintrayExtension::class.java, configure)
