@@ -19,7 +19,7 @@ import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 /* -------------------------------------------------------------------------- */
 
 group = "at.phatbl"
-version = "0.1.0"
+version = "1.0.0"
 
 val kotlinVersion: String by extra
 project.logger.lifecycle("kotlinVersion: $kotlinVersion")
