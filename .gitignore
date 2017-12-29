@@ -5,6 +5,7 @@
 .idea/compiler.xml
 .idea/gradle.xml
 .idea/inspectionProfiles/
+.idea/jenkinsSettings.xml
 .idea/kotlinc.xml
 .idea/libraries/
 .idea/markdown-exported-files.xml
