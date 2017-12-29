@@ -24,12 +24,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh './gradlew build'
+                sh './gradlew build --stacktrace'
             }
         }
         stage('Test') {
             steps {
-                sh './gradlew build'
+                sh './gradlew build --stacktrace'
             }
         }
     }
