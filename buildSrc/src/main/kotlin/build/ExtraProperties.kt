@@ -10,8 +10,9 @@ fun loadExtraPropertiesOf(project: Project) = project.run {
     require(this == rootProject) {
         "Properties should be loaded by the root project only!"
     }
-    val kotlinVersion = file("kotlin-version.txt").readText().trim()
     val kotlinRepo = "https://repo.gradle.org/gradle/repo"
+    // FIXME: Load from gradle.properties
+    val kotlinVersion = file("kotlin-version.txt").readText().trim()
     extra["kotlinVersion"] = kotlinVersion
     extra["kotlinRepo"] = kotlinRepo
     extra["spekVersion"] = "1.1.5"
