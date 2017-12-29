@@ -138,7 +138,6 @@ val javadocJar by tasks.creating(Jar::class) {
 artifacts.add("archives", sourcesJar)
 artifacts.add("archives", javadocJar)
 
-
 /* -------------------------------------------------------------------------- */
 // Testing
 /* -------------------------------------------------------------------------- */
@@ -197,7 +196,7 @@ configure<BasePluginConvention> {
     archivesBaseName = javaPackage
 }
 
-gradlePlugin.plugins.create("shellexec") {
+gradlePlugin.plugins.create(artifactName) {
     id = artifactName
     implementationClass = "$javaPackage.$pluginClass"
 }
