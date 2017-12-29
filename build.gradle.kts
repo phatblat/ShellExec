@@ -3,8 +3,10 @@
  * SimpleExec
  */
 
+import com.jfrog.bintray.gradle.BintrayExtension
+import java.util.Date
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
-import org.gradle.kotlin.dsl.`kotlin-dsl`
+import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.junit.platform.gradle.plugin.EnginesExtension
@@ -19,7 +21,7 @@ group = "at.phatbl"
 version = "0.1.0"
 
 val kotlinVersion: String by extra
-println("kotlinVersion: $kotlinVersion")
+project.logger.lifecycle("kotlinVersion: $kotlinVersion")
 val junitPlatformVersion: String by extra
 val spekVersion: String by extra
 
@@ -31,33 +33,41 @@ buildscript {
     build.loadExtraPropertiesOf(project)
 
     val kotlinRepo: String by extra
+    val junitPlatformVersion: String by extra
+
     repositories {
         maven(kotlinRepo)
+        jcenter()
     }
 
-    val kotlinVersion: String by extra
-    val junitPlatformVersion: String by extra
     dependencies {
-        classpath(kotlin("gradle-plugin", kotlinVersion))
         classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
     }
 }
 
 plugins {
+    // Gradle built-in
     jacoco
     `java-gradle-plugin`
-    `kotlin-dsl` // 0.11.1
+    `maven-publish`
+
+    // Kotlin plugins
+    kotlin("jvm")
+
+    // Gradle plugin portal - https://plugins.gradle.org/
+    id("com.jfrog.bintray") version "1.8.0"
 }
 
 apply {
-    plugin("org.junit.platform.gradle.plugin") // org.junit.platform:junit-platform-gradle-plugin
+    // org.junit.platform:junit-platform-gradle-plugin doesn't support new plugin style
+    plugin("org.junit.platform.gradle.plugin")
 }
 
 val removeBatchFile by tasks.creating(Delete::class) { delete("gradlew.bat") }
 
 tasks {
     "wrapper"(Wrapper::class) {
-        gradleVersion = "4.4"
+        gradleVersion = "4.4.1" // kotlin-dsl 0.13.2
         distributionType = DistributionType.ALL
         finalizedBy(removeBatchFile)
     }
@@ -75,14 +85,13 @@ repositories {
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-    compile(gradleKotlinDsl())
     compile(kotlin("stdlib", kotlinVersion))
     compile("org.apache.commons:commons-exec:1.3")
 
     // Speck
-    compile("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-    testCompile("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
-    testCompile("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
+    compile(kotlin("reflect", kotlinVersion))
+    testCompile(kotlin("test", kotlinVersion))
+    testCompile(kotlin("test-junit", kotlinVersion))
     testCompile("org.jetbrains.spek:spek-api:$spekVersion")
     testCompile("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
     testCompile("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
@@ -91,8 +100,43 @@ dependencies {
 // java
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = sourceCompatibility
 }
+
+tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = sourceCompatibility }
+
+// Include resources
+java.sourceSets["main"].resources {
+    setSrcDirs(mutableListOf("src/main/resources"))
+    include("VERSION.txt")
+}
+
+val updateVersionFile by tasks.creating {
+    description = "Updates the VERSION.txt file included with the plugin"
+    group = "Build"
+    doLast {
+        val versionFile = project.file("src/main/resources/VERSION.txt").writeText(version.toString())
+    }
+}
+
+tasks.getByName("assemble").dependsOn(updateVersionFile)
+
+val sourcesJar by tasks.creating(Jar::class) {
+    dependsOn("classes")
+    classifier = "sources"
+    from(java.sourceSets["main"].allSource)
+}
+
+val javadocJar by tasks.creating(Jar::class) {
+    dependsOn("javadoc")
+    classifier = "javadoc"
+    val javadoc = tasks.withType<Javadoc>().first()
+    from(javadoc.destinationDir)
+}
+
+artifacts.add("archives", sourcesJar)
+artifacts.add("archives", javadocJar)
+
 
 /* -------------------------------------------------------------------------- */
 // Testing
@@ -136,7 +180,7 @@ tasks.withType<JacocoReport> {
 
 val codeCoverageReport by tasks.creating(JacocoReport::class) {
     dependsOn("test")
-//    sourceSets(project.sourceSets.main)
+    sourceSets(java.sourceSets["main"])
 }
 
 /* -------------------------------------------------------------------------- */
@@ -152,18 +196,68 @@ configure<BasePluginConvention> {
     archivesBaseName = javaPackage
 }
 
-gradlePlugin {
-    plugins {
-        create("simple-exec") {
-            id = artifactName
-            implementationClass = "$javaPackage.$pluginClass"
+gradlePlugin.plugins.create("simple-exec") {
+    id = artifactName
+    implementationClass = "$javaPackage.$pluginClass"
+}
+
+publishing {
+    (publications) {
+        "mavenJava"(MavenPublication::class) {
+            from(components["java"])
+
+            artifact(sourcesJar)
+            artifact(javadocJar)
         }
     }
 }
 
+bintray {
+    user = property("bintray.user")
+    key = property("bintray.api.key")
+    setPublications("mavenJava")
+    setConfigurations("archives")
+    dryRun = false
+    publish = true
+    pkg.apply {
+        repo = "maven-open-source"
+        name = "SimpleExec"
+        desc = "Gradle plugin with a simpler Exec task."
+        websiteUrl = "https://github.com/phatblat/SimpleExec"
+        issueTrackerUrl = "https://github.com/phatblat/SimpleExec/issues"
+        vcsUrl = "https://github.com/phatblat/SimpleExec.git"
+        setLicenses("MIT")
+        setLabels("gradle", "plugin", "exec", "shell", "bash")
+        publicDownloadNumbers = true
+        version.apply {
+            name = project.version.toString()
+            desc = "SimpleExec Gradle Plugin ${project.version}"
+            released = Date().toString()
+            vcsTag = project.version.toString()
+            attributes = mapOf("gradle-plugin" to "${project.group}:com.use.less.gradle:gradle-useless-plugin")
+
+            mavenCentralSync.apply {
+                sync = false //Optional (true by default). Determines whether to sync the version to Maven Central.
+                user = "userToken" //OSS user token
+                password = "password" //OSS user password
+                close = "1" //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+            }
+        }
+    }
+}
+
+val deploy by tasks.creating {
+    description = "Deploys the artifact."
+    group = "Deployment"
+    dependsOn("bintrayUpload")
+}
+
 /* -------------------------------------------------------------------------- */
-// Groovy-like DSL
+// DSL
 /* -------------------------------------------------------------------------- */
+
+/** Retrieves property by key. Useful when properties contain dots. */
+fun property(name: String) = properties[name] as String
 
 /**
  * Retrieves the [junitPlatform][org.junit.platform.gradle.plugin.JUnitPlatformExtension] project extension.
@@ -188,3 +282,15 @@ val Project.`gradlePlugin`: GradlePluginDevelopmentExtension get() =
  */
 fun Project.`gradlePlugin`(configure: GradlePluginDevelopmentExtension.() -> Unit) =
         extensions.configure(GradlePluginDevelopmentExtension::class.java, configure)
+
+/**
+ * Retrieves the [bintray][com.jfrog.bintray.gradle.BintrayExtension] project extension.
+ */
+val Project.`bintray`: BintrayExtension get() =
+    extensions.getByType(BintrayExtension::class.java)
+
+/**
+ * Configures the [bintray][com.jfrog.bintray.gradle.BintrayExtension] project extension.
+ */
+fun Project.`bintray`(configure: BintrayExtension.() -> Unit) =
+        extensions.configure(BintrayExtension::class.java, configure)
