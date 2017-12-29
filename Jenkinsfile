@@ -1,6 +1,6 @@
 /*
  * Jenkinsfile
- * SimpleExec
+ * ShellExec
  *
  * Declarative pipeline script - https://jenkins.io/doc/book/pipeline/
  */

@@ -1,7 +1,7 @@
-# SimpleExec
+# ShellExec
 
-[![Pipeline Status](http://jenkins.log-g.co/buildStatus/icon?job=SimpleExec/master)](http://jenkins.log-g.co/job/SimpleExec/job/master/)
-[ ![Download](https://api.bintray.com/packages/phatblat/maven-open-source/SimpleExec/images/download.svg) ](https://bintray.com/phatblat/maven-open-source/SimpleExec/_latestVersion)
+[![Pipeline Status](http://jenkins.log-g.co/buildStatus/icon?job=ShellExec/master)](http://jenkins.log-g.co/job/ShellExec/job/master/)
+[ ![Download](https://api.bintray.com/packages/phatblat/maven-open-source/ShellExec/images/download.svg) ](https://bintray.com/phatblat/maven-open-source/ShellExec/_latestVersion)
 
 A simpler extension point than `Exec` for ad-hoc Gradle tasks that run shell commands.
 
@@ -17,12 +17,12 @@ A simpler extension point than `Exec` for ad-hoc Gradle tasks that run shell com
 ```gradle
 buildscript {
     repositories.jcenter()
-    dependencies.classpath 'at.phatbl:simple-exec:+'
+    dependencies.classpath 'at.phatbl:shellexec:+'
 }
 
-import at.phatbl.simple_exec.SimpleExec
+import at.phatbl.shellexec.ShellExec
 
-task lolCowFortune(type: SimpleExec) {
+task lolCowFortune(type: ShellExec) {
     command "fortune | cowsay | lolcat"
 }
 ```

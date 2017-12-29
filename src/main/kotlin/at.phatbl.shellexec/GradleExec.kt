@@ -1,4 +1,4 @@
-package at.phatbl.simple_exec
+package at.phatbl.shellexec
 
 import org.gradle.api.tasks.AbstractExecTask
 import org.gradle.api.tasks.Input

@@ -1,4 +1,4 @@
-package at.phatbl.simple_exec.logging
+package at.phatbl.shellexec.logging
 
 import org.apache.commons.exec.LogOutputStream
 import org.gradle.api.GradleException

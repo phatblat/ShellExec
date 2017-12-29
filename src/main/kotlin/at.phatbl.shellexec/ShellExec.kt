@@ -1,6 +1,6 @@
-package at.phatbl.simple_exec
+package at.phatbl.shellexec
 
-import at.phatbl.simple_exec.logging.GradleLogOutputStream
+import at.phatbl.shellexec.logging.GradleLogOutputStream
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.logging.LogLevel
@@ -11,7 +11,7 @@ import java.io.File
 //import java.io.InputStream
 import java.io.OutputStream
 
-open class SimpleExec : DefaultTask() {
+open class ShellExec : DefaultTask() {
     companion object {
         // Directories to be prepended to PATH
         private const val pathAdditions = "./bin:/usr/local/bin"
