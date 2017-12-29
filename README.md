@@ -7,10 +7,12 @@ A simpler extension point than [`Exec`](https://docs.gradle.org/current/dsl/org.
 
 ## Features
 
-- Specify entire command line in one string (instead of `List<CharSequence>`).
+- Specify entire `command` line in one string (instead of `List<CharSequence>`).
 - Append/prepend to the current `PATH`.
 - Execute a `command | pipe` or `conditional && command || chain`.
 - Easy access to `stdout` and `stderr`.
+
+:warning: Not compatible with Exec tasks yet (#11), but the API is very similar.
 
 ## Example `build.gradle`
 
