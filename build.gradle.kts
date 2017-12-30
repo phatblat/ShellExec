@@ -19,7 +19,11 @@ import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 /* -------------------------------------------------------------------------- */
 
 group = "at.phatbl"
-version = "1.0.0"
+version = "1.0.1"
+
+val artifactName = "shellexec"
+val javaPackage = "$group.$artifactName"
+val pluginClass =  "${name}Plugin"
 
 val kotlinVersion: String by extra
 project.logger.lifecycle("kotlinVersion: $kotlinVersion")
@@ -171,7 +175,7 @@ tasks.withType<JacocoReport> {
             isEnabled = false
         }
         html.apply {
-            destination = File("${buildDir}/jacocoHtml")
+            destination = File("$buildDir/jacocoHtml")
         }
 
         executionData(tasks.withType<Test>())
@@ -187,10 +191,6 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
 // Deployment
 /* -------------------------------------------------------------------------- */
 
-val artifactName = "shellexec"
-val javaPackage = "$group.$artifactName"
-val pluginClass =  "${name}Plugin"
-
 configure<BasePluginConvention> {
     // at.phatbl.shellexec-1.0.0.jar
     archivesBaseName = javaPackage
@@ -205,9 +205,10 @@ publishing {
     (publications) {
         "mavenJava"(MavenPublication::class) {
             from(components["java"])
+            artifactId = artifactName
 
-            artifact(sourcesJar)
-            artifact(javadocJar)
+            artifact(sourcesJar) { classifier = "sources" }
+            artifact(javadocJar) { classifier = "javadoc" }
         }
     }
 }
@@ -217,7 +218,7 @@ bintray {
     key = property("bintray.api.key") as String
     setPublications("mavenJava")
     setConfigurations("archives")
-    dryRun = false
+    dryRun = true
     publish = true
     pkg.apply {
         repo = "maven-open-source"
@@ -234,7 +235,7 @@ bintray {
             desc = "ShellExec Gradle Plugin ${project.version}"
             released = Date().toString()
             vcsTag = project.version.toString()
-            attributes = mapOf("gradle-plugin" to "${project.group}:com.use.less.gradle:gradle-useless-plugin")
+            attributes = mapOf("gradle-plugin" to "${project.group}:$artifactName:$version")
 
             mavenCentralSync.apply {
                 sync = false //Optional (true by default). Determines whether to sync the version to Maven Central.
