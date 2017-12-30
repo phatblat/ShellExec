@@ -218,7 +218,7 @@ bintray {
     key = property("bintray.api.key") as String
     setPublications("mavenJava")
     setConfigurations("archives")
-    dryRun = false
+    dryRun = true
     publish = true
     pkg.apply {
         repo = "maven-open-source"
@@ -235,7 +235,7 @@ bintray {
             desc = "ShellExec Gradle Plugin ${project.version}"
             released = Date().toString()
             vcsTag = project.version.toString()
-            attributes = mapOf("gradle-plugin" to "${project.group}:com.use.less.gradle:gradle-useless-plugin")
+            attributes = mapOf("gradle-plugin" to "${project.group}:$artifactName:$version")
 
             mavenCentralSync.apply {
                 sync = false //Optional (true by default). Determines whether to sync the version to Maven Central.
