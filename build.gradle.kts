@@ -175,7 +175,7 @@ tasks.withType<JacocoReport> {
             isEnabled = false
         }
         html.apply {
-            destination = File("${buildDir}/jacocoHtml")
+            destination = File("$buildDir/jacocoHtml")
         }
 
         executionData(tasks.withType<Test>())
@@ -205,9 +205,10 @@ publishing {
     (publications) {
         "mavenJava"(MavenPublication::class) {
             from(components["java"])
+            artifactId = artifactName
 
-            artifact(sourcesJar)
-            artifact(javadocJar)
+            artifact(sourcesJar) { classifier = "sources" }
+            artifact(javadocJar) { classifier = "javadoc" }
         }
     }
 }
