@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-
+- Fixed publishing metadata #22
+  - artifactId is now `shellexec`
 
 ## 1.0.0
 
