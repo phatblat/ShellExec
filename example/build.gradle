@@ -4,10 +4,7 @@
  */
 
 buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://dl.bintray.com/phatblat/maven-open-source" }
-    }
+    repositories.jcenter()
     dependencies.classpath 'at.phatbl:shellexec:+'
 }
 
