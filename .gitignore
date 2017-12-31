@@ -1,6 +1,7 @@
 !.idea/runConfigurations/
 *.iml
 .DS_Store
+.classpath
 .gradle/
 .idea/compiler.xml
 .idea/gradle.xml
