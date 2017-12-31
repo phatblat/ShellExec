@@ -19,6 +19,7 @@
 .idea/workspace.xml
 .project
 .settings/
+.vscode/
 /build/
 /buildSrc/build/
 out/
