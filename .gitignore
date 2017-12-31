@@ -22,4 +22,5 @@
 .vscode/
 /build/
 /buildSrc/build/
+bin/
 out/
