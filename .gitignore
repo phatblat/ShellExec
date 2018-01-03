@@ -23,4 +23,5 @@
 /build/
 /buildSrc/build/
 bin/
+node_modules/
 out/
