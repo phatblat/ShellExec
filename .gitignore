@@ -1,6 +1,7 @@
 !.idea/runConfigurations/
 *.iml
 .DS_Store
+.classpath
 .gradle/
 .idea/compiler.xml
 .idea/gradle.xml
@@ -16,6 +17,10 @@
 .idea/modules/
 .idea/vcs.xml
 .idea/workspace.xml
+.project
+.settings/
+.vscode/
 /build/
 /buildSrc/build/
+bin/
 out/
