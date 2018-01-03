@@ -1,6 +1,5 @@
 {
   "devDependencies": {
-    "danger": "^3.0.0",
-    "lodash.camelcase": "^4.3.0"
+    "danger": "^3.0.0"
   }
 }
