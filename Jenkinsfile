@@ -32,5 +32,10 @@ pipeline {
                 sh './gradlew test --stacktrace'
             }
         }
+        stage('Danger') {
+            steps {
+                sh 'yarn run danger ci'
+            }
+        }
     }
 }
