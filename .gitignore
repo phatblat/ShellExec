@@ -1,4 +1,5 @@
 !.idea/runConfigurations/
+!.vscode/tasks.json
 *.iml
 .DS_Store
 .classpath
@@ -19,7 +20,6 @@
 .idea/workspace.xml
 .project
 .settings/
-.vscode/
 /build/
 /buildSrc/build/
 bin/
