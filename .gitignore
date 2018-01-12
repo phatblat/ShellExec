@@ -17,6 +17,7 @@
 .idea/modules.xml
 .idea/modules/
 .idea/sonarIssues.xml
+.idea/sonarlint/
 .idea/vcs.xml
 .idea/workspace.xml
 .project
