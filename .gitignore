@@ -3,6 +3,7 @@
 *.iml
 .DS_Store
 .classpath
+.envrc
 .gradle/
 .idea/compiler.xml
 .idea/gradle.xml
