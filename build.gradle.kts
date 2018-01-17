@@ -203,6 +203,18 @@ gradlePlugin.plugins.create(artifactName) {
     implementationClass = "$javaPackage.$pluginClass"
 }
 
+pluginBundle {
+    website = "https://github.com/phatblat/ShellExec"
+    vcsUrl = "https://github.com/phatblat/ShellExec"
+    description = "Exec base task alternative which runs commands in a Bash shell."
+    tags = mutableListOf("gradle", "exec", "shell", "bash", "kotlin")
+
+    plugins.create("shellexec") {
+        id = javaPackage
+        displayName = "ShellExec"
+    }
+}
+
 publishing {
     (publications) {
         "mavenJava"(MavenPublication::class) {
