@@ -199,7 +199,7 @@ configure<BasePluginConvention> {
 }
 
 gradlePlugin.plugins.create(artifactName) {
-    id = artifactName
+    id = javaPackage
     implementationClass = "$javaPackage.$pluginClass"
 }
 
