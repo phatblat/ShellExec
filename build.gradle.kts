@@ -265,4 +265,5 @@ val deploy by tasks.creating {
     description = "Deploys the artifact."
     group = "Deployment"
     dependsOn("bintrayUpload")
+    dependsOn("publishPlugins")
 }
