@@ -7,6 +7,7 @@ import build.junitPlatform
 import com.jfrog.bintray.gradle.BintrayExtension
 import java.util.Date
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -60,7 +61,8 @@ plugins {
     kotlin("jvm")
 
     // Gradle plugin portal - https://plugins.gradle.org/
-    id("com.jfrog.bintray") //version "1.8.0"
+    id("com.gradle.plugin-publish") version  "0.9.9"
+    id("com.jfrog.bintray") // version "1.8.0"
 }
 
 apply {
