@@ -24,7 +24,7 @@ version = "1.0.1"
 
 val artifactName = "shellexec"
 val javaPackage = "$group.$artifactName"
-val pluginClass =  "${name}Plugin"
+val pluginClass =  "ShellExecPlugin"
 
 val kotlinVersion: String by extra
 project.logger.lifecycle("kotlinVersion: $kotlinVersion")
@@ -211,8 +211,9 @@ pluginBundle {
 
     plugins.create("shellexec") {
         id = javaPackage
-        displayName = "ShellExec"
+        displayName = "ShellExec plugin"
     }
+    mavenCoordinates.artifactId = artifactName
 }
 
 publishing {
