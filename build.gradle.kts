@@ -202,6 +202,13 @@ detekt {
         config = "$projectDir/detekt.yml"
         filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
     })
+    idea(Action {
+        path = ".idea"
+        codeStyleScheme = ".idea/code-style.xml"
+        inspectionsProfile = ".idea/inspect.xml"
+        report = "$projectDir/reports"
+        mask = "*.kt,"
+    })
 }
 
 /* -------------------------------------------------------------------------- */
