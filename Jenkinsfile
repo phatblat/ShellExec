@@ -34,8 +34,8 @@ pipeline {
         }
         stage('Danger') {
             steps {
-                sh 'yarn install --verbose'
-                sh 'yarn run danger ci'
+                sh 'bundle install --verbose'
+                sh 'bundle exec danger --verbose'
             }
         }
     }
