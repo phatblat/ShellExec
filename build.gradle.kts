@@ -20,7 +20,7 @@ import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 /* -------------------------------------------------------------------------- */
 
 group = "at.phatbl"
-version = "1.0.1"
+version = "1.0.2"
 
 val artifactName = "shellexec"
 val javaPackage = "$group.$artifactName"

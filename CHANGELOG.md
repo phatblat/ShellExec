@@ -2,7 +2,9 @@
 
 ## Unreleased
 
+## 1.0.2
 
+- Published to [Gradle Plugin Portal](https://plugins.gradle.org/plugin/at.phatbl.shellexec) #27
 
 ## 1.0.1
 
