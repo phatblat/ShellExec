@@ -26,10 +26,15 @@ pipeline {
             steps {
                 sh './gradlew assemble --stacktrace'
             }
-        }
+        
         stage('Test') {
             steps {
                 sh './gradlew test --stacktrace'
+            }
+        }
+        stage('Lint') {
+            steps {
+                sh './gradlew lint --stacktrace'
             }
         }
         stage('Danger') {

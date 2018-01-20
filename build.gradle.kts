@@ -211,6 +211,12 @@ detekt {
     })
 }
 
+val lint by tasks.creating(DefaultTask::class) {
+    // Does this task come from java-gradle-plugin?
+    dependsOn("validateTaskProperties")
+    dependsOn("detektCheck")
+}
+
 /* -------------------------------------------------------------------------- */
 // Deployment
 /* -------------------------------------------------------------------------- */
