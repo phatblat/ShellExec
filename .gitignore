@@ -6,6 +6,7 @@
 .envrc
 .gradle/
 .idea/compiler.xml
+.idea/dictionaries/
 .idea/gradle.xml
 .idea/inspectionProfiles/
 .idea/jenkinsSettings.xml
