@@ -17,6 +17,7 @@ fun loadExtraPropertiesOf(project: Project) = project.run {
     extra["kotlinRepo"] = kotlinRepo
     extra["spekVersion"] = "1.1.5"
     extra["junitPlatformVersion"] = "1.0.0"
+    extra["detektVersion"] = "1.0.0.RC6-2"
 }
 
 val Project.kotlinVersion get() = rootProject.extra["kotlinVersion"] as String
