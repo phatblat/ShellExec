@@ -233,7 +233,7 @@ bintray {
     key = property("bintray.api.key") as String
     setPublications("mavenJava")
     setConfigurations("archives")
-    dryRun = true
+    dryRun = false
     publish = true
     pkg.apply {
         repo = "maven-open-source"
