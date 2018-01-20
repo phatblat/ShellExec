@@ -7,6 +7,7 @@ import build.junitPlatform
 import com.jfrog.bintray.gradle.BintrayExtension
 import java.util.Date
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -19,11 +20,11 @@ import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 /* -------------------------------------------------------------------------- */
 
 group = "at.phatbl"
-version = "1.0.1"
+version = "1.0.2"
 
 val artifactName = "shellexec"
 val javaPackage = "$group.$artifactName"
-val pluginClass =  "${name}Plugin"
+val pluginClass =  "ShellExecPlugin"
 
 val kotlinVersion: String by extra
 project.logger.lifecycle("kotlinVersion: $kotlinVersion")
@@ -60,7 +61,8 @@ plugins {
     kotlin("jvm")
 
     // Gradle plugin portal - https://plugins.gradle.org/
-    id("com.jfrog.bintray") //version "1.8.0"
+    id("com.gradle.plugin-publish") version  "0.9.9"
+    id("com.jfrog.bintray") // version "1.8.0"
 }
 
 apply {
@@ -197,8 +199,21 @@ configure<BasePluginConvention> {
 }
 
 gradlePlugin.plugins.create(artifactName) {
-    id = artifactName
+    id = javaPackage
     implementationClass = "$javaPackage.$pluginClass"
+}
+
+pluginBundle {
+    website = "https://github.com/phatblat/ShellExec"
+    vcsUrl = "https://github.com/phatblat/ShellExec"
+    description = "Exec base task alternative which runs commands in a Bash shell."
+    tags = mutableListOf("gradle", "exec", "shell", "bash", "kotlin")
+
+    plugins.create("shellexec") {
+        id = javaPackage
+        displayName = "ShellExec plugin"
+    }
+    mavenCoordinates.artifactId = artifactName
 }
 
 publishing {
@@ -218,7 +233,7 @@ bintray {
     key = property("bintray.api.key") as String
     setPublications("mavenJava")
     setConfigurations("archives")
-    dryRun = true
+    dryRun = false
     publish = true
     pkg.apply {
         repo = "maven-open-source"
@@ -251,4 +266,5 @@ val deploy by tasks.creating {
     description = "Deploys the artifact."
     group = "Deployment"
     dependsOn("bintrayUpload")
+    dependsOn("publishPlugins")
 }
