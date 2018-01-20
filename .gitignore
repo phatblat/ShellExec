@@ -3,8 +3,10 @@
 *.iml
 .DS_Store
 .classpath
+.envrc
 .gradle/
 .idea/compiler.xml
+.idea/dictionaries/
 .idea/gradle.xml
 .idea/inspectionProfiles/
 .idea/jenkinsSettings.xml
@@ -21,8 +23,10 @@
 .idea/vcs.xml
 .idea/workspace.xml
 .project
+.rubygems/
 .settings/
 /build/
 /buildSrc/build/
 bin/
+node_modules/
 out/

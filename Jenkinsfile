@@ -32,5 +32,11 @@ pipeline {
                 sh './gradlew test --stacktrace'
             }
         }
+        stage('Danger') {
+            steps {
+                sh 'bundle install --verbose'
+                sh 'bundle exec danger --verbose'
+            }
+        }
     }
 }
