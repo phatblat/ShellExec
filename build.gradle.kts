@@ -30,6 +30,7 @@ val kotlinVersion: String by extra
 project.logger.lifecycle("kotlinVersion: $kotlinVersion")
 val junitPlatformVersion: String by extra
 val spekVersion: String by extra
+val detektVersion: String by extra
 
 /* -------------------------------------------------------------------------- */
 // Build Script
@@ -61,8 +62,9 @@ plugins {
     kotlin("jvm")
 
     // Gradle plugin portal - https://plugins.gradle.org/
-    id("com.gradle.plugin-publish") version  "0.9.9"
+    id("com.gradle.plugin-publish") version "0.9.9"
     id("com.jfrog.bintray") // version "1.8.0"
+    id("io.gitlab.arturbosch.detekt") version "1.0.0.RC6-2"
 }
 
 apply {
@@ -187,6 +189,32 @@ tasks.withType<JacocoReport> {
 val codeCoverageReport by tasks.creating(JacocoReport::class) {
     dependsOn("test")
     sourceSets(java.sourceSets["main"])
+}
+
+/* -------------------------------------------------------------------------- */
+// Linting
+/* -------------------------------------------------------------------------- */
+
+detekt {
+    version =detektVersion
+    profile("main", Action {
+        input = "$projectDir/src/main/kotlin"
+        config = "$projectDir/detekt.yml"
+        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    })
+    idea(Action {
+        path = ".idea"
+        codeStyleScheme = ".idea/code-style.xml"
+        inspectionsProfile = ".idea/inspect.xml"
+        report = "$projectDir/reports"
+        mask = "*.kt,"
+    })
+}
+
+val lint by tasks.creating(DefaultTask::class) {
+    // Does this task come from java-gradle-plugin?
+    dependsOn("validateTaskProperties")
+    dependsOn("detektCheck")
 }
 
 /* -------------------------------------------------------------------------- */

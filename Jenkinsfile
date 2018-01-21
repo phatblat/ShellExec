@@ -32,6 +32,11 @@ pipeline {
                 sh './gradlew test --stacktrace'
             }
         }
+        stage('Lint') {
+            steps {
+                sh './gradlew lint --stacktrace'
+            }
+        }
         stage('Danger') {
             steps {
                 sh 'bundle install --verbose'

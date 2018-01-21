@@ -71,9 +71,6 @@ open class ShellExec : DefaultTask() {
         shellCommand.standardOutput = standardOutput
         shellCommand.errorOutput = errorOutput
         shellCommand.start()
-//
-//        logger.lifecycle(shellCommand.stdout)
-//        logger.error(shellCommand.stderr)
 
         if (shellCommand.failed) {
             val message = "command failed with exit code $exitValue"

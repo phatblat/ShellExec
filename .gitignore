@@ -5,6 +5,7 @@
 .classpath
 .envrc
 .gradle/
+.idea/codeStyles/
 .idea/compiler.xml
 .idea/dictionaries/
 .idea/gradle.xml
