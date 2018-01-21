@@ -1,6 +1,11 @@
 package at.phatbl.shellexec
 
-import java.io.*
+import java.io.BufferedReader
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.io.OutputStream
 import java.util.concurrent.TimeUnit
 
 /**
@@ -10,6 +15,15 @@ data class ShellCommand(
         val baseDir: File,
         val command: String
 ) {
+    companion object {
+        // 20m
+        private const val timeout = 1200L
+
+        private const val uninitializedExitValue = -999
+
+        private const val bufferSize = 2 * 1024 * 1024
+    }
+
     lateinit var process: Process
 
     var standardOutput: OutputStream? = null
@@ -22,7 +36,7 @@ data class ShellCommand(
     val stderr: String
         get() = stream2String(process.errorStream)
 
-    var exitValue: Int = -999
+    var exitValue: Int = uninitializedExitValue
 
     val succeeded: Boolean
         get() = exitValue == 0
@@ -45,9 +59,7 @@ data class ShellCommand(
             copy(input = process.errorStream, output = errorOutput!!)
         }
 
-        // 20m
-        process.waitFor(1200, TimeUnit.SECONDS)
-
+        process.waitFor(timeout, TimeUnit.SECONDS)
         exitValue = process.exitValue()
     }
 
@@ -65,12 +77,10 @@ data class ShellCommand(
         return builder.toString()
     }
 
-    private val BUFFER_SIZE = 2 * 1024 * 1024
-
     @Throws(IOException::class)
     private fun copy(input: InputStream, output: OutputStream) {
         try {
-            val buffer = ByteArray(BUFFER_SIZE)
+            val buffer = ByteArray(bufferSize)
             var bytesRead = input.read(buffer)
             while (bytesRead != -1) {
                 output.write(buffer, 0, bytesRead)
