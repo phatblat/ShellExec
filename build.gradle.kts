@@ -76,7 +76,7 @@ val removeBatchFile by tasks.creating(Delete::class) { delete("gradlew.bat") }
 
 tasks {
     "wrapper"(Wrapper::class) {
-        gradleVersion = "4.4.1" // kotlin-dsl 0.13.2
+        gradleVersion = "4.5" // kotlin-dsl 0.14
         distributionType = DistributionType.ALL
         finalizedBy(removeBatchFile)
     }
