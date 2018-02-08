@@ -86,10 +86,14 @@ open class ShellExec : DefaultTask() {
     }
 
     /** Hook for running logic before the exec task action runs. */
-    open fun preExec() {}
+    open fun preExec() {
+        logger.debug("No custom logic in preExec")
+    }
 
     /** Hook for running logic immediately after the exec task action runs. Does not run on command failure. */
-    open fun postExec() {}
+    open fun postExec() {
+        logger.debug("No custom logic in postExec")
+    }
 
     /**
      * Builds a custom value for the PATH variable.
