@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+
+## 1.1.0
+
+- Added `preExec` and `postExec` hooks for custom logic. #31 
+
 ## 1.0.2
 
 - Published to [Gradle Plugin Portal](https://plugins.gradle.org/plugin/at.phatbl.shellexec) #27
