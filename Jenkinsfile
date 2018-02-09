@@ -24,17 +24,17 @@ pipeline {
     stages {
         stage('Assemble') {
             steps {
-                sh './gradlew assemble --stacktrace'
+                sh './gradlew assemble --no-daemon --stacktrace'
             }
         }
         stage('Test') {
             steps {
-                sh './gradlew test --stacktrace'
+                sh './gradlew test --no-daemon --stacktrace'
             }
         }
         stage('Lint') {
             steps {
-                sh './gradlew lint --stacktrace'
+                sh './gradlew lint --no-daemon --stacktrace'
             }
         }
         stage('Danger') {

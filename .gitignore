@@ -5,6 +5,7 @@
 .classpath
 .envrc
 .gradle/
+.idea/.name
 .idea/codeStyles/
 .idea/compiler.xml
 .idea/dictionaries/
@@ -29,5 +30,6 @@
 /build/
 /buildSrc/build/
 bin/
+local.properties
 node_modules/
 out/

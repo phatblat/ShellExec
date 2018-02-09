@@ -5,22 +5,26 @@
 
 import build.junitPlatform
 import com.jfrog.bintray.gradle.BintrayExtension
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Delete
 import java.util.Date
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.junit.platform.gradle.plugin.EnginesExtension
 import org.junit.platform.gradle.plugin.FiltersExtension
 import org.junit.platform.gradle.plugin.JUnitPlatformExtension
+import java.io.File
 
 /* -------------------------------------------------------------------------- */
 // Properties
 /* -------------------------------------------------------------------------- */
 
 group = "at.phatbl"
-version = "1.0.2"
+version = "1.1.0"
 
 val artifactName = "shellexec"
 val javaPackage = "$group.$artifactName"
@@ -76,7 +80,7 @@ val removeBatchFile by tasks.creating(Delete::class) { delete("gradlew.bat") }
 
 tasks {
     "wrapper"(Wrapper::class) {
-        gradleVersion = "4.5" // kotlin-dsl 0.14
+        gradleVersion = "4.5.1" // kotlin-dsl 0.14
         distributionType = DistributionType.ALL
         finalizedBy(removeBatchFile)
     }

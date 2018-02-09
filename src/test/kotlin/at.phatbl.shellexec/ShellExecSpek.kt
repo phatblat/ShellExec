@@ -9,7 +9,7 @@ import org.jetbrains.spek.api.dsl.xit
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class ShellExecSpec: Spek({
+class ShellExecSpek: Spek({
     describe("Shell Exec Task") {
         var project: Project = ProjectBuilder.builder().build()
         var task: ShellExec = project.tasks.create("exec", ShellExec::class.java)

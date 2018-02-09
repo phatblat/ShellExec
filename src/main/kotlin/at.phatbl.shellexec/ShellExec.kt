@@ -64,6 +64,8 @@ open class ShellExec : DefaultTask() {
 
     @TaskAction
     fun exec() {
+        preExec()
+
         val cmd = command ?: throw GradleException("command must be specified")
         if (cmd == "") throw GradleException("command must not be empty")
 
@@ -79,6 +81,18 @@ open class ShellExec : DefaultTask() {
             }
             logger.error(message)
         }
+
+        postExec()
+    }
+
+    /** Hook for running logic before the exec task action runs. */
+    open fun preExec() {
+        logger.debug("No custom logic in preExec")
+    }
+
+    /** Hook for running logic immediately after the exec task action runs. Does not run on command failure. */
+    open fun postExec() {
+        logger.debug("No custom logic in postExec")
     }
 
     /**
