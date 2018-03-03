@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- ⬆️ Upgraded Gradle wrapper to [4.6](https://github.com/gradle/gradle/releases/tag/v4.6.0). #33
 
 ## 1.1.0
 
@@ -9,11 +10,11 @@
 
 ## 1.0.2
 
-- Published to [Gradle Plugin Portal](https://plugins.gradle.org/plugin/at.phatbl.shellexec) #27
+- Published to [Gradle Plugin Portal](https://plugins.gradle.org/plugin/at.phatbl.shellexec). #27
 
 ## 1.0.1
 
-- Fixed publishing metadata #22
+- Fixed publishing metadata. #22
   - artifactId is now `shellexec`
 
 ## 1.0.0
