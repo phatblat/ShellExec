@@ -8,7 +8,6 @@ import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Delete
 import java.util.Date
-import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.extra
@@ -80,8 +79,8 @@ val removeBatchFile by tasks.creating(Delete::class) { delete("gradlew.bat") }
 
 tasks {
     "wrapper"(Wrapper::class) {
-        gradleVersion = "4.5.1" // kotlin-dsl 0.14
-        distributionType = DistributionType.ALL
+        gradleVersion = "4.6"
+        distributionType = Wrapper.DistributionType.ALL
         finalizedBy(removeBatchFile)
     }
 }
@@ -161,6 +160,7 @@ junitPlatform {
         engines {
             include("spek", "junit-jupiter", "junit-vintage")
         }
+
     }
 }
 
