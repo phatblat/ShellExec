@@ -3,12 +3,12 @@
  * ShellExecExample
  */
 
+import at.phatbl.shellexec.ShellExec
+
 buildscript {
     repositories.jcenter()
     dependencies.classpath 'at.phatbl:shellexec:+'
 }
-
-import at.phatbl.shellexec.ShellExec
 
 task helloWorld(type: ShellExec) {
     group "Example"
@@ -32,7 +32,7 @@ task emptyCommand(type: ShellExec) {
 
 task errorLogging(type: ShellExec) {
     group "Example"
-    command "cat missingfile"
+    command "echo This is an error >&2"
 }
 
 task customPath(type: ShellExec) {
@@ -45,6 +45,20 @@ task customPath(type: ShellExec) {
 task lolCowFortune(type: ShellExec) {
     group "Example"
     command "fortune | cowsay | lolcat"
+}
+
+class CustomTask extends ShellExec {
+    @Input
+    String message
+
+    void preExec() {
+        command = "echo $message"
+    }
+}
+
+task customTask(type: CustomTask) {
+    group "Example"
+    message = "Custom task command set from preExec"
 }
 
 /** No-op task to prevent issues when IDEA refreshes project. */

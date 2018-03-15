@@ -7,4 +7,5 @@ import java.io.File
  */
 fun File.writeLine(line: String) {
     printWriter().write(line)
+    printWriter().flush()
 }
