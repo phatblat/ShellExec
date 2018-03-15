@@ -13,6 +13,7 @@ import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.junit.platform.console.options.Details
 import org.junit.platform.gradle.plugin.EnginesExtension
 import org.junit.platform.gradle.plugin.FiltersExtension
 import org.junit.platform.gradle.plugin.JUnitPlatformExtension
@@ -127,7 +128,7 @@ val updateVersionFile by tasks.creating {
     description = "Updates the VERSION.txt file included with the plugin"
     group = "Build"
     doLast {
-        val versionFile = project.file("src/main/resources/VERSION.txt").writeText(version.toString())
+        project.file("src/main/resources/VERSION.txt").writeText(version.toString())
     }
 }
 
@@ -160,8 +161,8 @@ junitPlatform {
         engines {
             include("spek", "junit-jupiter", "junit-vintage")
         }
-
     }
+    details = Details.TREE
 }
 
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
