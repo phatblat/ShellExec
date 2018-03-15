@@ -5,31 +5,45 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecResult
 import java.io.File
 //import java.io.InputStream
 import java.io.OutputStream
 
-open class ShellExec : DefaultTask() {
+open class ShellExec: DefaultTask() {
     companion object {
         // Directories to be prepended to PATH
         private const val pathAdditions = "./bin:/usr/local/bin"
         private const val PATH = "PATH"
     }
 
+    @Input
     var environment = mutableMapOf<String, Any>()
+
+    @InputDirectory
     var workingDir: File = project.projectDir
 
+    @Internal
     val standardOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.LIFECYCLE)
+
+    @Internal
     val errorOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.ERROR)
+
+//    @Internal
 //    val standardInput: InputStream
 //        get() = shellCommand.process.outputStream
 
+    @Input
     var ignoreExitValue: Boolean = false
+
+    @Internal
     var execResult: ExecResult? = null
 
-    val exitValue: Int
+    @Internal
+    var exitValue: Int = -999
         get() = shellCommand.exitValue
 
     private lateinit var shellCommand: ShellCommand
@@ -43,7 +57,7 @@ open class ShellExec : DefaultTask() {
     private var systemPath: String
 
     /** Value to be prepended to the PATH. */
-//    @Input
+    @Internal
     var prePath: String? = null
         set(value) {
             field = value
@@ -51,7 +65,7 @@ open class ShellExec : DefaultTask() {
         }
 
     /** Value to be appended to the PATH. */
-//    @Input
+    @Internal
     var postPath: String? = null
         set(value) {
             field = value
