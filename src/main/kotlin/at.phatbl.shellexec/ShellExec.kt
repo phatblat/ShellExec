@@ -36,7 +36,7 @@ open class ShellExec : DefaultTask() {
 
     /** Core storage of command line to be executed */
     @Input
-    var command: String? = null
+    var command = ""
 
     /** Property containing a copy of the PATH environment variable. */
     @Input
@@ -66,10 +66,9 @@ open class ShellExec : DefaultTask() {
     fun exec() {
         preExec()
 
-        val cmd = command ?: throw GradleException("command must be specified")
-        if (cmd == "") throw GradleException("command must not be empty")
+        if (command == "") throw GradleException("command must not be empty")
 
-        shellCommand = ShellCommand(baseDir = workingDir, command = cmd)
+        shellCommand = ShellCommand(baseDir = workingDir, command = command)
         shellCommand.standardOutput = standardOutput
         shellCommand.errorOutput = errorOutput
         shellCommand.start()
