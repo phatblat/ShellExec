@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.1.1
+
 - 🐛 Set default `command` to empty string. Allows for `command` to be populated in `preExec`. #36
 - ⬆️ Upgraded Gradle wrapper to [4.6](https://github.com/gradle/gradle/releases/tag/v4.6.0). #33
 

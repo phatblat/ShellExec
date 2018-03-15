@@ -24,7 +24,7 @@ import java.io.File
 /* -------------------------------------------------------------------------- */
 
 group = "at.phatbl"
-version = "1.1.0"
+version = "1.1.1"
 
 val artifactName = "shellexec"
 val javaPackage = "$group.$artifactName"
