@@ -8,9 +8,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
-import org.gradle.process.ExecResult
 import java.io.File
-//import java.io.InputStream
 import java.io.OutputStream
 
 open class ShellExec: DefaultTask() {
@@ -38,9 +36,6 @@ open class ShellExec: DefaultTask() {
 
     @Input
     var ignoreExitValue: Boolean = false
-
-    @Internal
-    var execResult: ExecResult? = null
 
     @Internal
     var exitValue: Int = -999
