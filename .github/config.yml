@@ -1,0 +1,7 @@
+---
+# https://probot.github.io/apps/todo/#configuring-for-your-project
+todo:
+  keyword: "@todo"
+  autoAssign: true
+  blobLines: 5
+  caseSensitive: false
