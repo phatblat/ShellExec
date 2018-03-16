@@ -1,0 +1,10 @@
+/*
+ * Tubefile
+ * ShellExec
+ *
+ * https://github.com/phatblat/Tube
+ */
+
+@Library("Tube") _
+
+tube {}
