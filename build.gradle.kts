@@ -197,7 +197,7 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
 }
 
 /* -------------------------------------------------------------------------- */
-// Linting
+// Code Quality
 /* -------------------------------------------------------------------------- */
 
 detekt {
@@ -225,11 +225,21 @@ val lint by tasks.creating(DefaultTask::class) {
 }
 
 val codeQuality by tasks.creating(DefaultTask::class) {
-    description = "🚇 Tube stage which runs all code quality checks."
-    group = "Verification"
+    description = "Runs all code quality checks."
+    group = "🚇 Tube"
     dependsOn("detektCheck")
     dependsOn("check")
     dependsOn(lint)
+}
+
+/* -------------------------------------------------------------------------- */
+// Release
+/* -------------------------------------------------------------------------- */
+
+val release by tasks.creating(DefaultTask::class) {
+    description = "Performs release actions."
+    group = "🚇 Tube"
+    doLast { logger.lifecycle("Release task not implemented.") }
 }
 
 /* -------------------------------------------------------------------------- */
