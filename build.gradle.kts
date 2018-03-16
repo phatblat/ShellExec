@@ -217,9 +217,19 @@ detekt {
 }
 
 val lint by tasks.creating(DefaultTask::class) {
+    description = "Runs detekt and validateTaskProperties"
+    group = "Verification"
     // Does this task come from java-gradle-plugin?
     dependsOn("validateTaskProperties")
     dependsOn("detektCheck")
+}
+
+val codeQuality by tasks.creating(DefaultTask::class) {
+    description = "🚇 Tube stage which runs all code quality checks."
+    group = "Verification"
+    dependsOn("detektCheck")
+    dependsOn("check")
+    dependsOn(lint)
 }
 
 /* -------------------------------------------------------------------------- */
