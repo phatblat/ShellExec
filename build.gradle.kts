@@ -3,6 +3,7 @@
  * ShellExec
  */
 
+import at.phatbl.shellexec.ShellExec
 import build.junitPlatform
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.DefaultTask
@@ -18,6 +19,7 @@ import org.junit.platform.gradle.plugin.EnginesExtension
 import org.junit.platform.gradle.plugin.FiltersExtension
 import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 import java.io.File
+import java.nio.file.Files.delete
 
 /* -------------------------------------------------------------------------- */
 // Properties
@@ -53,6 +55,7 @@ buildscript {
 
     dependencies {
         classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
+        classpath("at.phatbl:shellexec:+")
     }
 }
 
@@ -197,7 +200,7 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
 }
 
 /* -------------------------------------------------------------------------- */
-// Linting
+// Code Quality
 /* -------------------------------------------------------------------------- */
 
 detekt {
@@ -217,9 +220,37 @@ detekt {
 }
 
 val lint by tasks.creating(DefaultTask::class) {
+    description = "Runs detekt and validateTaskProperties"
+    group = "Verification"
     // Does this task come from java-gradle-plugin?
     dependsOn("validateTaskProperties")
     dependsOn("detektCheck")
+}
+
+val danger by tasks.creating(ShellExec::class) {
+    description = "Runs danger rules."
+    group = "Verification"
+    command = """\
+        bundle install --gemfile=Gemfile --verbose
+        ./bin/danger --verbose"""
+}
+
+val codeQuality by tasks.creating(DefaultTask::class) {
+    description = "Runs all code quality checks."
+    group = "🚇 Tube"
+    dependsOn("detektCheck")
+    dependsOn("check")
+    dependsOn(lint)
+}
+
+/* -------------------------------------------------------------------------- */
+// Release
+/* -------------------------------------------------------------------------- */
+
+val release by tasks.creating(DefaultTask::class) {
+    description = "Performs release actions."
+    group = "🚇 Tube"
+    doLast { logger.lifecycle("Release task not implemented.") }
 }
 
 /* -------------------------------------------------------------------------- */
