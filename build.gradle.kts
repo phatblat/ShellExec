@@ -99,18 +99,17 @@ repositories {
     maven("http://dl.bintray.com/jetbrains/spek")
 }
 
-// In this section you declare the dependencies for your production and test code
 dependencies {
-    compile(kotlin("stdlib", kotlinVersion))
-    compile("org.apache.commons:commons-exec:1.3")
+    implementation(kotlin("stdlib", kotlinVersion))
+    implementation("org.apache.commons:commons-exec:1.3")
 
     // Speck
-    compile(kotlin("reflect", kotlinVersion))
-    testCompile(kotlin("test", kotlinVersion))
-    testCompile(kotlin("test-junit", kotlinVersion))
-    testCompile("org.jetbrains.spek:spek-api:$spekVersion")
-    testCompile("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
-    testCompile("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
+    implementation(kotlin("reflect", kotlinVersion))
+    testImplementation(kotlin("test", kotlinVersion))
+    testImplementation(kotlin("test-junit", kotlinVersion))
+    testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
+    testImplementation("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+    testImplementation("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
 }
 
 // java
