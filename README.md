@@ -1,6 +1,6 @@
 # ShellExec
 
-[![Pipeline Status](http://jenkins.log-g.co/buildStatus/icon?job=ShellExec/master)](http://jenkins.log-g.co/job/ShellExec/job/master/)
+[![Tube](https://jenkins.log-g.co/buildStatus/icon?job=phatblat/ShellExec/master)](https://jenkins.log-g.co/job/phatblat/job/ShellExec/job/master/)
 [ ![Download](https://api.bintray.com/packages/phatblat/maven-open-source/ShellExec/images/download.svg) ](https://bintray.com/phatblat/maven-open-source/ShellExec/_latestVersion)
 
 A simpler extension point than [`Exec`](https://docs.gradle.org/current/dsl/org.gradle.api.tasks.Exec.html) for ad-hoc Gradle tasks that run shell commands.
