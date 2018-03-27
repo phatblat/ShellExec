@@ -35,16 +35,16 @@ plugins {
     `maven-publish`
 
     // Kotlin plugins
-    kotlin("jvm")
+    kotlin("jvm") version "1.2.30"
 
     // Gradle plugin portal - https://plugins.gradle.org/
-    id("com.gradle.plugin-publish") version "0.9.9"
-    id("com.jfrog.bintray") // version "1.8.0"
-    id("io.gitlab.arturbosch.detekt") version "1.0.0.RC6-2"
+    id("com.gradle.plugin-publish") version "0.9.10"
+    id("com.jfrog.bintray") version "1.8.0"
+    id("io.gitlab.arturbosch.detekt") version "1.0.0.RC6-4"
 
     // Custom handling in pluginManagement
     id("at.phatbl.shellexec") version "1.1.1"
-    id("org.junit.platform.gradle.plugin") //version "1.1.0"
+    id("org.junit.platform.gradle.plugin") version "1.1.0"
 }
 
 val removeBatchFile by tasks.creating(Delete::class) { delete("gradlew.bat") }
@@ -68,7 +68,6 @@ val pluginClass by project
 val jvmTarget = JavaVersion.VERSION_1_8
 
 val kotlinVersion by project
-project.logger.lifecycle("kotlinVersion: $kotlinVersion")
 val spekVersion by project
 val detektVersion by project
 
