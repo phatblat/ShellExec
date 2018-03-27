@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 🐛Fixed issue when current directory contains space. #38
 - 👮‍♀️ Update build badge. #40
 - 🔧 Update Gradle configuration. #39
 - ⬆️ Kotlin (1.2.30) #39
