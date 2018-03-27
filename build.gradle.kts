@@ -3,8 +3,13 @@
  * ShellExec
  */
 
+/* -------------------------------------------------------------------------- */
+// 🛃 Imports
+/* -------------------------------------------------------------------------- */
+
 import at.phatbl.shellexec.ShellExec
 import build.junitPlatform
+import build.kotlinVersion
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Delete
@@ -22,42 +27,8 @@ import java.io.File
 import java.nio.file.Files.delete
 
 /* -------------------------------------------------------------------------- */
-// Properties
+// 🔌 Plugins
 /* -------------------------------------------------------------------------- */
-
-group = "at.phatbl"
-version = "1.1.1"
-
-val artifactName = "shellexec"
-val javaPackage = "$group.$artifactName"
-val pluginClass =  "ShellExecPlugin"
-
-val kotlinVersion: String by extra
-project.logger.lifecycle("kotlinVersion: $kotlinVersion")
-val junitPlatformVersion: String by extra
-val spekVersion: String by extra
-val detektVersion: String by extra
-
-/* -------------------------------------------------------------------------- */
-// Build Script
-/* -------------------------------------------------------------------------- */
-
-buildscript {
-    build.loadExtraPropertiesOf(project)
-
-    val kotlinRepo: String by extra
-    val junitPlatformVersion: String by extra
-
-    repositories {
-        maven(kotlinRepo)
-        jcenter()
-    }
-
-    dependencies {
-        classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
-        classpath("at.phatbl:shellexec:+")
-    }
-}
 
 plugins {
     // Gradle built-in
@@ -72,11 +43,10 @@ plugins {
     id("com.gradle.plugin-publish") version "0.9.9"
     id("com.jfrog.bintray") // version "1.8.0"
     id("io.gitlab.arturbosch.detekt") version "1.0.0.RC6-2"
-}
 
-apply {
-    // org.junit.platform:junit-platform-gradle-plugin doesn't support new plugin style
-    plugin("org.junit.platform.gradle.plugin")
+    // Custom handling in pluginManagement
+    id("at.phatbl.shellexec") version "1.1.1"
+    id("org.junit.platform.gradle.plugin") //version "1.1.0"
 }
 
 val removeBatchFile by tasks.creating(Delete::class) { delete("gradlew.bat") }
@@ -90,7 +60,33 @@ tasks {
 }
 
 /* -------------------------------------------------------------------------- */
-// Build Configuration
+// 📋 Properties
+/* -------------------------------------------------------------------------- */
+
+val artifactName by project
+val javaPackage = "$group.$artifactName"
+val pluginClass by project
+
+val jvmTarget = JavaVersion.VERSION_1_8
+
+val kotlinVersion by project
+project.logger.lifecycle("kotlinVersion: $kotlinVersion")
+val spekVersion by project
+val detektVersion by project
+
+// FIXME: Get version from plugins block
+// This is necessary to make the plugin version accessible in other places
+// https://stackoverflow.com/questions/46053522/how-to-get-ext-variables-into-plugins-block-in-build-gradle-kts/47507441#47507441
+//val junitPlatformVersion: String? by extra {
+//    buildscript.configurations["classpath"]
+//            .resolvedConfiguration.firstLevelModuleDependencies
+//            .find { it.moduleName == "junit-platform-gradle-plugin" }?.moduleVersion
+//}
+
+val junitPlatformVersion by project
+
+/* -------------------------------------------------------------------------- */
+// 👪 Dependencies
 /* -------------------------------------------------------------------------- */
 
 repositories {
@@ -100,25 +96,29 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib", kotlinVersion))
+    implementation(kotlin("stdlib", "$kotlinVersion"))
     implementation("org.apache.commons:commons-exec:1.3")
 
     // Speck
-    implementation(kotlin("reflect", kotlinVersion))
-    testImplementation(kotlin("test", kotlinVersion))
-    testImplementation(kotlin("test-junit", kotlinVersion))
+    implementation(kotlin("reflect", "$kotlinVersion"))
+    testImplementation(kotlin("test", "$kotlinVersion"))
+    testImplementation(kotlin("test-junit", "$kotlinVersion"))
     testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
     testImplementation("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
     testImplementation("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
 }
 
+/* -------------------------------------------------------------------------- */
+// 🏗 Assemble
+/* -------------------------------------------------------------------------- */
+
 // java
 configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = sourceCompatibility
+    sourceCompatibility = jvmTarget
+    targetCompatibility = jvmTarget
 }
 
-tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = sourceCompatibility }
+tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "$jvmTarget" }
 
 // Include resources
 java.sourceSets["main"].resources {
@@ -153,11 +153,10 @@ artifacts.add("archives", sourcesJar)
 artifacts.add("archives", javadocJar)
 
 /* -------------------------------------------------------------------------- */
-// Testing
+// ✅ Test
 /* -------------------------------------------------------------------------- */
 
 junitPlatform {
-    platformVersion = junitPlatformVersion
     filters {
         includeClassNamePatterns("^.*Tests?$", ".*Spec", ".*Spek")
         engines {
@@ -203,7 +202,7 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
 /* -------------------------------------------------------------------------- */
 
 detekt {
-    version =detektVersion
+    version = "$detektVersion"
     profile("main", Action {
         input = "$projectDir/src/main/kotlin"
         config = "$projectDir/detekt.yml"
@@ -253,7 +252,7 @@ val release by tasks.creating(DefaultTask::class) {
 }
 
 /* -------------------------------------------------------------------------- */
-// Deployment
+// 🚀 Deployment
 /* -------------------------------------------------------------------------- */
 
 configure<BasePluginConvention> {
@@ -261,7 +260,7 @@ configure<BasePluginConvention> {
     archivesBaseName = javaPackage
 }
 
-gradlePlugin.plugins.create(artifactName) {
+gradlePlugin.plugins.create("$artifactName") {
     id = javaPackage
     implementationClass = "$javaPackage.$pluginClass"
 }
@@ -276,14 +275,14 @@ pluginBundle {
         id = javaPackage
         displayName = "ShellExec plugin"
     }
-    mavenCoordinates.artifactId = artifactName
+    mavenCoordinates.artifactId = "$artifactName"
 }
 
 publishing {
     (publications) {
         "mavenJava"(MavenPublication::class) {
             from(components["java"])
-            artifactId = artifactName
+            artifactId = "$artifactName"
 
             artifact(sourcesJar) { classifier = "sources" }
             artifact(javadocJar) { classifier = "javadoc" }
