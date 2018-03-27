@@ -1,6 +1,12 @@
-# ShellExec CHANGELOG
+# 📝 ShellExec CHANGELOG
 
 ## Unreleased
+
+- 🔧 Update Gradle configuration. #39
+- ⬆️ Kotlin (1.2.30) #39
+- ⬆️ JUnit Platform (1.1.0) #39
+- ⬆️ Detekt (1.0.0.RC6-4)
+- ⬆️ Publishing Plugin (0.9.10)
 
 ## 1.1.1
 
