@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 👮‍♀️ Update build badge. #40
 - 🔧 Update Gradle configuration. #39
 - ⬆️ Kotlin (1.2.30) #39
 - ⬆️ JUnit Platform (1.1.0) #39
