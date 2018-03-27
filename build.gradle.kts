@@ -8,8 +8,6 @@
 /* -------------------------------------------------------------------------- */
 
 import at.phatbl.shellexec.ShellExec
-import build.junitPlatform
-import build.kotlinVersion
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Delete

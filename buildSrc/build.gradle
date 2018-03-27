@@ -1,8 +1,7 @@
 // https://github.com/gradle/kotlin-dsl/blob/234bbd7fbeedf66794345298a59f5ac6996a6f67/buildSrc/build.gradle
 buildscript {
     ext {
-        kotlinVersion = file('../kotlin-version.txt').text.trim()
-
+        kotlinVersion = "1.2.30"
     }
 
     configure([repositories, project.repositories]) {
