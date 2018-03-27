@@ -44,7 +44,6 @@ object ShellCommandSpek : Spek({
             assertTrue(shellCommand.succeeded)
             assertEquals("This is an error.\n", shellCommand.stderr)
         }
-
         it("can invoke a command with spaces in the path") {
             val fileName = "File with spaces in the name"
             val fileContents = "This is the file contents!"
@@ -68,6 +67,30 @@ object ShellCommandSpek : Spek({
             assertTrue(shellCommand.succeeded)
             assertEquals("", stderr)
             assertEquals("$fileContents\n", stdout)
+
+            temporaryFolder.delete()
+        }
+        it("can invoke a command with spaces in the current directory") {
+            val dirName = "directory with spaces in the name"
+            val fileContents = "This is the file contents!"
+
+            val temporaryFolder = TemporaryFolder()
+            temporaryFolder.create()
+            val baseDir = temporaryFolder.root
+            val subDir = File(baseDir, dirName)
+            subDir.mkdir()
+
+            shellCommand = ShellCommand(baseDir = subDir, command = "true")
+            shellCommand.start()
+
+            val stderr = shellCommand.stderr
+            val stdout = shellCommand.stdout
+
+            println(stderr)
+            println(stdout)
+
+            assertTrue(shellCommand.succeeded)
+            assertEquals("", stderr)
 
             temporaryFolder.delete()
         }

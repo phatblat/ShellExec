@@ -49,7 +49,7 @@ data class ShellCommand(
      */
     fun start() {
         baseDir.mkdir()
-        val pb = ProcessBuilder("bash", "-c", "cd $baseDir && $command")
+        val pb = ProcessBuilder("bash", "-c", "cd '$baseDir' && $command")
         process = pb.start()
 
         if (standardOutput != null) {
