@@ -1,6 +1,0 @@
-/*
- * settings.gradle
- * ShellExec
- */
-
-rootProject.name = 'shellexec'

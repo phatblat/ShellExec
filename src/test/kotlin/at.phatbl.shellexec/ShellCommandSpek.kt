@@ -3,18 +3,13 @@ package at.phatbl.shellexec
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class TempFolderUtil {
-    @Rule @JvmField val folder = TemporaryFolder()
-}
-
-class ShellCommandSpek : Spek({
+object ShellCommandSpek : Spek({
     describe("Shell Command") {
         var shellCommand: ShellCommand
         beforeEachTest {
@@ -54,11 +49,10 @@ class ShellCommandSpek : Spek({
             val fileName = "File with spaces in the name"
             val fileContents = "This is the file contents!"
 
-            // JUnit TemporaryFOlder
-            val util = TempFolderUtil()
-            util.folder.create()
-            val baseDir = util.folder.root
-            val file = util.folder.newFile(fileName)
+            val temporaryFolder = TemporaryFolder()
+            temporaryFolder.create()
+            val baseDir = temporaryFolder.root
+            val file = temporaryFolder.newFile(fileName)
 
             file.writeText(fileContents)
 
@@ -74,6 +68,8 @@ class ShellCommandSpek : Spek({
             assertTrue(shellCommand.succeeded)
             assertEquals("", stderr)
             assertEquals("$fileContents\n", stdout)
+
+            temporaryFolder.delete()
         }
     }
 })
