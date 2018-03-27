@@ -1,5 +1,6 @@
 package at.phatbl.shellexec
 
+import at.phatbl.shellexec.extensions.executeActions
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.jetbrains.spek.api.Spek
@@ -24,7 +25,7 @@ class ShellExecSpek: Spek({
 
         it("can run a simple command") {
             task.command = "true"
-            task.execute()
+            task.executeActions()
 
             assertEquals(task.exitValue, 0)
         }
@@ -32,7 +33,7 @@ class ShellExecSpek: Spek({
         it("can run a failing command") {
             task.command = "false"
             task.ignoreExitValue = true
-            task.execute()
+            task.executeActions()
 
             assertEquals(task.exitValue, 1)
         }

@@ -1,5 +1,6 @@
 package at.phatbl.shellexec
 
+import at.phatbl.shellexec.extensions.executeActions
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.jetbrains.spek.api.Spek
@@ -20,7 +21,7 @@ class ShellExecSubclassSpek: Spek({
             val task: PreExec = project.tasks.create("exec", PreExec::class.java)
 
             task.command = "true"
-            task.execute()
+            task.executeActions()
 
             assertEquals(task.exitValue, 0)
             assertTrue { task.methodCalled }
@@ -30,7 +31,7 @@ class ShellExecSubclassSpek: Spek({
             val task: PostExec = project.tasks.create("exec", PostExec::class.java)
 
             task.command = "true"
-            task.execute()
+            task.executeActions()
 
             assertEquals(task.exitValue, 0)
             assertTrue { task.methodCalled }
@@ -40,7 +41,7 @@ class ShellExecSubclassSpek: Spek({
             val task: PreAndPostExec = project.tasks.create("exec", PreAndPostExec::class.java)
 
             task.command = "true"
-            task.execute()
+            task.executeActions()
 
             assertEquals(task.exitValue, 0)
             assertTrue { task.preExecCalled && task.postExecCalled }
