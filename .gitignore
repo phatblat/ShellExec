@@ -1,10 +1,12 @@
 !.idea/runConfigurations/
 !.vscode/tasks.json
+*.hprof
 *.iml
 .DS_Store
 .classpath
 .envrc
 .gradle/
+.idea/
 .idea/.name
 .idea/codeStyles/
 .idea/compiler.xml
@@ -26,10 +28,14 @@
 .idea/workspace.xml
 .project
 .rubygems/
+.settings
 .settings/
+.vscode/
 /build/
 /buildSrc/build/
 bin/
+build/
+gradlew.bat
 local.properties
 node_modules/
 out/
