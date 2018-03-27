@@ -2,13 +2,17 @@
 
 ## Unreleased
 
+
+
+## 1.1.2
+
 - 🐛Fixed issue when current directory contains space. #38
 - 👮‍♀️ Update build badge. #40
 - 🔧 Update Gradle configuration. #39
 - ⬆️ Kotlin (1.2.30) #39
 - ⬆️ JUnit Platform (1.1.0) #39
-- ⬆️ Detekt (1.0.0.RC6-4)
-- ⬆️ Publishing Plugin (0.9.10)
+- ⬆️ Detekt (1.0.0.RC6-4) #39
+- ⬆️ Publishing Plugin (0.9.10) #39
 
 ## 1.1.1
 

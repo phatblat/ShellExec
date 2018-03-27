@@ -308,7 +308,7 @@ bintray {
             name = project.version.toString()
             desc = "ShellExec Gradle Plugin ${project.version}"
             released = Date().toString()
-            vcsTag = project.version.toString()
+            vcsTag = "$project.version"
             attributes = mapOf("gradle-plugin" to "${project.group}:$artifactName:$version")
 
             mavenCentralSync.apply {
