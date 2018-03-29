@@ -34,16 +34,14 @@ plugins {
     `java-gradle-plugin`
     `maven-publish`
 
-    // Kotlin plugins
-    kotlin("jvm") version "1.2.30"
-
     // Gradle plugin portal - https://plugins.gradle.org/
+    kotlin("jvm") version "1.2.31"
     id("com.gradle.plugin-publish") version "0.9.10"
     id("com.jfrog.bintray") version "1.8.0"
     id("io.gitlab.arturbosch.detekt") version "1.0.0.RC6-4"
 
     // Custom handling in pluginManagement
-    id("at.phatbl.shellexec") version "1.1.1"
+    id("at.phatbl.shellexec") version "1.1.2"
     id("org.junit.platform.gradle.plugin") version "1.1.0"
 }
 
@@ -67,7 +65,6 @@ val pluginClass by project
 
 val jvmTarget = JavaVersion.VERSION_1_8
 
-val kotlinVersion by project
 val spekVersion by project
 val detektVersion by project
 
@@ -86,23 +83,19 @@ val junitPlatformVersion by project
 // 👪 Dependencies
 /* -------------------------------------------------------------------------- */
 
-repositories {
-    jcenter()
-    maven("https://repo.gradle.org/gradle/repo")
-    maven("http://dl.bintray.com/jetbrains/spek")
-}
+repositories.jcenter()
 
 dependencies {
-    implementation(kotlin("stdlib", "$kotlinVersion"))
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
     implementation("org.apache.commons:commons-exec:1.3")
 
-    // Speck
-    implementation(kotlin("reflect", "$kotlinVersion"))
-    testImplementation(kotlin("test", "$kotlinVersion"))
-    testImplementation(kotlin("test-junit", "$kotlinVersion"))
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-junit"))
+    testImplementation("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
     testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
     testImplementation("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
-    testImplementation("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
 }
 
 /* -------------------------------------------------------------------------- */
