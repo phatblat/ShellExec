@@ -18,7 +18,7 @@ pluginManagement {
                     useModule("gradle.plugin.at.phatbl:shellexec:${requested.version}")
                 "org.junit.platform.gradle.plugin" ->
                     useModule("org.junit.platform:junit-platform-gradle-plugin:${requested.version}")
-                else -> println("")
+                else -> Unit
             }
         }
     }
