@@ -34,10 +34,8 @@ plugins {
     `java-gradle-plugin`
     `maven-publish`
 
-    // Kotlin plugins
-    kotlin("jvm") version "1.2.30"
-
     // Gradle plugin portal - https://plugins.gradle.org/
+    kotlin("jvm") version "1.2.31"
     id("com.gradle.plugin-publish") version "0.9.10"
     id("com.jfrog.bintray") version "1.8.0"
     id("io.gitlab.arturbosch.detekt") version "1.0.0.RC6-4"
@@ -67,7 +65,6 @@ val pluginClass by project
 
 val jvmTarget = JavaVersion.VERSION_1_8
 
-val kotlinVersion by project
 val spekVersion by project
 val detektVersion by project
 
@@ -93,13 +90,13 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib", "$kotlinVersion"))
+    implementation(kotlin("stdlib"))
     implementation("org.apache.commons:commons-exec:1.3")
 
     // Speck
-    implementation(kotlin("reflect", "$kotlinVersion"))
-    testImplementation(kotlin("test", "$kotlinVersion"))
-    testImplementation(kotlin("test-junit", "$kotlinVersion"))
+    implementation(kotlin("reflect"))
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-junit"))
     testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
     testImplementation("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
     testImplementation("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
