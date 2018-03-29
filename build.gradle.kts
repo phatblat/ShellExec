@@ -83,23 +83,19 @@ val junitPlatformVersion by project
 // 👪 Dependencies
 /* -------------------------------------------------------------------------- */
 
-repositories {
-    jcenter()
-    maven("https://repo.gradle.org/gradle/repo")
-    maven("http://dl.bintray.com/jetbrains/spek")
-}
+repositories.jcenter()
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
     implementation("org.apache.commons:commons-exec:1.3")
 
-    // Speck
-    implementation(kotlin("reflect"))
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
+    testImplementation("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
     testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
     testImplementation("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
-    testImplementation("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
 }
 
 /* -------------------------------------------------------------------------- */
