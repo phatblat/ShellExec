@@ -41,7 +41,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.0.0.RC6-4"
 
     // Custom handling in pluginManagement
-    id("at.phatbl.shellexec") version "1.1.1"
+    id("at.phatbl.shellexec") version "1.1.2"
     id("org.junit.platform.gradle.plugin") version "1.1.0"
 }
 
