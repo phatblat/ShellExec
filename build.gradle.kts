@@ -17,6 +17,7 @@ import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.preprocessor.mkdirsOrFail
 import org.junit.platform.console.options.Details
 import org.junit.platform.gradle.plugin.EnginesExtension
 import org.junit.platform.gradle.plugin.FiltersExtension
@@ -32,6 +33,7 @@ plugins {
     // Gradle built-in
     jacoco
     `java-gradle-plugin`
+    maven // only applied to make bintray happy
     `maven-publish`
 
     // Gradle plugin portal - https://plugins.gradle.org/
@@ -62,9 +64,14 @@ tasks {
 val artifactName by project
 val javaPackage = "$group.$artifactName"
 val pluginClass by project
+val projectUrl by project
+val tags by project
+val labels = "$tags".split(",")
+val license by project
 
 val jvmTarget = JavaVersion.VERSION_1_8
 
+val commonsExecVersion by project
 val spekVersion by project
 val detektVersion by project
 
@@ -90,7 +97,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-    implementation("org.apache.commons:commons-exec:1.3")
+    implementation("org.apache.commons:commons-exec:$commonsExecVersion")
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
@@ -103,13 +110,12 @@ dependencies {
 // 🏗 Assemble
 /* -------------------------------------------------------------------------- */
 
-// java
+tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "$jvmTarget" }
+
 configure<JavaPluginConvention> {
     sourceCompatibility = jvmTarget
     targetCompatibility = jvmTarget
 }
-
-tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "$jvmTarget" }
 
 // Include resources
 java.sourceSets["main"].resources {
@@ -121,7 +127,11 @@ val updateVersionFile by tasks.creating {
     description = "Updates the VERSION.txt file included with the plugin"
     group = "Build"
     doLast {
-        project.file("src/main/resources/VERSION.txt").writeText(version.toString())
+        val resources = "src/main/resources"
+        project.file(resources).mkdirsOrFail()
+        val versionFile = project.file("$resources/VERSION.txt")
+        versionFile.createNewFile()
+        versionFile.writeText(version.toString())
     }
 }
 
@@ -143,6 +153,29 @@ val javadocJar by tasks.creating(Jar::class) {
 artifacts.add("archives", sourcesJar)
 artifacts.add("archives", javadocJar)
 
+configure<BasePluginConvention> {
+    // at.phatbl.shellexec-1.0.0.jar
+    archivesBaseName = javaPackage
+}
+
+gradlePlugin.plugins.create("$artifactName") {
+    id = javaPackage
+    implementationClass = "$javaPackage.$pluginClass"
+}
+
+pluginBundle {
+    website = "$projectUrl"
+    vcsUrl = "$projectUrl"
+    description = project.description
+    tags = labels
+
+    plugins.create("$artifactName") {
+        id = javaPackage
+        displayName = project.name
+    }
+    mavenCoordinates.artifactId = "$artifactName"
+}
+
 /* -------------------------------------------------------------------------- */
 // ✅ Test
 /* -------------------------------------------------------------------------- */
@@ -151,7 +184,7 @@ junitPlatform {
     filters {
         includeClassNamePatterns("^.*Tests?$", ".*Spec", ".*Spek")
         engines {
-            include("spek", "junit-jupiter", "junit-vintage")
+            include("spek")
         }
     }
     details = Details.TREE
@@ -159,7 +192,7 @@ junitPlatform {
 
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
 jacoco {
-    toolVersion = jacocoVersion
+    toolVersion = "$jacocoVersion"
     reportsDir = file("$buildDir/reports/jacoco")
 }
 
@@ -176,6 +209,7 @@ tasks.withType<JacocoReport> {
             isEnabled = false
         }
         html.apply {
+            isEnabled = true
             destination = File("$buildDir/jacocoHtml")
         }
 
@@ -189,7 +223,7 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
 }
 
 /* -------------------------------------------------------------------------- */
-// Code Quality
+// 🔍 Code Quality
 /* -------------------------------------------------------------------------- */
 
 detekt {
@@ -246,29 +280,6 @@ val release by tasks.creating(DefaultTask::class) {
 // 🚀 Deployment
 /* -------------------------------------------------------------------------- */
 
-configure<BasePluginConvention> {
-    // at.phatbl.shellexec-1.0.0.jar
-    archivesBaseName = javaPackage
-}
-
-gradlePlugin.plugins.create("$artifactName") {
-    id = javaPackage
-    implementationClass = "$javaPackage.$pluginClass"
-}
-
-pluginBundle {
-    website = "https://github.com/phatblat/ShellExec"
-    vcsUrl = "https://github.com/phatblat/ShellExec"
-    description = "Exec base task alternative which runs commands in a Bash shell."
-    tags = mutableListOf("gradle", "exec", "shell", "bash", "kotlin")
-
-    plugins.create("shellexec") {
-        id = javaPackage
-        displayName = "ShellExec plugin"
-    }
-    mavenCoordinates.artifactId = "$artifactName"
-}
-
 publishing {
     (publications) {
         "mavenJava"(MavenPublication::class) {
@@ -289,14 +300,16 @@ bintray {
     dryRun = false
     publish = true
     pkg.apply {
-        repo = "maven-open-source"
-        name = "ShellExec"
-        desc = "Gradle plugin with a simpler Exec task."
-        websiteUrl = "https://github.com/phatblat/ShellExec"
-        issueTrackerUrl = "https://github.com/phatblat/ShellExec/issues"
-        vcsUrl = "https://github.com/phatblat/ShellExec.git"
-        setLicenses("MIT")
-        setLabels("gradle", "plugin", "exec", "shell", "bash")
+        repo = property("bintray.repo") as String
+        name = project.name
+        desc = project.description
+        websiteUrl = "$projectUrl"
+        issueTrackerUrl = "$projectUrl/issues"
+        vcsUrl = "$projectUrl.git"
+        githubRepo = "phatblat/${project.name}"
+        githubReleaseNotesFile = "CHANGELOG.md"
+        setLicenses(property("license") as String)
+        setLabels("gradle", "plugin", "exec", "shell", "bash", "kotlin")
         publicDownloadNumbers = true
         version.apply {
             name = project.version.toString()
@@ -313,6 +326,15 @@ bintray {
             }
         }
     }
+}
+
+// Workaround to eliminate warning from bintray plugin, which assumes the "maven" plugin is being used.
+// https://github.com/bintray/gradle-bintray-plugin/blob/master/src/main/groovy/com/jfrog/bintray/gradle/BintrayPlugin.groovy#L85
+val install by tasks
+install.doFirst {
+    val maven = project.convention.plugins["maven"] as MavenPluginConvention
+    maven.mavenPomDir = file("$buildDir/publications/mavenJava")
+    logger.info("Configured maven plugin to use same output dir as maven-publish: ${maven.mavenPomDir}")
 }
 
 val deploy by tasks.creating {
