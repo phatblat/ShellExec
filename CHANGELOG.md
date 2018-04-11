@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- ⬆️🔌 ShellExec (1.1.3). #45
+
 ## 1.1.3
 
 - ➕ Clamp ([1.0.0](https://github.com/phatblat/Clamp/releases/tag/1.0.0)). #44
