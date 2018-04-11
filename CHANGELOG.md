@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.1.3
+
 - ➕ Clamp ([1.0.0](https://github.com/phatblat/Clamp/releases/tag/1.0.0)). #44
 - ⬆️ Kotlin (1.2.31). #43
 
