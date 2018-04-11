@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Spek Tests" type="org.spekframework.spek-jvm" factoryName="Spek - JVM">
-    <module name="shellexec_test" />
+    <module name="ShellExec_test" />
     <option name="target" value="package" />
     <option name="package" value="at.phatbl.shellexec" />
     <option name="vm-parameters" value="" />

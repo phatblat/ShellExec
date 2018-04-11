@@ -7,8 +7,6 @@ import org.gradle.api.Project
  * Plugin class which currently does nothing.
  *   apply plugin: 'shellexec'
  */
-class ShellExecPlugin: Plugin<Project> {
-    override fun apply(project: Project) {
-        println("Applying ShellExecPlugin")
-    }
+class ShellExecPlugin : Plugin<Project> {
+    override fun apply(project: Project) {}
 }
