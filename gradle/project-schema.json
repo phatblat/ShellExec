@@ -34,17 +34,18 @@
         "extensions": {
             "ext": "org.gradle.api.plugins.ExtraPropertiesExtension",
             "buildScan": "com.gradle.scan.plugin.internal.api.g",
+            "kotlin": "org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension",
+            "kapt": "org.jetbrains.kotlin.gradle.plugin.KaptExtension",
             "defaultArtifacts": "org.gradle.api.internal.plugins.DefaultArtifactPublicationSet",
             "reporting": "org.gradle.api.reporting.ReportingExtension",
             "pluginBundle": "com.gradle.publish.PluginBundleExtension",
+            "bintray": "com.jfrog.bintray.gradle.BintrayExtension",
+            "profiles": "org.gradle.api.NamedDomainObjectContainer<io.gitlab.arturbosch.detekt.extensions.ProfileExtension>",
             "detekt": "io.gitlab.arturbosch.detekt.extensions.DetektExtension",
+            "junitPlatform": "org.junit.platform.gradle.plugin.JUnitPlatformExtension",
             "jacoco": "org.gradle.testing.jacoco.plugins.JacocoPluginExtension",
             "gradlePlugin": "org.gradle.plugin.devel.GradlePluginDevelopmentExtension",
-            "publishing": "org.gradle.api.publish.PublishingExtension",
-            "kotlin": "org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension",
-            "kapt": "org.jetbrains.kotlin.gradle.plugin.KaptExtension",
-            "bintray": "com.jfrog.bintray.gradle.BintrayExtension",
-            "junitPlatform": "org.junit.platform.gradle.plugin.JUnitPlatformExtension"
+            "publishing": "org.gradle.api.publish.PublishingExtension"
         }
     }
 }
