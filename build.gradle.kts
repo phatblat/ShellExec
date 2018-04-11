@@ -78,6 +78,7 @@ val detektVersion by project
 //}
 
 val junitPlatformVersion by project
+val jacocoVersion by project
 
 /* -------------------------------------------------------------------------- */
 // 👪 Dependencies
@@ -158,7 +159,7 @@ junitPlatform {
 
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
 jacoco {
-    toolVersion = "0.7.9"
+    toolVersion = jacocoVersion
     reportsDir = file("$buildDir/reports/jacoco")
 }
 
