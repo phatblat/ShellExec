@@ -37,34 +37,34 @@ plugins {
     `maven-publish`
 
     // Gradle plugin portal - https://plugins.gradle.org/
-    kotlin("jvm") version "1.2.31"
-    id("at.phatbl.clamp") version "1.0.0"
-    id("at.phatbl.shellexec") version "1.1.2"
+    kotlin("jvm") version "1.2.41"
+    id("at.phatbl.clamp") version "1.1.0"
+    id("at.phatbl.shellexec") version "1.1.3"
     id("com.gradle.plugin-publish") version "0.9.10"
     id("com.jfrog.bintray") version "1.8.0"
     id("io.gitlab.arturbosch.detekt") version "1.0.0.RC6-4"
 
     // Custom handling in pluginManagement
-    id("org.junit.platform.gradle.plugin") version "1.1.0"
+    id("org.junit.platform.gradle.plugin") version "1.2.0"
 }
 
 /* -------------------------------------------------------------------------- */
 // 📋 Properties
 /* -------------------------------------------------------------------------- */
 
-val artifactName by project
+val artifactName: String by project
 val javaPackage = "$group.$artifactName"
-val pluginClass by project
-val projectUrl by project
-val tags by project
+val pluginClass: String by project
+val projectUrl: String by project
+val tags: String by project
 val labels = "$tags".split(",")
-val license by project
+val license: String by project
 
 val jvmTarget = JavaVersion.VERSION_1_8
 
-val commonsExecVersion by project
-val spekVersion by project
-val detektVersion by project
+val commonsExecVersion: String by project
+val spekVersion: String by project
+val detektVersion: String by project
 
 // FIXME: Get version from plugins block
 // This is necessary to make the plugin version accessible in other places
@@ -75,8 +75,8 @@ val detektVersion by project
 //            .find { it.moduleName == "junit-platform-gradle-plugin" }?.moduleVersion
 //}
 
-val junitPlatformVersion by project
-val jacocoVersion by project
+val junitPlatformVersion: String by project
+val jacocoVersion: String by project
 
 /* -------------------------------------------------------------------------- */
 // 👪 Dependencies
