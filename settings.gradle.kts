@@ -8,7 +8,7 @@ rootProject.name = "ShellExec"
 /*
  * Clone Clamp to sibling directory to build from source.
  */
-val clamp = file("../Clamp")
+val clamp = file("../Clamp-DISABLED")
 if (clamp.exists()) {
     includeBuild(clamp) {
         dependencySubstitution {
