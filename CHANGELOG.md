@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- ⬆️🔌 ShellExec (1.1.3). #45
+- ⬆️🐘 Gradle (4.7)
+- ⬆️ JUnit Platform (1.2.0)
+- ⬆️🔌 ShellExec (1.1.3) #45
 
 ## 1.1.3
 
