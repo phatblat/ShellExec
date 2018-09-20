@@ -41,7 +41,7 @@ open class ShellExec: DefaultTask() {
     var exitValue: Int = -999
         get() = shellCommand.exitValue
 
-    private lateinit var shellCommand: ShellCommand
+    open lateinit var shellCommand: ShellCommand
 
     /** Core storage of command line to be executed */
     @Input

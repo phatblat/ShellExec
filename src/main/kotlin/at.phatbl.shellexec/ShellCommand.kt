@@ -1,11 +1,7 @@
 package at.phatbl.shellexec
 
-import java.io.BufferedReader
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.OutputStream
+import java.io.*
+import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
 /**
@@ -30,11 +26,9 @@ data class ShellCommand(
     var errorOutput: OutputStream? = null
 //    val standardInput: InputStream
 
-    val stdout: String
-        get() = stream2String(process.inputStream)
+    var stdout: String? = null
 
-    val stderr: String
-        get() = stream2String(process.errorStream)
+    var stderr: String? = null
 
     var exitValue: Int = uninitializedExitValue
 
@@ -52,12 +46,27 @@ data class ShellCommand(
         val pb = ProcessBuilder("bash", "-c", "cd '$baseDir' && $command")
         process = pb.start()
 
+        process.inputStream.mark(bufferSize)
+        process.errorStream.mark(bufferSize)
+
         if (standardOutput != null) {
             copy(input = process.inputStream, output = standardOutput!!)
         }
         if (errorOutput != null) {
             copy(input = process.errorStream, output = errorOutput!!)
         }
+
+        try {
+            process.inputStream.reset()
+
+            stdout = stream2String(process.inputStream)
+        } catch (e: Exception) { }
+
+        try {
+            process.errorStream.reset()
+
+            stderr = stream2String(process.errorStream)
+        } catch (e: Exception) { }
 
         process.waitFor(timeout, TimeUnit.SECONDS)
         exitValue = process.exitValue()
@@ -88,8 +97,8 @@ data class ShellCommand(
             }
             //If needed, close streams.
         } finally {
-            input.close()
-            output.close()
+            //input.close()
+            //output.close()
         }
     }
 }
