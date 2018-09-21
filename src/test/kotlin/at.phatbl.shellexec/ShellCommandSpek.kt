@@ -14,6 +14,7 @@ object ShellCommandSpek : Spek({
         var shellCommand: ShellCommand
         beforeEachTest {
         }
+
         it("can run a simple command") {
             shellCommand = ShellCommand(baseDir = File("."), command = "true")
             shellCommand.start()
@@ -22,6 +23,7 @@ object ShellCommandSpek : Spek({
             assertFalse(shellCommand.failed)
             assertEquals(0, shellCommand.exitValue)
         }
+
         it("can run a failing command") {
             shellCommand = ShellCommand(baseDir = File("."), command = "false")
             shellCommand.start()
@@ -30,6 +32,7 @@ object ShellCommandSpek : Spek({
             assertFalse(shellCommand.succeeded)
             assertEquals(1, shellCommand.exitValue)
         }
+
         it("can generate standard output") {
             shellCommand = ShellCommand(baseDir = File("."), command = "echo Hello World!")
             shellCommand.start()
@@ -37,6 +40,7 @@ object ShellCommandSpek : Spek({
             assertTrue(shellCommand.succeeded)
             assertEquals("Hello World!\n", shellCommand.stdout)
         }
+
         it("can generate error output") {
             shellCommand = ShellCommand(baseDir = File("."), command = "echo This is an error. >&2")
             shellCommand.start()
@@ -44,6 +48,23 @@ object ShellCommandSpek : Spek({
             assertTrue(shellCommand.succeeded)
             assertEquals("This is an error.\n", shellCommand.stderr)
         }
+
+        it("generate error when standard output is to big") {
+            shellCommand = ShellCommand(baseDir = File("."), command = "echo Hello World!")
+            shellCommand.start()
+
+            assertTrue(shellCommand.succeeded)
+            assertEquals("Hello World!\n", shellCommand.stdout)
+        }
+
+        it("can generate error output") {
+            shellCommand = ShellCommand(baseDir = File("."), command = "echo This is an error. >&2")
+            shellCommand.start()
+
+            assertTrue(shellCommand.succeeded)
+            assertEquals("This is an error.\n", shellCommand.stderr)
+        }
+
         it("can invoke a command with spaces in the path") {
             val fileName = "File with spaces in the name"
             val fileContents = "This is the file contents!"
@@ -70,6 +91,7 @@ object ShellCommandSpek : Spek({
 
             temporaryFolder.delete()
         }
+
         it("can invoke a command with spaces in the current directory") {
             val dirName = "directory with spaces in the name"
             val fileContents = "This is the file contents!"
