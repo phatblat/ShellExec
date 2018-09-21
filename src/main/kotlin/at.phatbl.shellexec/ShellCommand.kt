@@ -26,10 +26,10 @@ data class ShellCommand(
     var errorOutput: OutputStream? = null
 //    val standardInput: InputStream
 
-    val stdout: String?
+    val stdout: String
         get() = stream2String(process.inputStream)
 
-    val stderr: String?
+    val stderr: String
         get() = stream2String(process.errorStream)
 
     var exitValue: Int = uninitializedExitValue
@@ -48,7 +48,7 @@ data class ShellCommand(
         val pb = ProcessBuilder("bash", "-c", "cd '$baseDir' && $command")
         process = pb.start()
 
-        process.inputStream.mark(10)
+        process.inputStream.mark(bufferSize)
         process.errorStream.mark(bufferSize)
 
         if (standardOutput != null) {
@@ -83,7 +83,7 @@ data class ShellCommand(
     /**
      * Utility function which converts an input stream into a string.
      */
-    private fun stream2String(stream: InputStream): String? {
+    private fun stream2String(stream: InputStream): String {
         return try {
             val reader = BufferedReader(InputStreamReader(stream))
             val builder = StringBuilder()
@@ -95,7 +95,7 @@ data class ShellCommand(
 
             builder.toString()
         } catch (e: Exception) {
-            null
+            return ""
         }
     }
 
