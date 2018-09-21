@@ -26,9 +26,11 @@ data class ShellCommand(
     var errorOutput: OutputStream? = null
 //    val standardInput: InputStream
 
-    var stdout: String? = null
+    val stdout: String?
+        get() = stream2String(process.inputStream)
 
-    var stderr: String? = null
+    val stderr: String?
+        get() = stream2String(process.errorStream)
 
     var exitValue: Int = uninitializedExitValue
 
@@ -58,15 +60,15 @@ data class ShellCommand(
 
         try {
             process.inputStream.reset()
-
-            stdout = stream2String(process.inputStream)
-        } catch (e: Exception) { }
+        } catch (e: Exception) {
+            // TODO: Get a useful message back to the outputStream
+        }
 
         try {
             process.errorStream.reset()
-
-            stderr = stream2String(process.errorStream)
-        } catch (e: Exception) { }
+        } catch (e: Exception) {
+            // TODO: Get a useful message back to the outputStream
+        }
 
         process.waitFor(timeout, TimeUnit.SECONDS)
         exitValue = process.exitValue()
@@ -75,15 +77,20 @@ data class ShellCommand(
     /**
      * Utility function which converts an input stream into a string.
      */
-    private fun stream2String(stream: InputStream): String {
-        val reader = BufferedReader(InputStreamReader(stream))
-        val builder = StringBuilder()
-        val lineSeparator = System.getProperty("line.separator")
-        reader.forEachLine { line ->
-            builder.append(line)
-            builder.append(lineSeparator)
+    private fun stream2String(stream: InputStream): String? {
+        return try {
+            val reader = BufferedReader(InputStreamReader(stream))
+            val builder = StringBuilder()
+            val lineSeparator = System.getProperty("line.separator")
+            reader.forEachLine { line ->
+                builder.append(line)
+                builder.append(lineSeparator)
+            }
+
+            builder.toString()
+        } catch (e: Exception) {
+            null
         }
-        return builder.toString()
     }
 
     @Throws(IOException::class)
@@ -96,9 +103,6 @@ data class ShellCommand(
                 bytesRead = input.read(buffer)
             }
             //If needed, close streams.
-        } finally {
-            //input.close()
-            //output.close()
-        }
+        } finally { }
     }
 }

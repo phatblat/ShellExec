@@ -91,6 +91,12 @@ open class ShellExec: DefaultTask() {
         }
 
         postExec()
+
+        // Close up all the streams as we are done using shell exec
+        shellCommand.process.inputStream.close()
+        shellCommand.process.errorStream.close()
+        standardOutput.close()
+        errorOutput.close()
     }
 
     /** Hook for running logic before the exec task action runs. */
