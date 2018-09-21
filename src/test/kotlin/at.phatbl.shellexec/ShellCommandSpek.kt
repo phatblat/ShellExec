@@ -49,22 +49,6 @@ object ShellCommandSpek : Spek({
             assertEquals("This is an error.\n", shellCommand.stderr)
         }
 
-        it("generate error when standard output is to big") {
-            shellCommand = ShellCommand(baseDir = File("."), command = "echo Hello World!")
-            shellCommand.start()
-
-            assertTrue(shellCommand.succeeded)
-            assertEquals("Hello World!\n", shellCommand.stdout)
-        }
-
-        it("can generate error output") {
-            shellCommand = ShellCommand(baseDir = File("."), command = "echo This is an error. >&2")
-            shellCommand.start()
-
-            assertTrue(shellCommand.succeeded)
-            assertEquals("This is an error.\n", shellCommand.stderr)
-        }
-
         it("can invoke a command with spaces in the path") {
             val fileName = "File with spaces in the name"
             val fileContents = "This is the file contents!"

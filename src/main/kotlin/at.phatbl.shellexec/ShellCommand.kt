@@ -40,6 +40,8 @@ data class ShellCommand(
     val failed: Boolean
         get() = !succeeded
 
+    var readLimit = bufferSize
+
     /**
      * Runs the command.
      */
@@ -48,8 +50,8 @@ data class ShellCommand(
         val pb = ProcessBuilder("bash", "-c", "cd '$baseDir' && $command")
         process = pb.start()
 
-        process.inputStream.mark(bufferSize)
-        process.errorStream.mark(bufferSize)
+        process.inputStream.mark(readLimit)
+        process.errorStream.mark(readLimit)
 
         if (standardOutput != null) {
             copy(input = process.inputStream, output = standardOutput!!)
@@ -62,7 +64,7 @@ data class ShellCommand(
             process.inputStream.reset()
         } catch (e: Exception) {
             if (standardOutput != null) {
-                val errorMessage = "Could not reset input stream. Mark with Readlimit $bufferSize not found.".toByteArray()
+                val errorMessage = "Could not reset input stream. Mark with Readlimit $readLimit not found.".toByteArray()
                 standardOutput!!.write(errorMessage)
             }
         }
@@ -71,7 +73,7 @@ data class ShellCommand(
             process.errorStream.reset()
         } catch (e: Exception) {
             if (errorOutput != null) {
-                val errorMessage = "Could not reset error stream. Mark with Readlimit $bufferSize not found.".toByteArray()
+                val errorMessage = "Could not reset error stream. Mark with Readlimit $readLimit not found.".toByteArray()
                 errorOutput!!.write(errorMessage)
             }
         }
