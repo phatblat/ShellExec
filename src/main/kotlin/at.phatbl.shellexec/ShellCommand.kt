@@ -1,11 +1,7 @@
 package at.phatbl.shellexec
 
-import java.io.BufferedReader
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.OutputStream
+import java.io.*
+import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
 /**
@@ -44,6 +40,8 @@ data class ShellCommand(
     val failed: Boolean
         get() = !succeeded
 
+    var readLimit = bufferSize
+
     /**
      * Runs the command.
      */
@@ -52,11 +50,32 @@ data class ShellCommand(
         val pb = ProcessBuilder("bash", "-c", "cd '$baseDir' && $command")
         process = pb.start()
 
+        process.inputStream.mark(readLimit)
+        process.errorStream.mark(readLimit)
+
         if (standardOutput != null) {
             copy(input = process.inputStream, output = standardOutput!!)
         }
         if (errorOutput != null) {
             copy(input = process.errorStream, output = errorOutput!!)
+        }
+
+        try {
+            process.inputStream.reset()
+        } catch (e: Exception) {
+            if (standardOutput != null) {
+                val errorMessage = "Could not reset input stream. Mark with Readlimit $readLimit not found.".toByteArray()
+                standardOutput!!.write(errorMessage)
+            }
+        }
+
+        try {
+            process.errorStream.reset()
+        } catch (e: Exception) {
+            if (errorOutput != null) {
+                val errorMessage = "Could not reset error stream. Mark with Readlimit $readLimit not found.".toByteArray()
+                errorOutput!!.write(errorMessage)
+            }
         }
 
         process.waitFor(timeout, TimeUnit.SECONDS)
@@ -67,14 +86,19 @@ data class ShellCommand(
      * Utility function which converts an input stream into a string.
      */
     private fun stream2String(stream: InputStream): String {
-        val reader = BufferedReader(InputStreamReader(stream))
-        val builder = StringBuilder()
-        val lineSeparator = System.getProperty("line.separator")
-        reader.forEachLine { line ->
-            builder.append(line)
-            builder.append(lineSeparator)
+        return try {
+            val reader = BufferedReader(InputStreamReader(stream))
+            val builder = StringBuilder()
+            val lineSeparator = System.getProperty("line.separator")
+            reader.forEachLine { line ->
+                builder.append(line)
+                builder.append(lineSeparator)
+            }
+
+            builder.toString()
+        } catch (e: Exception) {
+            return ""
         }
-        return builder.toString()
     }
 
     @Throws(IOException::class)
@@ -87,9 +111,6 @@ data class ShellCommand(
                 bytesRead = input.read(buffer)
             }
             //If needed, close streams.
-        } finally {
-            input.close()
-            output.close()
-        }
+        } finally { }
     }
 }

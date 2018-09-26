@@ -41,7 +41,7 @@ open class ShellExec: DefaultTask() {
     var exitValue: Int = -999
         get() = shellCommand.exitValue
 
-    private lateinit var shellCommand: ShellCommand
+    open lateinit var shellCommand: ShellCommand
 
     /** Core storage of command line to be executed */
     @Input
@@ -91,6 +91,12 @@ open class ShellExec: DefaultTask() {
         }
 
         postExec()
+
+        // Close up all the streams as we are done using shell exec
+        shellCommand.process.inputStream.close()
+        shellCommand.process.errorStream.close()
+        standardOutput.close()
+        errorOutput.close()
     }
 
     /** Hook for running logic before the exec task action runs. */
