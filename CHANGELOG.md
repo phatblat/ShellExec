@@ -2,7 +2,11 @@
 
 ## Unreleased
 
-- 📝 Fixed string version of standard output from commands #47
+
+
+## 1.2.0
+
+- 🐛 Fixed string version of standard output from commands #47
 - ⬆️ Kotlin (1.2.71) #48 
 - ⬆️🐘 Gradle (4.7) #46
 - ⬆️ Kotlin (1.2.41) #46
