@@ -30,7 +30,6 @@
 .rubygems/
 .settings
 .settings/
-.vscode/
 /build/
 /buildSrc/build/
 bin/
