@@ -108,8 +108,8 @@ configure<JavaPluginConvention> {
 }
 
 // Include resources
-java.sourceSets["main"].resources {
-    setSrcDirs(mutableListOf("src/main/resources"))
+sourceSets["main"].resources {
+    srcDirs("src/main/resources")
     include("VERSION.txt")
 }
 
@@ -130,7 +130,7 @@ tasks.getByName("assemble").dependsOn(updateVersionFile)
 val sourcesJar by tasks.creating(Jar::class) {
     dependsOn("classes")
     classifier = "sources"
-    from(java.sourceSets["main"].allSource)
+    from(sourceSets["main"].allSource)
 }
 
 val javadocJar by tasks.creating(Jar::class) {
@@ -209,7 +209,7 @@ tasks.withType<JacocoReport> {
 
 val codeCoverageReport by tasks.creating(JacocoReport::class) {
     dependsOn("test")
-    sourceSets(java.sourceSets["main"])
+    // sourceSets(sourceSets["main"])
 }
 
 /* -------------------------------------------------------------------------- */
@@ -271,8 +271,8 @@ val release by tasks.creating(DefaultTask::class) {
 /* -------------------------------------------------------------------------- */
 
 publishing {
-    (publications) {
-        "mavenJava"(MavenPublication::class) {
+    publications {
+        register("mavenJava", MavenPublication::class) {
             from(components["java"])
             artifactId = "$artifactName"
 

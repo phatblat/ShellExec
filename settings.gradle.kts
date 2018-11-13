@@ -5,6 +5,8 @@
 
 rootProject.name = "ShellExec"
 
+enableFeaturePreview("STABLE_PUBLISHING")
+
 /*
  * Clone Clamp to sibling directory to build from source.
  */

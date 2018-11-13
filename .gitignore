@@ -10,6 +10,7 @@
 .idea/codeStyles/
 .idea/compiler.xml
 .idea/dictionaries/
+.idea/encodings.xml
 .idea/gradle.xml
 .idea/inspectionProfiles/
 .idea/jenkinsSettings.xml
@@ -29,7 +30,6 @@
 .rubygems/
 .settings
 .settings/
-.vscode/
 /build/
 /buildSrc/build/
 bin/
