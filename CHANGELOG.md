@@ -2,12 +2,13 @@
 
 ## Unreleased
 
+- ⬆️🧠 Kotlin (1.3.41) #52
 - ⬆️🐘 Gradle (4.10.2) #50
 
 ## 1.2.0
 
 - 🐛 Fixed string version of standard output from commands #47
-- ⬆️ Kotlin (1.2.71) #48 
+- ⬆️ Kotlin (1.2.71) #48
 - ⬆️🐘 Gradle (4.7) #46
 - ⬆️ Kotlin (1.2.41) #46
 - ⬆️ JUnit Platform (1.2.0) #46
@@ -36,7 +37,7 @@
 
 ## 1.1.0
 
-- Added `preExec` and `postExec` hooks for custom logic. #31 
+- Added `preExec` and `postExec` hooks for custom logic. #31
 
 ## 1.0.2
 
@@ -54,7 +55,7 @@
   - Append/prepend to `PATH`
   - Supports command pipes and conditional command chains
   - Easy access to `stdout`/`stderr`
-  
+
 ⚠️ Not compatible with `Exec` tasks yet (#11), but the current API is very similar.
 
 ## 0.1.0
