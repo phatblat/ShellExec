@@ -78,7 +78,6 @@ object ShellCommandSpek : Spek({
 
         it("can invoke a command with spaces in the current directory") {
             val dirName = "directory with spaces in the name"
-            val fileContents = "This is the file contents!"
 
             val temporaryFolder = TemporaryFolder()
             temporaryFolder.create()
