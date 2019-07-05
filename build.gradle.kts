@@ -75,6 +75,12 @@ val detektVersion: String by project
 
 val junitPlatformVersion: String by project
 val jacocoVersion: String by project
+val gradleWrapperVersion: String by project
+
+tasks.wrapper {
+    gradleVersion = gradleWrapperVersion
+    distributionType = Wrapper.DistributionType.ALL
+}
 
 /* -------------------------------------------------------------------------- */
 // 👪 Dependencies
@@ -185,24 +191,13 @@ jacoco {
     reportsDir = file("$buildDir/reports/jacoco")
 }
 
-tasks.withType<JacocoReport> {
+tasks.jacocoTestReport {
     reports {
-        sourceDirectories = fileTree("src/main/kotlin")
-        classDirectories = fileTree("$buildDir/classes/kotlin/main")
-
-        xml.apply {
-            isEnabled = true
-            destination = File("$buildDir/reports/jacoco.xml")
-        }
-        csv.apply {
-            isEnabled = false
-        }
-        html.apply {
-            isEnabled = true
-            destination = File("$buildDir/jacocoHtml")
-        }
-
-        executionData(tasks.withType<Test>())
+        xml.isEnabled = true
+        html.destination = file("$buildDir/reports/jacoco.xml")
+        csv.isEnabled = false
+        html.isEnabled = true
+        html.destination = file("$buildDir/reports/jacocoHtml")
     }
 }
 
