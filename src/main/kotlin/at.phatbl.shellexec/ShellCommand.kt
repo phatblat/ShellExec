@@ -1,19 +1,19 @@
 package at.phatbl.shellexec
 
 import java.io.*
-import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
 /**
  * Wrapper for running several commands inside a Bash shell.
  */
 data class ShellCommand(
-        val baseDir: File,
+        /** Working dir for command. Defaults to the JVM's current directory. */
+        val baseDir: File = File("."),
         val command: String
 ) {
     companion object {
         // 20m
-        private const val timeout = 1200L
+        private const val defaultTimeout: Long = 1200
 
         private const val uninitializedExitValue = -999
 
@@ -42,12 +42,19 @@ data class ShellCommand(
 
     var readLimit = bufferSize
 
+    /** Time allowed for command to run. Defaults to 20m */
+    var timeout = defaultTimeout
+
     /**
      * Runs the command.
      */
     fun start() {
-        baseDir.mkdir()
-        val pb = ProcessBuilder("bash", "-c", "cd '$baseDir' && $command")
+        baseDir.mkdirs()
+
+        val pb = ProcessBuilder("bash", "-c", command)
+            .directory(baseDir)
+
+        // Launch the process
         process = pb.start()
 
         process.inputStream.mark(readLimit)
@@ -63,23 +70,30 @@ data class ShellCommand(
         try {
             process.inputStream.reset()
         } catch (e: Exception) {
-            if (standardOutput != null) {
+            val stdout = standardOutput
+            if (stdout != null) {
                 val errorMessage = "Could not reset input stream. Mark with Readlimit $readLimit not found.".toByteArray()
-                standardOutput!!.write(errorMessage)
+                stdout.write(errorMessage)
             }
         }
 
         try {
             process.errorStream.reset()
         } catch (e: Exception) {
-            if (errorOutput != null) {
+            val stderr = errorOutput
+            if (stderr != null) {
                 val errorMessage = "Could not reset error stream. Mark with Readlimit $readLimit not found.".toByteArray()
-                errorOutput!!.write(errorMessage)
+                stderr.write(errorMessage)
             }
         }
 
-        process.waitFor(timeout, TimeUnit.SECONDS)
-        exitValue = process.exitValue()
+        try {
+            process.waitFor(timeout, TimeUnit.SECONDS)
+            exitValue = process.exitValue()
+        } catch (e: Exception) {
+            // Handle timeouts
+            println("ShellCommand timeout: $e")
+        }
     }
 
     /**

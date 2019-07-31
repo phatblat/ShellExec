@@ -12,8 +12,8 @@ import kotlin.test.assertTrue
 object ShellCommandSpek : Spek({
     describe("Shell Command") {
         var shellCommand: ShellCommand
-        beforeEachTest {
-        }
+
+        beforeEachTest {}
 
         it("can run a simple command") {
             shellCommand = ShellCommand(baseDir = File("."), command = "true")
@@ -98,6 +98,15 @@ object ShellCommandSpek : Spek({
             assertEquals("", stderr)
 
             temporaryFolder.delete()
+        }
+
+        it("can be cancelled early with a short timeout") {
+            shellCommand = ShellCommand(command = "sleep 10")
+            shellCommand.timeout = 1
+            shellCommand.start()
+
+            assertFalse(shellCommand.succeeded)
+            assertEquals(-999, shellCommand.exitValue)
         }
     }
 })
