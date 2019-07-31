@@ -39,7 +39,7 @@ plugins {
     kotlin("jvm") version "1.3.41"
     id("at.phatbl.shellexec") version "1.2.0"
     id("com.gradle.plugin-publish") version "0.9.10"
-    id("com.jfrog.bintray") version "1.8.0"
+    id("com.jfrog.bintray") version "1.8.4"
     id("io.gitlab.arturbosch.detekt") version "1.0.0.RC6-4"
 
     // Custom handling in pluginManagement
@@ -150,7 +150,7 @@ artifacts.add("archives", javadocJar)
 
 configure<BasePluginConvention> {
     // at.phatbl.shellexec-1.0.0.jar
-    archivesBaseName = javaPackage
+    archivesBaseName = artifactName
 }
 
 gradlePlugin.plugins.create("$artifactName") {
@@ -299,8 +299,8 @@ bintray {
             name = project.version.toString()
             desc = "ShellExec Gradle Plugin ${project.version}"
             released = Date().toString()
-            vcsTag = "$project.version"
-            attributes = mapOf("gradle-plugin" to "${project.group}:$artifactName:$version")
+            vcsTag = project.version.toString()
+            attributes = mapOf("gradle-plugin" to "${project.group}:$artifactName:${project.version}")
 
             mavenCentralSync.apply {
                 sync = false //Optional (true by default). Determines whether to sync the version to Maven Central.
