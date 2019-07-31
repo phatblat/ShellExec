@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 1.3.0
+
+- ⏱ Add timeout property #54
 - ⬆️🐘 Gradle (5.5.1)
 - ⬆️🐘 Gradle (5.5)
 - ➖🔌 Clamp
