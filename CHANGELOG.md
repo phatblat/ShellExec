@@ -2,10 +2,11 @@
 
 ## Unreleased
 
+- ⬆️ Bintray plugin (1.8.4) #55
+
 ## 1.3.0
 
 - ⏱ Add timeout property #54
-- ⬆️ Bintray plugin (1.8.4) #54
 - ⬆️🐘 Gradle (5.5.1)
 - ⬆️🐘 Gradle (5.5)
 - ➖🔌 Clamp
