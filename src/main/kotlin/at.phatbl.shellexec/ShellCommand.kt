@@ -86,9 +86,9 @@ data class ShellCommand(
         try {
             process.waitFor(timeout, TimeUnit.SECONDS)
             exitValue = process.exitValue()
-        } catch (e: Exception) {
-            // Handle timeouts
-            println("ShellCommand timeout: $e")
+        } catch (e: InterruptedException) {
+            val message = "Command timeout, exceeded $timeout second limit."
+            throw ShellCommandTimeoutException(message, e)
         }
     }
 
