@@ -16,7 +16,7 @@ object ShellCommandSpek : Spek({
         beforeEachTest {}
 
         it("can run a simple command") {
-            shellCommand = ShellCommand(baseDir = File("."), command = "true")
+            shellCommand = ShellCommand(command = "true")
             shellCommand.start()
 
             assertTrue(shellCommand.succeeded)
@@ -25,7 +25,7 @@ object ShellCommandSpek : Spek({
         }
 
         it("can run a failing command") {
-            shellCommand = ShellCommand(baseDir = File("."), command = "false")
+            shellCommand = ShellCommand(command = "false")
             shellCommand.start()
 
             assertTrue(shellCommand.failed)
@@ -34,7 +34,7 @@ object ShellCommandSpek : Spek({
         }
 
         it("can generate standard output") {
-            shellCommand = ShellCommand(baseDir = File("."), command = "echo Hello World!")
+            shellCommand = ShellCommand(command = "echo Hello World!")
             shellCommand.start()
 
             assertTrue(shellCommand.succeeded)
@@ -42,7 +42,7 @@ object ShellCommandSpek : Spek({
         }
 
         it("can generate error output") {
-            shellCommand = ShellCommand(baseDir = File("."), command = "echo This is an error. >&2")
+            shellCommand = ShellCommand(command = "echo This is an error. >&2")
             shellCommand.start()
 
             assertTrue(shellCommand.succeeded)
@@ -71,7 +71,7 @@ object ShellCommandSpek : Spek({
 
             assertTrue(shellCommand.succeeded)
             assertEquals("", stderr)
-            assertEquals("$fileContents", stdout)
+            assertEquals(fileContents, stdout)
 
             temporaryFolder.delete()
         }
