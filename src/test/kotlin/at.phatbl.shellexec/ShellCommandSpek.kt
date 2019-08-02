@@ -4,9 +4,11 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.junit.rules.TemporaryFolder
+import java.io.ByteArrayOutputStream
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 object ShellCommandSpek : Spek({
@@ -41,12 +43,36 @@ object ShellCommandSpek : Spek({
             assertEquals("Hello World!\n", shellCommand.stdout)
         }
 
+        it("can generate standard output to a stream") {
+            shellCommand = ShellCommand(command = "echo Hello World!")
+            val stream = ByteArrayOutputStream()
+            shellCommand.standardOutput = stream
+
+            shellCommand.start()
+
+            assertTrue(shellCommand.succeeded)
+            assertEquals("Hello World!\n", String(stream.toByteArray()))
+            assertNull(shellCommand.stdout)
+        }
+
         it("can generate error output") {
             shellCommand = ShellCommand(command = "echo This is an error. >&2")
             shellCommand.start()
 
             assertTrue(shellCommand.succeeded)
             assertEquals("This is an error.\n", shellCommand.stderr)
+        }
+
+        it("can generate error output to a stream") {
+            shellCommand = ShellCommand(command = "echo This is an error. >&2")
+            val stream = ByteArrayOutputStream()
+            shellCommand.errorOutput = stream
+
+            shellCommand.start()
+
+            assertTrue(shellCommand.succeeded)
+            assertEquals("This is an error.\n", String(stream.toByteArray()))
+            assertNull(shellCommand.stderr)
         }
 
         it("can invoke a command with spaces in the path") {
