@@ -29,15 +29,15 @@ data class ShellCommand(
     private var outputFile: File? = null
     private var errorFile: File? = null
 
-    val stdout: String
+    val stdout: String?
         get() {
-            val output = outputFile ?: return ""
+            val output = outputFile ?: return null
             return output.bufferedReader().use { it.readText() }
         }
 
-    val stderr: String
+    val stderr: String?
         get() {
-            val errors = errorFile ?: return ""
+            val errors = errorFile ?: return null
             return errors.bufferedReader().use { it.readText() }
         }
 
