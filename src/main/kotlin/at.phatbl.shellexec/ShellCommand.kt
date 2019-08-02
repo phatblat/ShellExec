@@ -21,39 +21,78 @@ data class ShellCommand(
         private const val bufferSize = 2 * 1024 * 1024
     }
 
-    lateinit var process: Process
+    /**
+     * Time allowed for command to run. Defaults to 20m
+     */
+    var timeout = defaultTimeout
 
+    /**
+     * Exposes the exit code of the underlying process. Defaults to -999 until the process has exited.
+     */
+    var exitValue: Int = uninitializedExitValue
+
+    /**
+     * True if the process ended with a successful exit code.
+     */
+    val succeeded: Boolean
+        get() = exitValue == 0
+
+    /**
+     * False if the process did not return a successful exit code.
+     */
+    val failed: Boolean
+        get() = !succeeded
+
+    /**
+     * Exposes a stream of command output from the underlying process if you provide an OutputStream.
+     * Mutually exclusive with stdout. Defaults to null.
+     * @see stdout
+     */
     var standardOutput: OutputStream? = null
+
+    /**
+     * Exposes a stream of command error output from the underlying process if you provide an OutputStream.
+     * Mutually exclusive with stderr. Defaults to null.
+     * @see stderr
+     */
     var errorOutput: OutputStream? = null
 
-    private var outputFile: File? = null
-    private var errorFile: File? = null
-
+    /**
+     * Convenience property for accessing stdout from command as a string after the command has finished running.
+     * Will always be null if you provide an OutputStream to standardOutput.
+     * @see standardOutput
+     */
     val stdout: String?
         get() {
             val output = outputFile ?: return null
             return output.bufferedReader().use { it.readText() }
         }
 
+    /**
+     * Convenience property for accessing stderr from command as a string after the command has finished running.
+     * Will always be null if you provide an OutputStream to errorOutput.
+     * @see errorOutput
+     */
     val stderr: String?
         get() {
             val errors = errorFile ?: return null
             return errors.bufferedReader().use { it.readText() }
         }
 
-    var exitValue: Int = uninitializedExitValue
+    /**
+     * File containing stdout from command. null if an OutputStream is provided to standardOutput before start is called.
+     */
+    private var outputFile: File? = null
 
-    val succeeded: Boolean
-        get() = exitValue == 0
-
-    val failed: Boolean
-        get() = !succeeded
-
-    /** Time allowed for command to run. Defaults to 20m */
-    var timeout = defaultTimeout
+    /**
+     * File containing stderr from command. null if an OutputStream is provided to errorOutput before start is called.
+     */
+    private var errorFile: File? = null
 
     /**
      * Runs the command.
+     *
+     * @throws ShellCommandTimeoutException if the command process did not finish before the timeout.
      */
     fun start() {
         baseDir.mkdirs()
@@ -74,7 +113,7 @@ data class ShellCommand(
         }
 
         // Launch the process
-        process = pb.start()
+        val process = pb.start()
 
         if (outputStream != null) {
             copy(input = process.inputStream, output = outputStream)
