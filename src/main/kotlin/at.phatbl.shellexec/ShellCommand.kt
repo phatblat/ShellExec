@@ -16,7 +16,7 @@ data class ShellCommand(
         private const val defaultTimeout: Long = 1200
 
         // Used to track whether we've received an updated exit code from the process.
-        private const val uninitializedExitValue = -999
+        const val uninitializedExitValue = -999
 
         private const val bufferSize = 2 * 1024 * 1024
     }
@@ -58,11 +58,11 @@ data class ShellCommand(
     fun start() {
         baseDir.mkdirs()
 
-        val outputStream = standardOutput
-        val errorStream = errorOutput
-
         val pb = ProcessBuilder("bash", "-c", command)
             .directory(baseDir)
+
+        val outputStream = standardOutput
+        val errorStream = errorOutput
 
         if (outputStream == null) {
             outputFile = createTempFile("shellexec-", "-output.log", baseDir)
