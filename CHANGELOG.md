@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- ♻️ Refactor stdout/stderr convenience properties #56
 - ⬆️ Bintray plugin (1.8.4) #55
 
 ## 1.3.0
