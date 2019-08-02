@@ -30,10 +30,6 @@ open class ShellExec: DefaultTask() {
     @Internal
     val errorOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.ERROR)
 
-//    @Internal
-//    val standardInput: InputStream
-//        get() = shellCommand.process.outputStream
-
     @Input
     var ignoreExitValue: Boolean = false
 
@@ -41,6 +37,7 @@ open class ShellExec: DefaultTask() {
     var exitValue: Int = -999
         get() = shellCommand.exitValue
 
+    @Internal
     open lateinit var shellCommand: ShellCommand
 
     /** Core storage of command line to be executed */
