@@ -71,7 +71,7 @@ object ShellCommandSpek : Spek({
 
             assertTrue(shellCommand.succeeded)
             assertEquals("", stderr)
-            assertEquals("$fileContents\n", stdout)
+            assertEquals("$fileContents", stdout)
 
             temporaryFolder.delete()
         }

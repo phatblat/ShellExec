@@ -124,7 +124,11 @@ data class ShellCommand(
 
         try {
             process.waitFor(timeout, TimeUnit.SECONDS)
-            exitValue = process.exitValue()
+
+            // Check to see if the process has quit. Otherwise calling exitValue throws IllegalThreadStateException
+            if (!process.isAlive) {
+                exitValue = process.exitValue()
+            }
         } catch (e: InterruptedException) {
             val message = "Command timeout, exceeded $timeout second limit."
             throw ShellCommandTimeoutException(message, e)
