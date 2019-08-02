@@ -65,11 +65,11 @@ data class ShellCommand(
         val errorStream = errorOutput
 
         if (outputStream == null) {
-            outputFile = createTempFile("shellexec-", "-output.log", baseDir)
+            outputFile = createTempFile("shellexec-", "-output.log")
             pb.redirectOutput(outputFile)
         }
         if (errorStream == null) {
-            errorFile = createTempFile("shellexec-", "-error.log", baseDir)
+            errorFile = createTempFile("shellexec-", "-error.log")
             pb.redirectError(errorFile)
         }
 
