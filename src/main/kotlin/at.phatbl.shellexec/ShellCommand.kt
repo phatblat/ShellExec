@@ -15,6 +15,7 @@ data class ShellCommand(
         // 20m
         private const val defaultTimeout: Long = 1200
 
+        // Used to track whether we've received an updated exit code from the process.
         private const val uninitializedExitValue = -999
 
         private const val bufferSize = 2 * 1024 * 1024
@@ -24,13 +25,21 @@ data class ShellCommand(
 
     var standardOutput: OutputStream? = null
     var errorOutput: OutputStream? = null
-//    val standardInput: InputStream
+
+    private var outputFile: File? = null
+    private var errorFile: File? = null
 
     val stdout: String
-        get() = stream2String(process.inputStream)
+        get() {
+            val output = outputFile ?: return ""
+            return output.bufferedReader().use { it.readText() }
+        }
 
     val stderr: String
-        get() = stream2String(process.errorStream)
+        get() {
+            val errors = errorFile ?: return ""
+            return errors.bufferedReader().use { it.readText() }
+        }
 
     var exitValue: Int = uninitializedExitValue
 
@@ -39,8 +48,6 @@ data class ShellCommand(
 
     val failed: Boolean
         get() = !succeeded
-
-    var readLimit = bufferSize
 
     /** Time allowed for command to run. Defaults to 20m */
     var timeout = defaultTimeout
@@ -51,40 +58,29 @@ data class ShellCommand(
     fun start() {
         baseDir.mkdirs()
 
+        val outputStream = standardOutput
+        val errorStream = errorOutput
+
         val pb = ProcessBuilder("bash", "-c", command)
             .directory(baseDir)
+
+        if (outputStream == null) {
+            outputFile = createTempFile("shellexec-", "-output.log", baseDir)
+            pb.redirectOutput(outputFile)
+        }
+        if (errorStream == null) {
+            errorFile = createTempFile("shellexec-", "-error.log", baseDir)
+            pb.redirectError(errorFile)
+        }
 
         // Launch the process
         process = pb.start()
 
-        process.inputStream.mark(readLimit)
-        process.errorStream.mark(readLimit)
-
-        if (standardOutput != null) {
-            copy(input = process.inputStream, output = standardOutput!!)
+        if (outputStream != null) {
+            copy(input = process.inputStream, output = outputStream)
         }
-        if (errorOutput != null) {
-            copy(input = process.errorStream, output = errorOutput!!)
-        }
-
-        try {
-            process.inputStream.reset()
-        } catch (e: Exception) {
-            val stdout = standardOutput
-            if (stdout != null) {
-                val errorMessage = "Could not reset input stream. Mark with Readlimit $readLimit not found.".toByteArray()
-                stdout.write(errorMessage)
-            }
-        }
-
-        try {
-            process.errorStream.reset()
-        } catch (e: Exception) {
-            val stderr = errorOutput
-            if (stderr != null) {
-                val errorMessage = "Could not reset error stream. Mark with Readlimit $readLimit not found.".toByteArray()
-                stderr.write(errorMessage)
-            }
+        if (errorStream != null) {
+            copy(input = process.errorStream, output = errorStream)
         }
 
         try {
@@ -93,25 +89,6 @@ data class ShellCommand(
         } catch (e: Exception) {
             // Handle timeouts
             println("ShellCommand timeout: $e")
-        }
-    }
-
-    /**
-     * Utility function which converts an input stream into a string.
-     */
-    private fun stream2String(stream: InputStream): String {
-        return try {
-            val reader = BufferedReader(InputStreamReader(stream))
-            val builder = StringBuilder()
-            val lineSeparator = System.getProperty("line.separator")
-            reader.forEachLine { line ->
-                builder.append(line)
-                builder.append(lineSeparator)
-            }
-
-            builder.toString()
-        } catch (e: Exception) {
-            return ""
         }
     }
 
