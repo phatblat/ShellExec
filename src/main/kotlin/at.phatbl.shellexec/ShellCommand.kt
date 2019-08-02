@@ -92,16 +92,20 @@ data class ShellCommand(
         }
     }
 
+    /**
+     * Passes characters from the input stream to the output stream.
+     */
     @Throws(IOException::class)
     private fun copy(input: InputStream, output: OutputStream) {
-        try {
-            val buffer = ByteArray(bufferSize)
-            var bytesRead = input.read(buffer)
-            while (bytesRead != -1) {
-                output.write(buffer, 0, bytesRead)
-                bytesRead = input.read(buffer)
+        input.use {
+            output.use {
+                val buffer = ByteArray(bufferSize)
+                var bytesRead = input.read(buffer)
+                while (bytesRead != -1) {
+                    output.write(buffer, 0, bytesRead)
+                    bytesRead = input.read(buffer)
+                }
             }
-            //If needed, close streams.
-        } finally { }
+        }
     }
 }
