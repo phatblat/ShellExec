@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+
+
+## 1.4.0
+
 - ♻️ Refactor `stdout` & `stderr` convenience properties #56
   - 💥 Return type is now nullable
   - Output now goes to temp files when not using streams
