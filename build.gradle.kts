@@ -55,7 +55,7 @@ val javaPackage = "$group.$artifactName"
 val pluginClass: String by project
 val projectUrl: String by project
 val tags: String by project
-val labels = "$tags".split(",")
+val labels = tags.split(",")
 val license: String by project
 
 val jvmTarget = JavaVersion.VERSION_1_8
