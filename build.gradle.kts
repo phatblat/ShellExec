@@ -37,7 +37,7 @@ plugins {
 
     // Gradle plugin portal - https://plugins.gradle.org/
     kotlin("jvm") version "1.3.41"
-    id("at.phatbl.shellexec") version "1.3.0"
+    id("at.phatbl.shellexec") version "1.4.0"
     id("com.gradle.plugin-publish") version "0.9.10"
     id("com.jfrog.bintray") version "1.8.4"
     id("io.gitlab.arturbosch.detekt") version "1.0.0.RC6-4"
