@@ -41,6 +41,16 @@ object ShellCommandSpek : Spek({
 
             assertTrue(shellCommand.succeeded)
             assertEquals("Hello World!\n", shellCommand.stdout)
+            assertNull(shellCommand.standardOutput)
+        }
+
+        it("has empty but not null standard output") {
+            shellCommand = ShellCommand(command = "echo -n")
+            shellCommand.start()
+
+            assertTrue(shellCommand.succeeded)
+            assertEquals("", shellCommand.stdout)
+            assertNull(shellCommand.standardOutput)
         }
 
         it("can generate standard output to a stream") {
@@ -61,6 +71,16 @@ object ShellCommandSpek : Spek({
 
             assertTrue(shellCommand.succeeded)
             assertEquals("This is an error.\n", shellCommand.stderr)
+            assertNull(shellCommand.errorOutput)
+        }
+
+        it("has empty but not null error output") {
+            shellCommand = ShellCommand(command = "echo -n >&2")
+            shellCommand.start()
+
+            assertTrue(shellCommand.succeeded)
+            assertEquals("", shellCommand.stderr)
+            assertNull(shellCommand.errorOutput)
         }
 
         it("can generate error output to a stream") {
