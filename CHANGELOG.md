@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- ♻️ Refactor `stdout` & `stderr` convenience properties #56
+  - 💥 Return type is now nullable
+  - Output now goes to temp files when not using streams
+  - New `ShellCommandTimeoutException` is thrown with details when a command doesn't complete before the current timeout.
+- `baseDir` argument is now optional #56
 - ⬆️ Bintray plugin (1.8.4) #55
 
 ## 1.3.0
