@@ -65,7 +65,7 @@ open class ShellCommand(
      * Will always be null if you provide an OutputStream to standardOutput.
      * @see standardOutput
      */
-    val stdout: String?
+    open val stdout: String?
         get() {
             val output = outputFile ?: return null
             return output.bufferedReader().use { it.readText() }
