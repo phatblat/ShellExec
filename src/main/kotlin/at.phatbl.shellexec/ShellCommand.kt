@@ -1,12 +1,15 @@
 package at.phatbl.shellexec
 
-import java.io.*
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import java.util.concurrent.TimeUnit
 
 /**
  * Wrapper for running several commands inside a Bash shell.
  */
-data class ShellCommand(
+open class ShellCommand(
         /** Working dir for command. Defaults to the JVM's current directory. */
         val baseDir: File = File("."),
         val command: String
@@ -94,7 +97,7 @@ data class ShellCommand(
      *
      * @throws ShellCommandTimeoutException if the command process did not finish before the timeout.
      */
-    fun start() {
+    open fun start() {
         baseDir.mkdirs()
 
         val pb = ProcessBuilder("bash", "-c", command)
