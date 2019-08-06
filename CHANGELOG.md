@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-
+- 👐🏻 Open API #58
 
 ## 1.4.0
 
