@@ -85,7 +85,7 @@ open class ShellExec: DefaultTask() {
             if (!ignoreExitValue) {
                 throw GradleException(message)
             }
-            logger.log(LogLevel.ERROR, message)
+            logger.error( message)
         }
 
         postExec()
@@ -97,12 +97,12 @@ open class ShellExec: DefaultTask() {
 
     /** Hook for running logic before the exec task action runs. */
     open fun preExec() {
-        logger.log(LogLevel.DEBUG, "No custom logic in preExec")
+        logger.debug( "No custom logic in preExec")
     }
 
     /** Hook for running logic immediately after the exec task action runs. Does not run on command failure. */
     open fun postExec() {
-        logger.log(LogLevel.DEBUG, "No custom logic in postExec")
+        logger.debug( "No custom logic in postExec")
     }
 
     /**
@@ -110,7 +110,7 @@ open class ShellExec: DefaultTask() {
      */
     private fun buildPath() {
         var path = systemPath
-        logger.log(LogLevel.INFO, "System.env.PATH: $systemPath")
+        logger.info( "System.env.PATH: $systemPath")
         prePath?.let { pre: String ->
             path = "$pre:$path"
         }
@@ -118,6 +118,6 @@ open class ShellExec: DefaultTask() {
             path = "$path:$post"
         }
         environment.put(PATH, path)
-        logger.log(LogLevel.INFO, "PATH: ${environment[PATH]}")
+        logger.info( "PATH: ${environment[PATH]}")
     }
 }
