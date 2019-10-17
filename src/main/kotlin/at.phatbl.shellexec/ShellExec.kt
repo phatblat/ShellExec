@@ -26,13 +26,10 @@ open class ShellExec: DefaultTask() {
     var workingDir: File = project.projectDir
 
     @Input
-    var shellLogger: Logger = logger
+    var standardOutput = GradleLogOutputStream(logger, LogLevel.LIFECYCLE, null)
 
-    @Internal
-    val standardOutput: OutputStream = GradleLogOutputStream(shellLogger, LogLevel.LIFECYCLE)
-
-    @Internal
-    val errorOutput: OutputStream = GradleLogOutputStream(shellLogger, LogLevel.ERROR)
+    @Input
+    var errorOutput = GradleLogOutputStream(logger, LogLevel.ERROR, null)
 
     @Input
     var ignoreExitValue: Boolean = false
@@ -88,7 +85,7 @@ open class ShellExec: DefaultTask() {
             if (!ignoreExitValue) {
                 throw GradleException(message)
             }
-            shellLogger.log(LogLevel.ERROR, message)
+            logger.log(LogLevel.ERROR, message)
         }
 
         postExec()
@@ -100,12 +97,12 @@ open class ShellExec: DefaultTask() {
 
     /** Hook for running logic before the exec task action runs. */
     open fun preExec() {
-        shellLogger.log(LogLevel.DEBUG, "No custom logic in preExec")
+        logger.log(LogLevel.DEBUG, "No custom logic in preExec")
     }
 
     /** Hook for running logic immediately after the exec task action runs. Does not run on command failure. */
     open fun postExec() {
-        shellLogger.log(LogLevel.DEBUG, "No custom logic in postExec")
+        logger.log(LogLevel.DEBUG, "No custom logic in postExec")
     }
 
     /**
@@ -113,7 +110,7 @@ open class ShellExec: DefaultTask() {
      */
     private fun buildPath() {
         var path = systemPath
-        shellLogger.log(LogLevel.INFO, "System.env.PATH: $systemPath")
+        logger.log(LogLevel.INFO, "System.env.PATH: $systemPath")
         prePath?.let { pre: String ->
             path = "$pre:$path"
         }
@@ -121,6 +118,6 @@ open class ShellExec: DefaultTask() {
             path = "$path:$post"
         }
         environment.put(PATH, path)
-        shellLogger.log(LogLevel.INFO, "PATH: ${environment[PATH]}")
+        logger.log(LogLevel.INFO, "PATH: ${environment[PATH]}")
     }
 }
