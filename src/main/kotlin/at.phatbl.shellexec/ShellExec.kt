@@ -4,6 +4,7 @@ import at.phatbl.shellexec.logging.GradleLogOutputStream
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.logging.LogLevel
+import org.gradle.api.logging.Logger
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
@@ -24,11 +25,14 @@ open class ShellExec: DefaultTask() {
     @InputDirectory
     var workingDir: File = project.projectDir
 
-    @Internal
-    val standardOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.LIFECYCLE)
+    @Input
+    var shellLogger: Logger = logger
 
     @Internal
-    val errorOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.ERROR)
+    val standardOutput: OutputStream = GradleLogOutputStream(shellLogger, LogLevel.LIFECYCLE)
+
+    @Internal
+    val errorOutput: OutputStream = GradleLogOutputStream(shellLogger, LogLevel.ERROR)
 
     @Input
     var ignoreExitValue: Boolean = false
@@ -84,7 +88,7 @@ open class ShellExec: DefaultTask() {
             if (!ignoreExitValue) {
                 throw GradleException(message)
             }
-            logger.error(message)
+            shellLogger.log(LogLevel.ERROR, message)
         }
 
         postExec()
@@ -96,12 +100,12 @@ open class ShellExec: DefaultTask() {
 
     /** Hook for running logic before the exec task action runs. */
     open fun preExec() {
-        logger.debug("No custom logic in preExec")
+        shellLogger.log(LogLevel.DEBUG, "No custom logic in preExec")
     }
 
     /** Hook for running logic immediately after the exec task action runs. Does not run on command failure. */
     open fun postExec() {
-        logger.debug("No custom logic in postExec")
+        shellLogger.log(LogLevel.DEBUG, "No custom logic in postExec")
     }
 
     /**
@@ -109,7 +113,7 @@ open class ShellExec: DefaultTask() {
      */
     private fun buildPath() {
         var path = systemPath
-        logger.info("System.env.PATH: $systemPath")
+        shellLogger.log(LogLevel.INFO, "System.env.PATH: $systemPath")
         prePath?.let { pre: String ->
             path = "$pre:$path"
         }
@@ -117,6 +121,6 @@ open class ShellExec: DefaultTask() {
             path = "$path:$post"
         }
         environment.put(PATH, path)
-        logger.info("PATH: ${environment[PATH]}")
+        shellLogger.log(LogLevel.INFO, "PATH: ${environment[PATH]}")
     }
 }
