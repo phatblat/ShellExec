@@ -130,6 +130,7 @@ val updateVersionFile by tasks.creating {
     }
 }
 
+tasks.getByName("processResources").dependsOn(updateVersionFile)
 tasks.getByName("assemble").dependsOn(updateVersionFile)
 
 val sourcesJar by tasks.creating(Jar::class) {
