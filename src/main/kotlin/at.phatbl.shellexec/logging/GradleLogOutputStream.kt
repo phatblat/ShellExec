@@ -9,7 +9,7 @@ import java.io.File
 /**
  * Adapter which passes log output through to Gradle's logger.
  */
-class GradleLogOutputStream(val logger: Logger, level: LogLevel, val logFiles: Array<File>? = null): LogOutputStream(level.ordinal) {
+class GradleLogOutputStream(val logger: Logger, level: LogLevel, val logFiles: Array<File>? = null, val isLoggingTo: LoggingMethod = LoggingMethod.BOTH): LogOutputStream(level.ordinal) {
     /**
      * Logs a line to the log system of the user.
      *
@@ -28,7 +28,23 @@ class GradleLogOutputStream(val logger: Logger, level: LogLevel, val logFiles: A
             else -> throw GradleException("Unknown log level: $logLevel")
         }
 
-        logFiles?.forEach { it.appendText("$line\n") }
-        logger.log(level, line)
+        when(isLoggingTo) {
+            LoggingMethod.BOTH -> {
+                logFiles?.forEach { it.appendText("$line\n") }
+                logger.log(level, line)
+            }
+            LoggingMethod.FILE -> {
+                logFiles?.forEach { it.appendText("$line\n") }
+            }
+            LoggingMethod.STDOUT -> {
+                logger.log(level, line)
+            }
+        }
     }
+}
+
+enum class LoggingMethod {
+    FILE,
+    STDOUT,
+    BOTH
 }
