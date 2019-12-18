@@ -28,7 +28,12 @@ class GradleLogOutputStream(val logger: Logger, level: LogLevel, val logFiles: A
             else -> throw GradleException("Unknown log level: $logLevel")
         }
 
-        logFiles?.forEach { it.appendText("$line\n") }
+        logFiles?.forEach {
+            if (it.exists()) {
+                it.appendText("$line\n")
+            }
+        }
+
         logger.log(level, line)
     }
 }
