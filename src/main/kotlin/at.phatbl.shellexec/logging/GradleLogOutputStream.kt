@@ -29,9 +29,7 @@ class GradleLogOutputStream(val logger: Logger, level: LogLevel, val logFiles: A
         }
 
         logFiles?.forEach {
-            if (it.exists()) {
-                it.appendText("$line\n")
-            }
+            it.appendText("$line\n")
         }
 
         logger.log(level, line)
