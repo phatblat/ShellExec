@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- ✨ Gradle logging to file/s #59
+
 ## 1.4.1
 
 - 👐🏻 Open API #58
