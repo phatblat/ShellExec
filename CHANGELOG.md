@@ -12,6 +12,8 @@
 - ⬆️ Detekt (1.2.2) #60
 - ⬆️ Gradle Publishing (0.10.1) #60
 - ⬆️ ShellExec(1.4.1) #60
+- ⬆️ Bundler (2.1.0) #60
+- ⬆️ danger (6.1.0) #60
 
 ## 1.4.1
 
