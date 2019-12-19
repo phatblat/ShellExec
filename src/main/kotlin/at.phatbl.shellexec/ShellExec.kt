@@ -45,7 +45,6 @@ open class ShellExec: DefaultTask() {
     var command = ""
 
     /** Property containing a copy of the PATH environment variable. */
-    @Input
     private var systemPath: String
 
     /** Value to be prepended to the PATH. */
