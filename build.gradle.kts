@@ -236,7 +236,7 @@ val lint by tasks.creating(DefaultTask::class) {
     description = "Runs detekt and validateTaskProperties"
     group = "Verification"
     // Does this task come from java-gradle-plugin?
-    dependsOn("validateTaskProperties")
+    dependsOn("validatePlugins")
     dependsOn("detekt")
 }
 
