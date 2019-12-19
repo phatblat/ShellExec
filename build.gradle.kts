@@ -36,11 +36,11 @@ plugins {
     `maven-publish`
 
     // Gradle plugin portal - https://plugins.gradle.org/
-    kotlin("jvm") version "1.3.41"
-    id("at.phatbl.shellexec") version "1.4.0"
-    id("com.gradle.plugin-publish") version "0.9.10"
+    kotlin("jvm") version "1.3.60"
+    id("at.phatbl.shellexec") version "1.4.1"
+    id("com.gradle.plugin-publish") version "0.10.1"
     id("com.jfrog.bintray") version "1.8.4"
-    id("io.gitlab.arturbosch.detekt") version "1.0.0.RC6-4"
+    id("io.gitlab.arturbosch.detekt") version "1.2.2"
 
     // Custom handling in pluginManagement
     id("org.junit.platform.gradle.plugin") version "1.2.0"
@@ -154,22 +154,25 @@ configure<BasePluginConvention> {
     archivesBaseName = artifactName
 }
 
-gradlePlugin.plugins.create("$artifactName") {
+gradlePlugin.plugins.create(artifactName) {
     id = javaPackage
     implementationClass = "$javaPackage.$pluginClass"
 }
 
 pluginBundle {
-    website = "$projectUrl"
-    vcsUrl = "$projectUrl"
+    website = projectUrl
+    vcsUrl = projectUrl
     description = project.description
-    tags = labels
 
-    plugins.create("$artifactName") {
-        id = javaPackage
-        displayName = project.name
+    (plugins) {
+        artifactName {
+            id = javaPackage
+            displayName = project.name
+            tags = labels
+            version = project.version.toString()
+        }
     }
-    mavenCoordinates.artifactId = "$artifactName"
+    mavenCoordinates.artifactId = artifactName
 }
 
 /* -------------------------------------------------------------------------- */
@@ -188,7 +191,7 @@ junitPlatform {
 
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
 jacoco {
-    toolVersion = "$jacocoVersion"
+    toolVersion = jacocoVersion
     reportsDir = file("$buildDir/reports/jacoco")
 }
 
@@ -211,28 +214,30 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
 // 🔍 Code Quality
 /* -------------------------------------------------------------------------- */
 
+// https://arturbosch.github.io/detekt/kotlindsl.html
 detekt {
-    version = "$detektVersion"
-    profile("main", Action {
-        input = "$projectDir/src/main/kotlin"
-        config = "$projectDir/detekt.yml"
-        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-    })
-    idea(Action {
+    toolVersion = detektVersion
+    config = files("$projectDir/detekt.yml")
+    idea {
         path = ".idea"
         codeStyleScheme = ".idea/code-style.xml"
         inspectionsProfile = ".idea/inspect.xml"
         report = "$projectDir/reports"
         mask = "*.kt,"
-    })
+    }
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
+    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+    exclude(".*test.*,.*/resources/.*,.*/tmp/.*")
 }
 
 val lint by tasks.creating(DefaultTask::class) {
     description = "Runs detekt and validateTaskProperties"
     group = "Verification"
     // Does this task come from java-gradle-plugin?
-    dependsOn("validateTaskProperties")
-    dependsOn("detektCheck")
+    dependsOn("validatePlugins")
+    dependsOn("detekt")
 }
 
 val danger by tasks.creating(ShellExec::class) {
@@ -246,7 +251,7 @@ val danger by tasks.creating(ShellExec::class) {
 val codeQuality by tasks.creating(DefaultTask::class) {
     description = "Runs all code quality checks."
     group = "🚇 Tube"
-    dependsOn("detektCheck")
+    dependsOn("detekt")
     dependsOn("check")
     dependsOn(lint)
 }
@@ -269,7 +274,7 @@ publishing {
     publications {
         register("mavenJava", MavenPublication::class) {
             from(components["java"])
-            artifactId = "$artifactName"
+            artifactId = artifactName
 
             artifact(sourcesJar) { classifier = "sources" }
             artifact(javadocJar) { classifier = "javadoc" }
