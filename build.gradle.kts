@@ -237,7 +237,7 @@ val lint by tasks.creating(DefaultTask::class) {
     group = "Verification"
     // Does this task come from java-gradle-plugin?
     dependsOn("validateTaskProperties")
-    dependsOn("detektCheck")
+    dependsOn("detekt")
 }
 
 val danger by tasks.creating(ShellExec::class) {
@@ -251,7 +251,7 @@ val danger by tasks.creating(ShellExec::class) {
 val codeQuality by tasks.creating(DefaultTask::class) {
     description = "Runs all code quality checks."
     group = "🚇 Tube"
-    dependsOn("detektCheck")
+    dependsOn("detekt")
     dependsOn("check")
     dependsOn(lint)
 }
