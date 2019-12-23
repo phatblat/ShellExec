@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- 🐛 Updated OutputStreams to GradleOutputStreams because of compile error #61
+- 🐛 Updated OutputStreams to GradleOutputStreams because of compile error #65
 
 
 ## 1.5.0
