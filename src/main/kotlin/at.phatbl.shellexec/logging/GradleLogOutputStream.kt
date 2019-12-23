@@ -4,11 +4,12 @@ import org.apache.commons.exec.LogOutputStream
 import org.gradle.api.GradleException
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.logging.Logger
+import java.io.File
 
 /**
  * Adapter which passes log output through to Gradle's logger.
  */
-class GradleLogOutputStream(val logger: Logger, val level: LogLevel): LogOutputStream(level.ordinal) {
+class GradleLogOutputStream(val logger: Logger, level: LogLevel, val logFiles: Array<File>? = null): LogOutputStream(level.ordinal) {
     /**
      * Logs a line to the log system of the user.
      *
@@ -26,6 +27,11 @@ class GradleLogOutputStream(val logger: Logger, val level: LogLevel): LogOutputS
             LogLevel.ERROR.ordinal -> LogLevel.ERROR
             else -> throw GradleException("Unknown log level: $logLevel")
         }
+
+        logFiles?.forEach {
+            it.appendText("$line\n")
+        }
+
         logger.log(level, line)
     }
 }

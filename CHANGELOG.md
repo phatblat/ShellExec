@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+
+
+## 1.5.0
+
+- ✨ Gradle logging to file/s #59
+- ⬆️ Gradle (6.0.1) #60
+- ⬆️ Spek (1.2.1) #60
+- ⬆️ Detekt (1.2.2) #60
+- ⬆️ Gradle Publishing (0.10.1) #60
+- ⬆️ ShellExec(1.4.1) #60
+- ⬆️ Bundler (2.1.0) #60
+- ⬆️ danger (6.1.0) #60
+
 ## 1.4.1
 
 - 👐🏻 Open API #58

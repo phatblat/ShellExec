@@ -24,11 +24,11 @@ open class ShellExec: DefaultTask() {
     @InputDirectory
     var workingDir: File = project.projectDir
 
-    @Internal
-    val standardOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.LIFECYCLE)
+    @Input
+    var standardOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.LIFECYCLE)
 
-    @Internal
-    val errorOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.ERROR)
+    @Input
+    var errorOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.ERROR)
 
     @Input
     var ignoreExitValue: Boolean = false
@@ -45,7 +45,6 @@ open class ShellExec: DefaultTask() {
     var command = ""
 
     /** Property containing a copy of the PATH environment variable. */
-    @Input
     private var systemPath: String
 
     /** Value to be prepended to the PATH. */
