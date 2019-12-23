@@ -25,10 +25,10 @@ open class ShellExec: DefaultTask() {
     var workingDir: File = project.projectDir
 
     @Input
-    var standardOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.LIFECYCLE)
+    var standardOutput: GradleLogOutputStream = GradleLogOutputStream(logger, LogLevel.LIFECYCLE)
 
     @Input
-    var errorOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.ERROR)
+    var errorOutput: GradleLogOutputStream = GradleLogOutputStream(logger, LogLevel.ERROR)
 
     @Input
     var ignoreExitValue: Boolean = false
