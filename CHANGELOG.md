@@ -4,6 +4,10 @@
 
 
 
+## 1.5.1
+
+- 🐛 Expose Apache commons-exec as API dependency #66
+
 ## 1.5.0
 
 - ✨ Gradle logging to file/s #59
