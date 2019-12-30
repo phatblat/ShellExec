@@ -89,10 +89,10 @@ tasks.wrapper {
 repositories.jcenter()
 
 dependencies {
+    api("org.apache.commons:commons-exec:$commonsExecVersion")
     implementation(kotlin("stdlib"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-    implementation("org.apache.commons:commons-exec:$commonsExecVersion")
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
