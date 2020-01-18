@@ -9,7 +9,11 @@ import java.io.File
 /**
  * Adapter which passes log output through to Gradle's logger.
  */
-class GradleLogOutputStream(val logger: Logger, level: LogLevel, val logFiles: Array<File>? = null): LogOutputStream(level.ordinal) {
+class GradleLogOutputStream(
+    val logger: Logger,
+    level: LogLevel,
+    val logFiles: Array<File>? = null
+): LogOutputStream(level.ordinal) {
     /**
      * Logs a line to the log system of the user.
      *
