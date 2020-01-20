@@ -4,6 +4,7 @@ import at.phatbl.shellexec.logging.GradleLogOutputStream
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.logging.LogLevel
+import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
@@ -24,10 +25,10 @@ open class ShellExec: DefaultTask() {
     @InputDirectory
     var workingDir: File = project.projectDir
 
-    @Input
+    @Console
     var standardOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.LIFECYCLE)
 
-    @Input
+    @Console
     var errorOutput: OutputStream = GradleLogOutputStream(logger, LogLevel.ERROR)
 
     @Input
