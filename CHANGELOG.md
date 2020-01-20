@@ -4,6 +4,10 @@
 
 
 
+## 1.5.2
+
+- 🐛 Change annotation on output properties #68
+
 ## 1.5.1
 
 - 🐛 Expose Apache commons-exec as API dependency #66
