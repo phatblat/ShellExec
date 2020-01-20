@@ -328,8 +328,8 @@ install.doFirst {
 }
 
 val deploy by tasks.creating {
-    description = "Deploys the artifact."
-    group = "Deployment"
+    description = "Deploys plugin to bintray and the Gradle plugin portal."
+    group = "🚇 Tube"
     dependsOn("bintrayUpload")
     dependsOn("publishPlugins")
 }
