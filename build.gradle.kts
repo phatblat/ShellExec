@@ -8,21 +8,8 @@
 /* -------------------------------------------------------------------------- */
 
 import at.phatbl.shellexec.ShellExec
-import com.jfrog.bintray.gradle.BintrayExtension
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Delete
-import java.util.Date
-import org.gradle.kotlin.dsl.apply
-import org.gradle.kotlin.dsl.creating
-import org.gradle.kotlin.dsl.extra
-import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.junit.platform.console.options.Details
-import org.junit.platform.gradle.plugin.EnginesExtension
-import org.junit.platform.gradle.plugin.FiltersExtension
-import org.junit.platform.gradle.plugin.JUnitPlatformExtension
-import java.io.File
-import java.nio.file.Files.delete
 
 /* -------------------------------------------------------------------------- */
 // 🔌 Plugins
@@ -32,14 +19,12 @@ plugins {
     // Gradle built-in
     jacoco
     `java-gradle-plugin`
-    maven // only applied to make bintray happy
     `maven-publish`
 
     // Gradle plugin portal - https://plugins.gradle.org/
     kotlin("jvm") version "1.3.60"
     id("at.phatbl.shellexec") version "1.4.1"
     id("com.gradle.plugin-publish") version "0.10.1"
-    id("com.jfrog.bintray") version "1.8.4"
     id("io.gitlab.arturbosch.detekt") version "1.2.2"
 
     // Custom handling in pluginManagement
@@ -282,54 +267,8 @@ publishing {
     }
 }
 
-bintray {
-    user = property("bintray.user") as String
-    key = property("bintray.api.key") as String
-    setPublications("mavenJava")
-    setConfigurations("archives")
-    dryRun = false
-    publish = true
-    pkg.apply {
-        repo = property("bintray.repo") as String
-        name = project.name
-        desc = project.description
-        websiteUrl = projectUrl
-        issueTrackerUrl = "$projectUrl/issues"
-        vcsUrl = "$projectUrl.git"
-        githubRepo = "phatblat/${project.name}"
-        githubReleaseNotesFile = "CHANGELOG.md"
-        setLicenses(property("license") as String)
-        setLabels("gradle", "plugin", "exec", "shell", "bash", "kotlin")
-        publicDownloadNumbers = true
-        version.apply {
-            name = project.version.toString()
-            desc = "ShellExec Gradle Plugin ${project.version}"
-            released = Date().toString()
-            vcsTag = project.version.toString()
-            attributes = mapOf("gradle-plugin" to "${project.group}:$artifactName:${project.version}")
-
-            mavenCentralSync.apply {
-                sync = false //Optional (true by default). Determines whether to sync the version to Maven Central.
-                user = "userToken" //OSS user token
-                password = "password" //OSS user password
-                close = "1" //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
-            }
-        }
-    }
-}
-
-// Workaround to eliminate warning from bintray plugin, which assumes the "maven" plugin is being used.
-// https://github.com/bintray/gradle-bintray-plugin/blob/master/src/main/groovy/com/jfrog/bintray/gradle/BintrayPlugin.groovy#L85
-val install by tasks
-install.doFirst {
-    val maven = project.convention.plugins["maven"] as MavenPluginConvention
-    maven.mavenPomDir = file("$buildDir/publications/mavenJava")
-    logger.info("Configured maven plugin to use same output dir as maven-publish: ${maven.mavenPomDir}")
-}
-
 val deploy by tasks.creating {
-    description = "Deploys plugin to bintray and the Gradle plugin portal."
+    description = "Deploys plugin to the Gradle plugin portal."
     group = "🚇 Tube"
-    dependsOn("bintrayUpload")
     dependsOn("publishPlugins")
 }
