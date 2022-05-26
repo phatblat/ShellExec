@@ -71,7 +71,7 @@ tasks.wrapper {
 // 👪 Dependencies
 /* -------------------------------------------------------------------------- */
 
-repositories.jcenter()
+repositories.gradlePluginPortal()
 
 dependencies {
     api("org.apache.commons:commons-exec:$commonsExecVersion")

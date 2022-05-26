@@ -6,7 +6,7 @@
 import at.phatbl.shellexec.ShellExec
 
 buildscript {
-    repositories.jcenter()
+    repositories.gradlePluginPortal()
     dependencies.classpath 'at.phatbl:shellexec:+'
 }
 
