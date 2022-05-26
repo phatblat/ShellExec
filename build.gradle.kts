@@ -177,7 +177,7 @@ junitPlatform {
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
 jacoco {
     toolVersion = jacocoVersion
-    reportsDir = file("$buildDir/reports/jacoco")
+    reportsDirectory.set(file("$buildDir/reports/jacoco"))
 }
 
 tasks.jacocoTestReport {
