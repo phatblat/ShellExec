@@ -22,7 +22,7 @@ plugins {
     `maven-publish`
 
     // Gradle plugin portal - https://plugins.gradle.org/
-    kotlin("jvm") version "1.3.60"
+    kotlin("jvm") version "1.5.31"
     id("at.phatbl.shellexec") version "1.4.1"
     id("com.gradle.plugin-publish") version "0.10.1"
     id("io.gitlab.arturbosch.detekt") version "1.2.2"
