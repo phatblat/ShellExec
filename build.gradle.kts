@@ -9,8 +9,6 @@
 
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.konan.target.buildDistribution
-import org.junit.platform.console.options.Details
 
 /* -------------------------------------------------------------------------- */
 // 🔌 Plugins
@@ -26,9 +24,6 @@ plugins {
     kotlin("jvm") version "1.5.31"
     id("com.gradle.plugin-publish") version "0.10.1" //"1.0.0-rc-2"
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
-
-    // Custom handling in pluginManagement
-    id("org.junit.platform.gradle.plugin") version "1.2.0"
 }
 
 /* -------------------------------------------------------------------------- */
@@ -46,19 +41,9 @@ val license: String by project
 val jvmTarget = JavaVersion.VERSION_1_8
 
 val commonsExecVersion: String by project
+val junitVersion: String by project
 val spekVersion: String by project
 val detektVersion: String by project
-
-// FIXME: Get version from plugins block
-// This is necessary to make the plugin version accessible in other places
-// https://stackoverflow.com/questions/46053522/how-to-get-ext-variables-into-plugins-block-in-build-gradle-kts/47507441#47507441
-//val junitPlatformVersion: String? by extra {
-//    buildscript.configurations["classpath"]
-//            .resolvedConfiguration.firstLevelModuleDependencies
-//            .find { it.moduleName == "junit-platform-gradle-plugin" }?.moduleVersion
-//}
-
-val junitPlatformVersion: String by project
 val jacocoVersion: String by project
 val gradleWrapperVersion: String by project
 
@@ -81,9 +66,11 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
-    testImplementation("org.junit.platform:junit-platform-runner:$junitPlatformVersion")
+    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testImplementation("org.junit.platform:junit-platform-runner")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
-    testImplementation("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }
 
 /* -------------------------------------------------------------------------- */
@@ -103,7 +90,7 @@ sourceSets["main"].resources {
     include("VERSION.txt")
 }
 
-val updateVersionFile by tasks.creating {
+val updateVersionFile: Task by tasks.creating {
     description = "Updates the VERSION.txt file included with the plugin"
     group = "Build"
     doLast {
@@ -162,14 +149,11 @@ pluginBundle {
 // ✅ Test
 /* -------------------------------------------------------------------------- */
 
-junitPlatform {
-    filters {
-        includeClassNamePatterns("^.*Tests?$", ".*Spec", ".*Spek")
-        engines {
-            include("spek")
-        }
-    }
-    details = Details.TREE
+tasks.test {
+    jvmArgs(
+        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+        "--add-opens", "java.base/java.util=ALL-UNNAMED"
+    )
 }
 
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
