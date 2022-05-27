@@ -4,7 +4,9 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.nio.file.Path
 import java.util.concurrent.TimeUnit
+import kotlin.io.path.createTempFile
 
 /**
  * Wrapper for running several commands inside a Bash shell.
@@ -83,7 +85,7 @@ open class ShellCommand(
         }
 
     /**
-     * File containing stdout from command. null if an OutputStream is provided to standardOutput before start is called.
+     * File where stdout will be written. null if an OutputStream is provided to standardOutput before start is called.
      */
     private var outputFile: File? = null
 
@@ -107,12 +109,14 @@ open class ShellCommand(
         val errorStream = errorOutput
 
         if (outputStream == null) {
-            outputFile = createTempFile("shellexec-", "-output.log")
-            pb.redirectOutput(outputFile)
+            val path = createTempFile("shellexec-", "-output.log")
+            pb.redirectOutput(path.toFile())
+            outputFile = path.toFile()
         }
         if (errorStream == null) {
-            errorFile = createTempFile("shellexec-", "-error.log")
-            pb.redirectError(errorFile)
+            val path = createTempFile("shellexec-", "-error.log")
+            pb.redirectError(path.toFile())
+            errorFile = path.toFile()
         }
 
         // Launch the process
@@ -128,7 +132,7 @@ open class ShellCommand(
         try {
             process.waitFor(timeout, TimeUnit.SECONDS)
 
-            // Check to see if the process has quit. Otherwise calling exitValue throws IllegalThreadStateException
+            // Check to see if the process has quit. Otherwise, calling exitValue throws IllegalThreadStateException
             if (!process.isAlive) {
                 exitValue = process.exitValue()
             }
