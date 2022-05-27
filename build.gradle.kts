@@ -8,6 +8,7 @@
 /* -------------------------------------------------------------------------- */
 
 import io.gitlab.arturbosch.detekt.Detekt
+import org.gradle.api.file.DuplicatesStrategy
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /* -------------------------------------------------------------------------- */
@@ -94,20 +95,30 @@ val updateVersionFile: Task by tasks.creating {
     description = "Updates the VERSION.txt file included with the plugin"
     group = "Build"
     doLast {
-        val resources = "src/main/resources"
+        val resources = layout.projectDirectory.dir("src/main/resources")
         project.file(resources).mkdirs()
-        val versionFile = project.file("$resources/VERSION.txt")
+
+        val versionFile = resources.file("VERSION.txt").asFile
         versionFile.createNewFile()
         versionFile.writeText(version.toString())
     }
 }
 
-tasks.getByName("processResources").dependsOn(updateVersionFile)
-tasks.getByName("assemble").dependsOn(updateVersionFile)
+afterEvaluate {
+    tasks.named("processResources").configure {
+        dependsOn(updateVersionFile)
+        val task = this as AbstractCopyTask
+        // Workaround for error 👇🏻
+        // Execution failed for task ':processResources'.
+        //> Entry VERSION.txt is a duplicate but no duplicate handling strategy has been set. Please refer to https://docs.gradle.org/7.4.2/dsl/org.gradle.api.tasks.Copy.html#org.gradle.api.tasks.Copy:duplicatesStrategy for details.
+        task.duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+}
 
 val sourcesJar by tasks.creating(Jar::class) {
     dependsOn("classes")
-    from(sourceSets["main"].allSource)
+    from(sourceSets["main"].allJava)
+    exclude("src/main/resources/VERSION.txt")
 }
 
 val javadocJar by tasks.creating(Jar::class) {
