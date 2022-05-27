@@ -9,6 +9,7 @@
 
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.konan.target.buildDistribution
 import org.junit.platform.console.options.Details
 
 /* -------------------------------------------------------------------------- */
@@ -34,8 +35,8 @@ plugins {
 // 📋 Properties
 /* -------------------------------------------------------------------------- */
 
-val artifactName: String by project
-val javaPackage = "$group.$artifactName"
+val artifactId: String by project
+val javaPackage = "$group.$artifactId"
 val pluginClass: String by project
 val projectUrl: String by project
 val tags: String by project
@@ -91,7 +92,7 @@ dependencies {
 
 tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "$jvmTarget" }
 
-configure<JavaPluginConvention> {
+java {
     sourceCompatibility = jvmTarget
     targetCompatibility = jvmTarget
 }
@@ -119,13 +120,11 @@ tasks.getByName("assemble").dependsOn(updateVersionFile)
 
 val sourcesJar by tasks.creating(Jar::class) {
     dependsOn("classes")
-    classifier = "sources"
     from(sourceSets["main"].allSource)
 }
 
 val javadocJar by tasks.creating(Jar::class) {
     dependsOn("javadoc")
-    classifier = "javadoc"
     val javadoc = tasks.withType<Javadoc>().first()
     from(javadoc.destinationDir)
 }
@@ -133,12 +132,12 @@ val javadocJar by tasks.creating(Jar::class) {
 artifacts.add("archives", sourcesJar)
 artifacts.add("archives", javadocJar)
 
-configure<BasePluginConvention> {
+base {
     // at.phatbl.shellexec-1.0.0.jar
-    archivesBaseName = artifactName
+    archivesBaseName = artifactId
 }
 
-gradlePlugin.plugins.create(artifactName) {
+gradlePlugin.plugins.create(artifactId) {
     id = javaPackage
     implementationClass = "$javaPackage.$pluginClass"
 }
@@ -149,14 +148,14 @@ pluginBundle {
     description = project.description
 
     (plugins) {
-        artifactName {
+        artifactId {
             id = javaPackage
             displayName = project.name
             tags = labels
             version = project.version.toString()
         }
     }
-    mavenCoordinates.artifactId = artifactName
+    mavenCoordinates.artifactId = artifactId
 }
 
 /* -------------------------------------------------------------------------- */
@@ -181,11 +180,11 @@ jacoco {
 
 tasks.jacocoTestReport {
     reports {
-        xml.isEnabled = true
-        html.destination = file("$buildDir/reports/jacoco.xml")
-        csv.isEnabled = false
-        html.isEnabled = true
-        html.destination = file("$buildDir/reports/jacocoHtml")
+        html.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacocoHtml"))
+        xml.required.set(true)
+        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco.xml"))
+        csv.required.set(false)
     }
 }
 
@@ -243,7 +242,7 @@ publishing {
     publications {
         register("mavenJava", MavenPublication::class) {
             from(components["java"])
-            artifactId = artifactName
+            artifactId = artifactId
 
             artifact(sourcesJar) { classifier = "sources" }
             artifact(javadocJar) { classifier = "javadoc" }
@@ -251,7 +250,7 @@ publishing {
     }
 }
 
-val deploy by tasks.creating {
+val deploy: Task by tasks.creating {
     description = "Deploys plugin to the Gradle plugin portal."
     group = "🚇 Tube"
     dependsOn("publishPlugins")
