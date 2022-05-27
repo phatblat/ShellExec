@@ -7,7 +7,7 @@
 // 🛃 Imports
 /* -------------------------------------------------------------------------- */
 
-import at.phatbl.shellexec.ShellExec
+import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.junit.platform.console.options.Details
 
@@ -23,9 +23,8 @@ plugins {
 
     // Gradle plugin portal - https://plugins.gradle.org/
     kotlin("jvm") version "1.5.31"
-    id("at.phatbl.shellexec") version "1.4.1"
-    id("com.gradle.plugin-publish") version "0.10.1"
-    id("io.gitlab.arturbosch.detekt") version "1.2.2"
+    id("com.gradle.plugin-publish") version "0.10.1" //"1.0.0-rc-2"
+    id("io.gitlab.arturbosch.detekt") version "1.20.0"
 
     // Custom handling in pluginManagement
     id("org.junit.platform.gradle.plugin") version "1.2.0"
@@ -203,16 +202,9 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
 detekt {
     toolVersion = detektVersion
     config = files("$projectDir/detekt.yml")
-    idea {
-        path = ".idea"
-        codeStyleScheme = ".idea/code-style.xml"
-        inspectionsProfile = ".idea/inspect.xml"
-        report = "$projectDir/reports"
-        mask = "*.kt,"
-    }
 }
 
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
+tasks.withType<Detekt> {
     // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
     exclude(".*test.*,.*/resources/.*,.*/tmp/.*")
 }
