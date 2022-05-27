@@ -217,14 +217,6 @@ val lint by tasks.creating(DefaultTask::class) {
     dependsOn("detekt")
 }
 
-val danger by tasks.creating(ShellExec::class) {
-    description = "Runs danger rules."
-    group = "Verification"
-    command = """\
-        bundle install --gemfile=Gemfile --verbose
-        ./bin/danger --verbose"""
-}
-
 val codeQuality by tasks.creating(DefaultTask::class) {
     description = "Runs all code quality checks."
     group = "🚇 Tube"
