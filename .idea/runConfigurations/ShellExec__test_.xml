@@ -13,9 +13,11 @@
           <option value="test" />
         </list>
       </option>
-      <option name="vmOptions" value="" />
+      <option name="vmOptions" value="--add-opens java.base/java.lang=ALL-UNNAMED" />
     </ExternalSystemSettings>
-    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-    <method />
+    <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+    <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+    <DebugAllEnabled>false</DebugAllEnabled>
+    <method v="2" />
   </configuration>
 </component>

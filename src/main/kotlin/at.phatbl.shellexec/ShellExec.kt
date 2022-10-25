@@ -14,8 +14,7 @@ import java.io.OutputStream
 
 open class ShellExec: DefaultTask() {
     companion object {
-        // Directories to be prepended to PATH
-        private const val pathAdditions = "./bin:/usr/local/bin"
+        private const val DEFAULT_EXIT_VALUE = -999
         private const val PATH = "PATH"
     }
 
@@ -35,7 +34,7 @@ open class ShellExec: DefaultTask() {
     var ignoreExitValue: Boolean = false
 
     @Internal
-    var exitValue: Int = -999
+    var exitValue: Int = DEFAULT_EXIT_VALUE
         get() = shellCommand.exitValue
 
     @Internal
@@ -46,7 +45,7 @@ open class ShellExec: DefaultTask() {
     var command = ""
 
     /** Property containing a copy of the PATH environment variable. */
-    private var systemPath: String
+    private var systemPath: String = System.getenv(PATH)
 
     /** Value to be prepended to the PATH. */
     @Internal
@@ -63,10 +62,6 @@ open class ShellExec: DefaultTask() {
             field = value
             buildPath()
         }
-
-    init {
-        systemPath = System.getenv(PATH)
-    }
 
     @TaskAction
     fun exec() {

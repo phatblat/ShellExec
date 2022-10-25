@@ -11,7 +11,7 @@ import kotlin.test.assertTrue
 
 class ShellExecSubclassSpek: Spek({
     describe("Shell Exec Task") {
-        var project: Project = ProjectBuilder.builder().build()
+        lateinit var project: Project // = ProjectBuilder.builder().build()
 
         beforeEachTest {
             project = ProjectBuilder.builder().build()

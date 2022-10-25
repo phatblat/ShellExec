@@ -1,13 +1,15 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Spek Tests" type="org.spekframework.spek-jvm" factoryName="Spek - JVM">
-    <module name="ShellExec_test" />
+    <module name="ShellExec.test" />
     <option name="target" value="package" />
     <option name="package" value="at.phatbl.shellexec" />
-    <option name="vm-parameters" value="" />
+    <option name="vm-parameters" value="--add-opens=java.base/java.lang=ALL-UNNAMED" />
     <option name="program-parameters" value="" />
     <option name="working-directory" value="$PROJECT_DIR$" />
     <option name="alternative-jre-path" value="" />
     <option name="pass-parent-envs" value="true" />
-    <method />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
   </configuration>
 </component>

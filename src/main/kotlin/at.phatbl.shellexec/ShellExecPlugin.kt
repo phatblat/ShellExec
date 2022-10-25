@@ -8,5 +8,7 @@ import org.gradle.api.Project
  *   apply plugin: 'shellexec'
  */
 class ShellExecPlugin : Plugin<Project> {
-    override fun apply(project: Project) {}
+    override fun apply(project: Project) {
+        //
+    }
 }
