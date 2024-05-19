@@ -1,9 +1,9 @@
 package at.phatbl.shellexec
 
+import org.gradle.internal.impldep.org.junit.rules.TemporaryFolder
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import org.junit.rules.TemporaryFolder
 import java.io.ByteArrayOutputStream
 import java.io.File
 import kotlin.test.assertEquals

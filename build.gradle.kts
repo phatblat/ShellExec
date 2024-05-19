@@ -45,9 +45,6 @@ val license: String by project
 val jvmTarget = JavaVersion.VERSION_17
 
 val commonsExecVersion: String by project
-val junitVersion: String by project
-val spekVersion: String by project
-val jacocoVersion: String by project
 
 tasks.wrapper {
     gradleVersion = libs.versions.gradle.get()
@@ -68,17 +65,22 @@ repositories.gradlePluginPortal()
 
 dependencies {
     api("org.apache.commons:commons-exec:$commonsExecVersion")
-    implementation(kotlin("stdlib"))
-    implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect"))
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlin.stdlib.jdk8)
 
-    testImplementation(kotlin("test"))
-    testImplementation(kotlin("test-junit"))
-    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
-    testImplementation("org.junit.platform:junit-platform-runner")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
-    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+    testImplementation(libs.kotlin.test.asProvider().get())
+    testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.junit.jupiter)
+//    testImplementation(libs.junit.platform.runner)
+//    testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
+
+    testImplementation(libs.spek.api)
+
+//    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+//    testRuntimeOnly(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testRuntimeOnly(libs.spek.engine)
 }
 
 /* -------------------------------------------------------------------------- */
@@ -118,7 +120,7 @@ afterEvaluate {
         dependsOn(updateVersionFile)
         val task = this as AbstractCopyTask
         // Workaround for error 👇🏻
-        // Execution failed for task ':processResources'.
+        // Execution failed for task ":processResources".
         //> Entry VERSION.txt is a duplicate but no duplicate handling strategy has been set. Please refer to https://docs.gradle.org/7.4.2/dsl/org.gradle.api.tasks.Copy.html#org.gradle.api.tasks.Copy:duplicatesStrategy for details.
         task.duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
@@ -173,9 +175,15 @@ tasks.test {
     )
 }
 
+tasks.named<Test>("test") {
+    useJUnitPlatform {
+        includeEngines("spek", "spek2")
+    }
+}
+
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
 jacoco {
-    toolVersion = jacocoVersion
+    toolVersion = libs.versions.jacoco.get()
     reportsDirectory.set(layout.buildDirectory.dir("reports/jacoco"))
 }
 
