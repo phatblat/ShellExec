@@ -1,4 +1,4 @@
-!.idea/runConfigurations/
+!.run/
 !.vscode/tasks.json
 !.yarn/patches
 !.yarn/plugins
