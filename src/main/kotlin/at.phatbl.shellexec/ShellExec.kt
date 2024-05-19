@@ -14,7 +14,6 @@ import java.io.OutputStream
 
 open class ShellExec: DefaultTask() {
     companion object {
-        private const val DEFAULT_EXIT_VALUE = -999
         private const val PATH = "PATH"
     }
 
@@ -34,7 +33,7 @@ open class ShellExec: DefaultTask() {
     var ignoreExitValue: Boolean = false
 
     @Internal
-    var exitValue: Int = DEFAULT_EXIT_VALUE
+    val exitValue: Int
         get() = shellCommand.exitValue
 
     @Internal
