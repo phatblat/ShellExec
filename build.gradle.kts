@@ -175,7 +175,7 @@ tasks.test {
 
 tasks.named<Test>("test") {
     useJUnitPlatform {
-        includeEngines("spek", "spek2")
+        includeEngines("spek2")
     }
 }
 
@@ -197,14 +197,12 @@ tasks.jacocoTestReport {
 
 val codeCoverageReport by tasks.creating(JacocoReport::class) {
     dependsOn("test")
-    // sourceSets(sourceSets["main"])
 }
 
 /* -------------------------------------------------------------------------- */
 // 🔍 Code Quality
 /* -------------------------------------------------------------------------- */
 
-// https://arturbosch.github.io/detekt/kotlindsl.html
 // https://detekt.dev/
 detekt {
     toolVersion = libs.versions.detekt.get()
@@ -215,8 +213,6 @@ javaLauncher.map {
     tasks.withType<Detekt>().configureEach {
         jvmTarget = java.toolchain.languageVersion.get().toString()
         jdkHome.set(file(it.executablePath))
-
-        // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
         exclude(".*test.*,.*/resources/.*,.*/tmp/.*")
     }
     tasks.withType<DetektCreateBaselineTask>().configureEach {

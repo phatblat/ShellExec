@@ -1,3 +1,5 @@
+# https://github.com/detekt/detekt/blob/v1.23.6/detekt-core/src/main/resources/default-detekt-config.yml
+---
 build:
   maxIssues: 0
   excludeCorrectable: false
@@ -38,14 +40,10 @@ console-reports:
     - 'NotificationReport'
     - 'FindingsReport'
     - 'FileBasedFindingsReport'
-  #  - 'LiteFindingsReport'
 
 output-reports:
   active: true
-  exclude:
-  # - 'TxtOutputReport'
-  # - 'XmlOutputReport'
-  # - 'HtmlOutputReport'
+  exclude: []
 
 comments:
   active: true
@@ -483,7 +481,7 @@ style:
     active: false
   DataClassContainsFunctions:
     active: false
-    conversionFunctionPrefix: 'to'
+    conversionFunctionPrefix: ['to']
   DataClassShouldBeImmutable:
     active: false
   DestructuringDeclarationWithTooManyEntries:
@@ -515,8 +513,10 @@ style:
   ForbiddenMethodCall:
     active: false
     methods:
-      - 'kotlin.io.print'
-      - 'kotlin.io.println'
+      - reason: 'print does not allow you to configure the output stream. Use a logger instead.'
+        value: 'kotlin.io.print'
+      - reason: 'println does not allow you to configure the output stream. Use a logger instead.'
+        value: 'kotlin.io.println'
   ForbiddenPublicDataClass:
     active: true
     excludes: ['**']
@@ -531,7 +531,7 @@ style:
     active: true
     ignoreOverridableFunction: true
     ignoreActualFunction: true
-    excludedFunctions: ''
+    excludedFunctions: []
   LibraryCodeMustSpecifyReturnType:
     active: true
     excludes: ['**']
@@ -602,7 +602,8 @@ style:
   ReturnCount:
     active: true
     max: 2
-    excludedFunctions: 'equals'
+    excludedFunctions:
+      - 'equals'
     excludeLabeled: false
     excludeReturnFromLambda: true
     excludeGuardClauses: false
@@ -678,9 +679,9 @@ style:
     active: true
   UtilityClassWithPublicConstructor:
     active: true
-#  VarCouldBeVal:
-#    active: true
-#    ignoreLateinitVar: false
+  VarCouldBeVal:
+    active: false
+    ignoreLateinitVar: false
   WildcardImport:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
