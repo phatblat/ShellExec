@@ -32,8 +32,12 @@ open class ShellExec: DefaultTask() {
     @Input
     var ignoreExitValue: Boolean = false
 
-    val exitValue: Int
+    @Internal
+    @Suppress("UNUSED_PARAMETER")
+    var exitValue: Int = ShellCommand.uninitializedExitValue
         get() = shellCommand.exitValue
+        // No-op setter using field to avoid warnings
+        set(value) = print("$field")
 
     @Internal
     open lateinit var shellCommand: ShellCommand
