@@ -71,14 +71,11 @@ dependencies {
     testImplementation(libs.kotlin.test.junit5)
     testImplementation(libs.junit.jupiter)
 //    testImplementation(libs.junit.platform.runner)
-//    testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
+    testImplementation(libs.spek2.dsl)
 
-    testImplementation(libs.spek.api)
-
-//    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 //    testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.jupiter.engine)
-    testRuntimeOnly(libs.spek.engine)
+    testRuntimeOnly(libs.spek2.runner.junit5)
 }
 
 /* -------------------------------------------------------------------------- */

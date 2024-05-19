@@ -6,7 +6,7 @@ gradle = "8.7"
 kotlin = "1.9.22"
 jacoco = "0.8.12"
 junit = "5.8.2"
-spek = "1.2.1"
+spek2 = "2.0.19"
 
 [libraries]
 commons-exec = { module = "org.apache.commons:commons-exec", version.ref = "commons-exec" }
@@ -19,8 +19,8 @@ junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jun
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
 junit-platform-runner = { module = "org.junit.platform:junit-platform-runner", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
-spek-api = { module = "org.jetbrains.spek:spek-api", version.ref = "spek" }
-spek-engine = { module = "org.jetbrains.spek:spek-junit-platform-engine", version.ref = "spek" }
+spek2-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version.ref = "spek2" }
+spek2-runner-junit5 = { module = "org.spekframework.spek2:spek-runner-junit5", version.ref = "spek2" }
 
 #[bundles]
 #groovy = ["groovy-core", "groovy-json", "groovy-nio"]
