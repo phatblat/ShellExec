@@ -171,7 +171,7 @@ tasks.test {
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
 jacoco {
     toolVersion = jacocoVersion
-    reportsDirectory.set(file("$buildDir/reports/jacoco"))
+    reportsDirectory.set(layout.buildDirectory.dir("reports/jacoco"))
 }
 
 tasks.jacocoTestReport {
