@@ -25,8 +25,7 @@ plugins {
     `java-gradle-plugin`
     `maven-publish`
 
-    id("io.gitlab.arturbosch.detekt") version "1.23.6"
-
+    alias(libs.plugins.detekt)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.publish)
 }
@@ -48,7 +47,6 @@ val jvmTarget = JavaVersion.VERSION_1_8
 val commonsExecVersion: String by project
 val junitVersion: String by project
 val spekVersion: String by project
-val detektVersion: String by project
 val jacocoVersion: String by project
 
 tasks.wrapper {
@@ -60,11 +58,7 @@ tasks.wrapper {
 // 👪 Dependencies
 /* -------------------------------------------------------------------------- */
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 val javaLauncher = javaToolchains.launcherFor {
     languageVersion = JavaLanguageVersion.of(17)
 }
@@ -205,7 +199,7 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
 // https://arturbosch.github.io/detekt/kotlindsl.html
 // https://detekt.dev/
 detekt {
-    toolVersion = detektVersion
+    toolVersion = libs.versions.detekt.get()
     config.setFrom("$projectDir/detekt.yml")
 }
 
