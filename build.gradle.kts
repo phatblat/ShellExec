@@ -10,6 +10,7 @@
 @file:Suppress("SpellCheckingInspection")
 
 import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType.BIN
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -206,9 +207,16 @@ detekt {
     config.setFrom("$projectDir/detekt.yml")
 }
 
-tasks.withType<Detekt> {
+tasks.withType<Detekt>().configureEach {
+    jvmTarget = "1.8"
+    jdkHome.set(file("path/to/jdkHome"))
+
     // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
     exclude(".*test.*,.*/resources/.*,.*/tmp/.*")
+}
+tasks.withType<DetektCreateBaselineTask>().configureEach {
+    this.jvmTarget = "1.8"
+    jdkHome.set(file("path/to/jdkHome"))
 }
 
 val lint by tasks.creating(DefaultTask::class) {
