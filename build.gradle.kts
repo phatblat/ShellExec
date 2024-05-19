@@ -194,9 +194,10 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
 /* -------------------------------------------------------------------------- */
 
 // https://arturbosch.github.io/detekt/kotlindsl.html
+// https://detekt.dev/
 detekt {
     toolVersion = detektVersion
-    config = files("$projectDir/detekt.yml")
+    config.setFrom("$projectDir/detekt.yml")
 }
 
 tasks.withType<Detekt> {
