@@ -149,25 +149,22 @@ base {
     archivesName = artifactId
 }
 
-gradlePlugin.plugins.create(artifactId) {
-    id = javaPackage
-    implementationClass = "$javaPackage.$pluginClass"
-}
-
-pluginBundle {
+// https://plugins.gradle.org/docs/publish-plugin#examples
+gradlePlugin {
     website = projectUrl
     vcsUrl = projectUrl
     description = project.description
 
-    (plugins) {
-        artifactId {
+    plugins {
+        create(artifactId) {
             id = javaPackage
+            implementationClass = "$javaPackage.$pluginClass"
             displayName = project.name
-            tags = labels
+            description = project.description
+            tags.set(labels)
             version = project.version.toString()
         }
     }
-    mavenCoordinates.artifactId = artifactId
 }
 
 /* -------------------------------------------------------------------------- */
