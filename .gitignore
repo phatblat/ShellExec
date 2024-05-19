@@ -1,5 +1,10 @@
 !.idea/runConfigurations/
 !.vscode/tasks.json
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 *.hprof
 *.iml
 .DS_Store
@@ -32,14 +37,10 @@
 .settings
 .settings/
 .yarn/
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
 bin/
 build/
 buildSrc/build/
+example/gradle*
 gradlew.bat
 local.properties
 node_modules/
