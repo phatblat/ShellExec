@@ -69,11 +69,11 @@ dependencies {
 
     testImplementation(libs.kotlin.test.asProvider().get())
     testImplementation(libs.kotlin.test.junit5)
-    testImplementation(libs.junit.jupiter)
-//    testImplementation(libs.junit.platform.runner)
+
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.spek2.dsl)
 
-//    testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.spek2.runner.junit5)
 }
@@ -175,7 +175,7 @@ tasks.test {
 
 tasks.named<Test>("test") {
     useJUnitPlatform {
-        includeEngines("spek2")
+        includeEngines("spek2", "junit-jupiter")
     }
 }
 
