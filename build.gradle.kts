@@ -7,6 +7,8 @@
 // 🛃 Imports
 /* -------------------------------------------------------------------------- */
 
+@file:Suppress("SpellCheckingInspection")
+
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType.BIN
@@ -20,12 +22,16 @@ plugins {
     // Gradle built-in
     jacoco
     `java-gradle-plugin`
+    `kotlin-dsl`
     `maven-publish`
 
     // Gradle plugin portal - https://plugins.gradle.org/
-    kotlin("jvm") version "1.9.24"
+    kotlin("jvm") version libs.versions.kotlin.get()
+
     id("com.gradle.plugin-publish") version "0.10.1" //"1.0.0-rc-2"
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
+
+//    alias(libs.plugins)
 }
 
 /* -------------------------------------------------------------------------- */

@@ -3,6 +3,8 @@
  * ShellExec
  */
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "ShellExec"
 
 // Workaround to make the JUnit Platform Gradle Plugin available using the `plugins` DSL
