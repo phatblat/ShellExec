@@ -111,7 +111,7 @@ open class ShellExec: DefaultTask() {
         postPath?.let { post: String ->
             path = "$path:$post"
         }
-        environment.put(PATH, path)
+        environment[PATH] = path
         logger.info("PATH: ${environment[PATH]}")
     }
 }
