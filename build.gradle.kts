@@ -44,8 +44,6 @@ val license: String by project
 
 val jvmTarget = JavaVersion.VERSION_17
 
-val commonsExecVersion: String by project
-
 tasks.wrapper {
     gradleVersion = libs.versions.gradle.get()
     distributionType = BIN
@@ -64,7 +62,7 @@ val javaLauncher = javaToolchains.launcherFor {
 repositories.gradlePluginPortal()
 
 dependencies {
-    api("org.apache.commons:commons-exec:$commonsExecVersion")
+    implementation(libs.commons.exec)
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.stdlib.jdk8)
