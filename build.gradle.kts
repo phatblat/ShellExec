@@ -42,7 +42,7 @@ val tags: String by project
 val labels = tags.split(",")
 val license: String by project
 
-val jvmTarget = JavaVersion.VERSION_1_8
+val jvmTarget = JavaVersion.VERSION_17
 
 val commonsExecVersion: String by project
 val junitVersion: String by project
@@ -85,7 +85,9 @@ dependencies {
 // 🏗 Assemble
 /* -------------------------------------------------------------------------- */
 
-tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "$jvmTarget" }
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = jvmTarget.toString()
+}
 
 java {
     sourceCompatibility = jvmTarget
