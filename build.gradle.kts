@@ -133,7 +133,7 @@ artifacts.add("archives", javadocJar)
 
 base {
     // at.phatbl.shellexec-1.0.0.jar
-    archivesBaseName = artifactId
+    archivesName = artifactId
 }
 
 gradlePlugin.plugins.create(artifactId) {
