@@ -234,7 +234,6 @@ val lint by tasks.creating(DefaultTask::class) {
 
 val codeQuality by tasks.creating(DefaultTask::class) {
     description = "Runs all code quality checks."
-    group = "🚇 Tube"
     dependsOn("detekt")
     dependsOn("check")
     dependsOn(lint)
@@ -246,7 +245,6 @@ val codeQuality by tasks.creating(DefaultTask::class) {
 
 val release by tasks.creating(DefaultTask::class) {
     description = "Performs release actions."
-    group = "🚇 Tube"
     doLast { logger.lifecycle("Release task not implemented.") }
 }
 
@@ -268,6 +266,5 @@ publishing {
 
 val deploy: Task by tasks.creating {
     description = "Deploys plugin to the Gradle plugin portal."
-    group = "🚇 Tube"
     dependsOn("publishPlugins")
 }
