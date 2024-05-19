@@ -211,7 +211,7 @@ detekt {
     config.setFrom("$projectDir/detekt.yml")
 }
 
-javaLauncher.map { it ->
+javaLauncher.map {
     tasks.withType<Detekt>().configureEach {
         jvmTarget = java.toolchain.languageVersion.get().toString()
         jdkHome.set(file(it.executablePath))
