@@ -24,7 +24,7 @@ plugins {
     // Gradle plugin portal - https://plugins.gradle.org/
     kotlin("jvm") version "1.9.24"
     id("com.gradle.plugin-publish") version "0.10.1" //"1.0.0-rc-2"
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.6"
 }
 
 /* -------------------------------------------------------------------------- */
