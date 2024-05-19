@@ -50,10 +50,9 @@ val junitVersion: String by project
 val spekVersion: String by project
 val detektVersion: String by project
 val jacocoVersion: String by project
-val gradleWrapperVersion: String by project
 
 tasks.wrapper {
-    gradleVersion = gradleWrapperVersion
+    gradleVersion = libs.versions.gradle.get()
     distributionType = BIN
 }
 
