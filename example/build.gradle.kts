@@ -45,7 +45,7 @@ tasks {
 
     val lolBoxFortune by registering(ShellExec::class) {
         group = "Example"
-        command = "fortune | boxes --design parchment --no-color | lolcat"
+        command = "fortune | boxes --design parchment --no-color | lolcat --force"
     }
 
     /** [ShellExec] Extension used by customTask below. */

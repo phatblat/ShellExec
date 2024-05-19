@@ -22,7 +22,7 @@ buildscript {
 }
 
 val lolBoxFortune by registering(ShellExec::class) {
-    command = "fortune | boxes --design parchment --no-color | lolcat"
+    command = "fortune | boxes --design parchment --no-color | lolcat --force"
 }
 ```
 
