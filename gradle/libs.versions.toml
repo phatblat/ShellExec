@@ -20,6 +20,7 @@ kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version
 #groovy = ["groovy-core", "groovy-json", "groovy-nio"]
 
 [plugins]
-#detekt = { module = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-#publish = { module = "com.gradle.plugin-publish", version = "0.10.1" }
+#detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+kotlin-dsl = { id = "org.gradle.kotlin.kotlin-dsl", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+publish = { id = "com.gradle.plugin-publish", version = "1.2.1" }

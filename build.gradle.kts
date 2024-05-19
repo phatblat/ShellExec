@@ -23,16 +23,12 @@ plugins {
     // Gradle built-in
     jacoco
     `java-gradle-plugin`
-    `kotlin-dsl`
     `maven-publish`
 
-    // Gradle plugin portal - https://plugins.gradle.org/
-    kotlin("jvm") version libs.versions.kotlin.get()
-
-    id("com.gradle.plugin-publish") version "0.10.1" //"1.0.0-rc-2"
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
 
-//    alias(libs.plugins)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.publish)
 }
 
 /* -------------------------------------------------------------------------- */
