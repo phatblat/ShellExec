@@ -11,6 +11,7 @@
       <option name="taskNames">
         <list>
           <option value="test" />
+          <option value="--rerun" />
         </list>
       </option>
       <option name="vmOptions" value="--add-opens java.base/java.lang=ALL-UNNAMED" />
