@@ -207,7 +207,7 @@ detekt {
 
 javaLauncher.map { it ->
     tasks.withType<Detekt>().configureEach {
-        jvmTarget = "1.8"
+        jvmTarget = java.toolchain.languageVersion.get().toString()
         jdkHome.set(file(it.executablePath))
 
         // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
