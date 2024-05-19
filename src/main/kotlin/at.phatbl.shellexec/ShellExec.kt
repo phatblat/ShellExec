@@ -32,7 +32,6 @@ open class ShellExec: DefaultTask() {
     @Input
     var ignoreExitValue: Boolean = false
 
-    @Internal
     val exitValue: Int
         get() = shellCommand.exitValue
 
