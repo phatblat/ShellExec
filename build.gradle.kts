@@ -11,7 +11,7 @@
 
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import org.gradle.api.file.DuplicatesStrategy
+import org.gradle.api.file.DuplicatesStrategy.INCLUDE
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType.BIN
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -117,7 +117,7 @@ afterEvaluate {
         // Workaround for error 👇🏻
         // Execution failed for task ":processResources".
         //> Entry VERSION.txt is a duplicate but no duplicate handling strategy has been set. Please refer to https://docs.gradle.org/7.4.2/dsl/org.gradle.api.tasks.Copy.html#org.gradle.api.tasks.Copy:duplicatesStrategy for details.
-        task.duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        task.duplicatesStrategy = INCLUDE
     }
 }
 
@@ -143,7 +143,9 @@ base {
 
 // https://plugins.gradle.org/docs/publish-plugin#examples
 gradlePlugin {
+    @Suppress("UnstableApiUsage")
     website = projectUrl
+    @Suppress("UnstableApiUsage")
     vcsUrl = projectUrl
     description = project.description
 
@@ -153,6 +155,7 @@ gradlePlugin {
             implementationClass = "$javaPackage.$pluginClass"
             displayName = project.name
             description = project.description
+            @Suppress("UnstableApiUsage")
             tags.set(labels)
             version = project.version.toString()
         }
