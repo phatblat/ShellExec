@@ -65,6 +65,16 @@ tasks.wrapper {
 // 👪 Dependencies
 /* -------------------------------------------------------------------------- */
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+val javaLauncher = javaToolchains.launcherFor {
+    languageVersion = JavaLanguageVersion.of(17)
+}
+//java.toolchain.languageVersion.get()
+
 repositories.gradlePluginPortal()
 
 dependencies {
@@ -207,16 +217,18 @@ detekt {
     config.setFrom("$projectDir/detekt.yml")
 }
 
-tasks.withType<Detekt>().configureEach {
-    jvmTarget = "1.8"
-    jdkHome.set(file("path/to/jdkHome"))
+javaLauncher.map { it ->
+    tasks.withType<Detekt>().configureEach {
+        jvmTarget = "1.8"
+        jdkHome.set(file(it.executablePath))
 
-    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
-    exclude(".*test.*,.*/resources/.*,.*/tmp/.*")
-}
-tasks.withType<DetektCreateBaselineTask>().configureEach {
-    this.jvmTarget = "1.8"
-    jdkHome.set(file("path/to/jdkHome"))
+        // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+        exclude(".*test.*,.*/resources/.*,.*/tmp/.*")
+    }
+    tasks.withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = java.toolchain.languageVersion.get().toString()
+        jdkHome.set(file(it.executablePath))
+    }
 }
 
 val lint by tasks.creating(DefaultTask::class) {
