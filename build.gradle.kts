@@ -9,6 +9,7 @@
 
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.file.DuplicatesStrategy
+import org.gradle.api.tasks.wrapper.Wrapper.DistributionType.BIN
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /* -------------------------------------------------------------------------- */
@@ -50,7 +51,7 @@ val gradleWrapperVersion: String by project
 
 tasks.wrapper {
     gradleVersion = gradleWrapperVersion
-    distributionType = Wrapper.DistributionType.ALL
+    distributionType = BIN
 }
 
 /* -------------------------------------------------------------------------- */
