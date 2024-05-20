@@ -34,7 +34,7 @@ open class ShellExec : DefaultTask() {
 
     @Internal
     @Suppress("UNUSED_PARAMETER")
-    var exitValue: Int = ShellCommand.uninitializedExitValue
+    var exitValue: Int = ShellCommand.UNINITIALIZED_EXIT_VALUE
         get() = shellCommand.exitValue
 
         // No-op setter using field to avoid warnings

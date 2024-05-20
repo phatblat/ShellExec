@@ -12,7 +12,9 @@ import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.gradle.api.attributes.TestSuiteType.UNIT_TEST
 import org.gradle.api.file.DuplicatesStrategy.INCLUDE
 import org.gradle.api.tasks.testing.TestResult.ResultType
-import org.gradle.api.tasks.testing.TestResult.ResultType.*
+import org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE
+import org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
+import org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType.BIN
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -211,7 +213,10 @@ tasks.named<Test>("test") {
             KotlinClosure2({ desc: TestDescriptor, result: TestResult ->
                 if (desc.parent == null) {
                     println(
-                        "Result: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)",
+                        """
+                        Result: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed,
+                        ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)
+                        """.trimIndent(),
                     )
                 }
             }),
