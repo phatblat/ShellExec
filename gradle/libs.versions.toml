@@ -4,6 +4,8 @@ commons-exec = "1.4.0"
 detekt = "1.23.6"
 gradle = "8.7"
 kotlin = "1.9.22"
+# https://github.com/JLLeitschuh/ktlint-gradle
+ktlint = "12.1.1"
 jacoco = "0.8.12"
 junit = "5.10.2"
 spek2 = "2.0.19"
@@ -24,4 +26,5 @@ spek2-runner-junit5 = { module = "org.spekframework.spek2:spek-runner-junit5", v
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 publish = { id = "com.gradle.plugin-publish", version = "1.2.1" }

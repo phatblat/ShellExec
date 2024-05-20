@@ -15,6 +15,7 @@ deps:
 lint:
     ./gradlew validatePlugins
     ./gradlew detekt --rerun-tasks
+    ./gradlew ktlintCheck
 
 build:
     ./gradlew assemble

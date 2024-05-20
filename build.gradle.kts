@@ -30,6 +30,7 @@ plugins {
     id("test-report-aggregation")
 
     alias(libs.plugins.detekt)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.publish)
 }
