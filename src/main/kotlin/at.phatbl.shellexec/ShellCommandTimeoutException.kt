@@ -5,5 +5,5 @@ package at.phatbl.shellexec
  */
 class ShellCommandTimeoutException(
     message: String,
-    cause: Throwable
+    cause: Throwable,
 ) : Exception(message, cause)

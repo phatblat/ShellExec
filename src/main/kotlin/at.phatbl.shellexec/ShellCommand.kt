@@ -4,7 +4,6 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.nio.file.Path
 import java.util.concurrent.TimeUnit
 import kotlin.io.path.createTempFile
 
@@ -12,9 +11,9 @@ import kotlin.io.path.createTempFile
  * Wrapper for running several commands inside a Bash shell.
  */
 open class ShellCommand(
-        /** Working dir for command. Defaults to the JVM's current directory. */
-        val baseDir: File = File("."),
-        val command: String
+    /** Working dir for command. Defaults to the JVM's current directory. */
+    val baseDir: File = File("."),
+    val command: String,
 ) {
     companion object {
         // 20m
@@ -102,8 +101,9 @@ open class ShellCommand(
     open fun start() {
         baseDir.mkdirs()
 
-        val pb = ProcessBuilder("bash", "-c", command)
-            .directory(baseDir)
+        val pb =
+            ProcessBuilder("bash", "-c", command)
+                .directory(baseDir)
 
         val outputStream = standardOutput
         val errorStream = errorOutput
@@ -146,7 +146,10 @@ open class ShellCommand(
      * Passes characters from the input stream to the output stream.
      */
     @Throws(IOException::class)
-    private fun copy(input: InputStream, output: OutputStream) {
+    private fun copy(
+        input: InputStream,
+        output: OutputStream,
+    ) {
         input.use {
             output.use {
                 val buffer = ByteArray(bufferSize)
