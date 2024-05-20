@@ -1,6 +1,9 @@
 default:
     @just --list
 
+dirty:
+    git clean -xd --force --dry-run
+
 clean:
     ./gradlew clean
 
