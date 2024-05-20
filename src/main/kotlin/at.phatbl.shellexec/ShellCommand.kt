@@ -4,7 +4,6 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.nio.file.Path
 import java.util.concurrent.TimeUnit
 import kotlin.io.path.createTempFile
 
@@ -12,29 +11,29 @@ import kotlin.io.path.createTempFile
  * Wrapper for running several commands inside a Bash shell.
  */
 open class ShellCommand(
-        /** Working dir for command. Defaults to the JVM's current directory. */
-        val baseDir: File = File("."),
-        val command: String
+    /** Working dir for command. Defaults to the JVM's current directory. */
+    val baseDir: File = File("."),
+    val command: String,
 ) {
     companion object {
         // 20m
-        private const val defaultTimeout: Long = 1200
+        private const val DEFAULT_TIMEOUT: Long = 1200
 
         // Used to track whether we've received an updated exit code from the process.
-        const val uninitializedExitValue = -999
+        const val UNINITIALIZED_EXIT_VALUE = -999
 
-        private const val bufferSize = 2 * 1024 * 1024
+        private const val BUFFER_SIZE = 2 * 1024 * 1024
     }
 
     /**
      * Time allowed for command to run. Defaults to 20m
      */
-    var timeout = defaultTimeout
+    var timeout = DEFAULT_TIMEOUT
 
     /**
      * Exposes the exit code of the underlying process. Defaults to -999 until the process has exited.
      */
-    var exitValue: Int = uninitializedExitValue
+    var exitValue: Int = UNINITIALIZED_EXIT_VALUE
 
     /**
      * True if the process ended with a successful exit code.
@@ -102,8 +101,9 @@ open class ShellCommand(
     open fun start() {
         baseDir.mkdirs()
 
-        val pb = ProcessBuilder("bash", "-c", command)
-            .directory(baseDir)
+        val pb =
+            ProcessBuilder("bash", "-c", command)
+                .directory(baseDir)
 
         val outputStream = standardOutput
         val errorStream = errorOutput
@@ -146,10 +146,13 @@ open class ShellCommand(
      * Passes characters from the input stream to the output stream.
      */
     @Throws(IOException::class)
-    private fun copy(input: InputStream, output: OutputStream) {
+    private fun copy(
+        input: InputStream,
+        output: OutputStream,
+    ) {
         input.use {
             output.use {
-                val buffer = ByteArray(bufferSize)
+                val buffer = ByteArray(BUFFER_SIZE)
                 var bytesRead = input.read(buffer)
                 while (bytesRead != -1) {
                     output.write(buffer, 0, bytesRead)

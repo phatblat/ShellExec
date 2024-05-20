@@ -8,7 +8,7 @@ import org.spekframework.spek2.style.specification.describe
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class ShellExecSpek: Spek({
+class ShellExecSpek : Spek({
     describe("Shell Exec Task") {
         lateinit var project: Project
         lateinit var task: ShellExec

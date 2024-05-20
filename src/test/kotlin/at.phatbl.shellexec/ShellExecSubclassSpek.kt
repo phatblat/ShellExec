@@ -8,7 +8,7 @@ import org.spekframework.spek2.style.specification.describe
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ShellExecSubclassSpek: Spek({
+class ShellExecSubclassSpek : Spek({
     describe("Shell Exec Task") {
         lateinit var project: Project // = ProjectBuilder.builder().build()
 
@@ -48,19 +48,31 @@ class ShellExecSubclassSpek: Spek({
     }
 })
 
-open class PreExec: ShellExec() {
+open class PreExec : ShellExec() {
     var methodCalled = false
-    override fun preExec() { methodCalled = true }
+
+    override fun preExec() {
+        methodCalled = true
+    }
 }
 
-open class PostExec: ShellExec() {
+open class PostExec : ShellExec() {
     var methodCalled = false
-    override fun postExec() { methodCalled = true }
+
+    override fun postExec() {
+        methodCalled = true
+    }
 }
 
-open class PreAndPostExec: ShellExec() {
+open class PreAndPostExec : ShellExec() {
     var preExecCalled = false
     var postExecCalled = false
-    override fun preExec() { preExecCalled = true }
-    override fun postExec() { postExecCalled = true }
+
+    override fun preExec() {
+        preExecCalled = true
+    }
+
+    override fun postExec() {
+        postExecCalled = true
+    }
 }

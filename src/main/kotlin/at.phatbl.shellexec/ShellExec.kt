@@ -12,7 +12,7 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.io.OutputStream
 
-open class ShellExec: DefaultTask() {
+open class ShellExec : DefaultTask() {
     companion object {
         private const val PATH = "PATH"
     }
@@ -34,8 +34,9 @@ open class ShellExec: DefaultTask() {
 
     @Internal
     @Suppress("UNUSED_PARAMETER")
-    var exitValue: Int = ShellCommand.uninitializedExitValue
+    var exitValue: Int = ShellCommand.UNINITIALIZED_EXIT_VALUE
         get() = shellCommand.exitValue
+
         // No-op setter using field to avoid warnings
         set(value) = print("$field")
 

@@ -3,22 +3,24 @@
  * ShellExec
  */
 
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 // 🛃 Imports
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.gradle.api.attributes.TestSuiteType.UNIT_TEST
 import org.gradle.api.file.DuplicatesStrategy.INCLUDE
 import org.gradle.api.tasks.testing.TestResult.ResultType
-import org.gradle.api.tasks.testing.TestResult.ResultType.*
+import org.gradle.api.tasks.testing.TestResult.ResultType.FAILURE
+import org.gradle.api.tasks.testing.TestResult.ResultType.SKIPPED
+import org.gradle.api.tasks.testing.TestResult.ResultType.SUCCESS
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType.BIN
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 // 🔌 Plugins
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 
 plugins {
     id("jacoco")
@@ -30,13 +32,14 @@ plugins {
     id("test-report-aggregation")
 
     alias(libs.plugins.detekt)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.publish)
 }
 
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 // 📋 Properties
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 
 val artifactId: String by project
 val javaPackage = "$group.$artifactId"
@@ -53,15 +56,15 @@ tasks.wrapper {
     distributionType = BIN
 }
 
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 // 👪 Dependencies
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-val javaLauncher = javaToolchains.launcherFor {
-    languageVersion = JavaLanguageVersion.of(17)
-}
-//java.toolchain.languageVersion.get()
+val javaLauncher =
+    javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 
 repositories.gradlePluginPortal()
 
@@ -72,9 +75,9 @@ dependencies {
     implementation(libs.kotlin.stdlib.jdk8)
 }
 
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 // 🏗 Assemble
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = jvmTarget.toString()
@@ -110,7 +113,7 @@ afterEvaluate {
         val task = this as AbstractCopyTask
         // Workaround for error 👇🏻
         // Execution failed for task ":processResources".
-        //> Entry VERSION.txt is a duplicate but no duplicate handling strategy has been set. Please refer to https://docs.gradle.org/7.4.2/dsl/org.gradle.api.tasks.Copy.html#org.gradle.api.tasks.Copy:duplicatesStrategy for details.
+        // > Entry VERSION.txt is a duplicate but no duplicate handling strategy has been set. Please refer to https://docs.gradle.org/7.4.2/dsl/org.gradle.api.tasks.Copy.html#org.gradle.api.tasks.Copy:duplicatesStrategy for details.
         task.duplicatesStrategy = INCLUDE
     }
 }
@@ -136,10 +139,9 @@ base {
 }
 
 // https://plugins.gradle.org/docs/publish-plugin#examples
+@Suppress("UnstableApiUsage")
 gradlePlugin {
-    @Suppress("UnstableApiUsage")
     website = projectUrl
-    @Suppress("UnstableApiUsage")
     vcsUrl = projectUrl
     description = project.description
 
@@ -149,16 +151,15 @@ gradlePlugin {
             implementationClass = "$javaPackage.$pluginClass"
             displayName = project.name
             description = project.description
-            @Suppress("UnstableApiUsage")
             tags.set(labels)
             version = project.version.toString()
         }
     }
 }
 
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 // ✅ Test
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 
 testing {
     @Suppress("UnstableApiUsage")
@@ -205,15 +206,20 @@ tasks.named<Test>("test") {
         afterTest(
             KotlinClosure2({ desc: TestDescriptor, result: TestResult ->
                 println("${desc.className} | ${desc.displayName} = ${getColoredResultType(result.resultType)}")
-            })
+            }),
         )
 
         afterSuite(
             KotlinClosure2({ desc: TestDescriptor, result: TestResult ->
                 if (desc.parent == null) {
-                    println("Result: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)")
+                    println(
+                        """
+                        Result: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed,
+                        ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)
+                        """.trimIndent(),
+                    )
                 }
-            })
+            }),
         )
     }
 }
@@ -247,9 +253,9 @@ val codeCoverageReport by tasks.creating(JacocoReport::class) {
     dependsOn("test")
 }
 
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 // 🔍 Code Quality
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 
 // https://detekt.dev/
 detekt {
@@ -269,37 +275,18 @@ javaLauncher.map {
     }
 }
 
-val lint by tasks.creating(DefaultTask::class) {
-    description = "Runs detekt and validateTaskProperties"
-    group = "Verification"
-    // Does this task come from java-gradle-plugin?
-    dependsOn("validatePlugins")
-    dependsOn("detekt")
-}
-
-val codeQuality by tasks.creating(DefaultTask::class) {
-    description = "Runs all code quality checks."
-    dependsOn("detekt")
-    dependsOn("check")
-    dependsOn(lint)
-}
-
-tasks.check {
-    dependsOn(tasks.named<TestReport>("testAggregateTestReport"))
-}
-
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 // Release
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 
-val release by tasks.creating(DefaultTask::class) {
+val release: Task by tasks.creating {
     description = "Performs release actions."
     doLast { logger.lifecycle("Release task not implemented.") }
 }
 
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 // 🚀 Deployment
-/* -------------------------------------------------------------------------- */
+// --------------------------------------------------------------------------
 
 publishing {
     publications {

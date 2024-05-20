@@ -1,13 +1,13 @@
-# https://github.com/detekt/detekt/blob/v1.23.6/detekt-core/src/main/resources/default-detekt-config.yml
+# https://detekt.dev/docs/introduction/configurations/
 ---
 build:
   maxIssues: 0
   excludeCorrectable: false
   weights:
-  # complexity: 2
-  # LongParameterList: 1
-  # style: 1
-  # comments: 1
+    complexity: 2
+    LongParameterList: 1
+    style: 1
+    comments: 1
 
 config:
   validation: true
@@ -92,22 +92,6 @@ complexity:
     threshold: 10
     includeStaticDeclarations: false
     includePrivateDeclarations: false
-  ComplexMethod:
-    active: true
-    threshold: 15
-    ignoreSingleWhenExpression: false
-    ignoreSimpleWhenEntries: false
-    ignoreNestingFunctions: false
-    nestingFunctions:
-      - 'also'
-      - 'apply'
-      - 'forEach'
-      - 'isNotNull'
-      - 'ifNull'
-      - 'let'
-      - 'run'
-      - 'use'
-      - 'with'
   LabeledExpression:
     active: false
     ignoredLabels: []
@@ -285,7 +269,6 @@ naming:
   BooleanPropertyNaming:
     active: false
     allowedPattern: '^(is|has|are)'
-    ignoreOverridden: true
   ClassNaming:
     active: true
     classPattern: '[A-Z][a-zA-Z0-9]*'
@@ -294,7 +277,6 @@ naming:
     parameterPattern: '[a-z][A-Za-z0-9]*'
     privateParameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
-    ignoreOverridden: true
   EnumNaming:
     active: true
     enumEntryPattern: '[A-Z][_a-zA-Z0-9]*'
@@ -312,12 +294,10 @@ naming:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
     functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
-    ignoreOverridden: true
   FunctionParameterNaming:
     active: true
     parameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
-    ignoreOverridden: true
   InvalidPackageDeclaration:
     active: false
     rootPackage: ''
@@ -359,7 +339,6 @@ naming:
     variablePattern: '[a-z][A-Za-z0-9]*'
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
-    ignoreOverridden: true
 
 performance:
   active: true
@@ -397,8 +376,6 @@ potential-bugs:
       - 'java.util.HashSet'
       - 'java.util.LinkedHashMap'
       - 'java.util.HashMap'
-  DuplicateCaseInWhenExpression:
-    active: true
   ElseCaseInsteadOfExhaustiveWhen:
     active: false
   EqualsAlwaysReturnsTrueOrFalse:
@@ -413,7 +390,7 @@ potential-bugs:
     active: false
   IgnoredReturnValue:
     active: false
-    restrictToAnnotatedMethods: true
+    restrictToConfig: true
     returnValueAnnotations:
       - '*.CheckResult'
       - '*.CheckReturnValue'
@@ -440,15 +417,10 @@ potential-bugs:
   MissingPackageDeclaration:
     active: false
     excludes: ['**/*.kts']
-  MissingWhenCase:
-    active: true
-    allowElseExpression: true
   NullCheckOnMutableProperty:
     active: false
   NullableToStringCall:
     active: false
-  RedundantElseInWhen:
-    active: true
   UnconditionalJumpStatementInLoop:
     active: false
   UnnecessaryNotNullOperator:
@@ -498,14 +470,6 @@ style:
   ExpressionBodySyntax:
     active: false
     includeLineWrapping: false
-  ForbiddenComment:
-    active: true
-    values:
-      - 'FIXME:'
-      - 'STOPSHIP:'
-      - 'TODO:'
-    allowedPatterns: ''
-    customMessage: ''
   ForbiddenImport:
     active: false
     imports: []
@@ -517,12 +481,6 @@ style:
         value: 'kotlin.io.print'
       - reason: 'println does not allow you to configure the output stream. Use a logger instead.'
         value: 'kotlin.io.println'
-  ForbiddenPublicDataClass:
-    active: true
-    excludes: ['**']
-    ignorePackages:
-      - '*.internal'
-      - '*.internal.*'
   ForbiddenVoid:
     active: false
     ignoreOverridden: false
@@ -532,12 +490,6 @@ style:
     ignoreOverridableFunction: true
     ignoreActualFunction: true
     excludedFunctions: []
-  LibraryCodeMustSpecifyReturnType:
-    active: true
-    excludes: ['**']
-  LibraryEntitiesShouldNotBePublic:
-    active: true
-    excludes: ['**']
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
@@ -559,8 +511,6 @@ style:
     ignoreEnums: false
     ignoreRanges: false
     ignoreExtensionFunctions: true
-  MandatoryBracesIfStatements:
-    active: false
   MandatoryBracesLoops:
     active: false
   MaxLineLength:
@@ -586,8 +536,6 @@ style:
   OptionalAbstractKeyword:
     active: true
   OptionalUnit:
-    active: false
-  OptionalWhenBraces:
     active: false
   PreferToOverPairSyntax:
     active: false
