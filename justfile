@@ -8,9 +8,17 @@ clean:
     ./gradlew clean
     git clean -xd --force
 
-deps:
+dev-deps:
     ./gradlew buildEnvironment
-    ./gradlew dependencies
+
+deps:
+    ./gradlew dependencies --configuration runtimeClasspath
+    ./gradlew dependencies --configuration implementation
+
+test-deps:
+    ./gradlew dependencies --configuration testCompileClasspath
+    ./gradlew dependencies --configuration testRuntimeClasspath
+    ./gradlew dependencies --configuration testImplementation
 
 lint:
     ./gradlew validatePlugins
