@@ -9,7 +9,10 @@
 
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import org.gradle.api.attributes.TestSuiteType.UNIT_TEST
 import org.gradle.api.file.DuplicatesStrategy.INCLUDE
+import org.gradle.api.tasks.testing.TestResult.ResultType
+import org.gradle.api.tasks.testing.TestResult.ResultType.*
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType.BIN
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -24,6 +27,7 @@ plugins {
     id("jvm-test-suite")
     id("jvm-toolchains")
     id("maven-publish")
+    id("test-report-aggregation")
 
     alias(libs.plugins.detekt)
     alias(libs.plugins.kotlin.jvm)
@@ -180,6 +184,47 @@ tasks.named<Test>("test") {
     useJUnitPlatform {
         includeEngines("spek2", "junit-jupiter")
     }
+    testLogging {
+        showCauses = false
+        showExceptions = false
+        showStackTraces = false
+        showStandardStreams = false
+
+        val ansiReset = "\u001B[0m"
+        val ansiGreen = "\u001B[32m"
+        val ansiRed = "\u001B[31m"
+        val ansiYellow = "\u001B[33m"
+
+        fun getColoredResultType(resultType: ResultType): String =
+            when (resultType) {
+                SUCCESS -> "$ansiGreen $resultType $ansiReset"
+                FAILURE -> "$ansiRed $resultType $ansiReset"
+                SKIPPED -> "$ansiYellow $resultType $ansiReset"
+            }
+
+        afterTest(
+            KotlinClosure2({ desc: TestDescriptor, result: TestResult ->
+                println("${desc.className} | ${desc.displayName} = ${getColoredResultType(result.resultType)}")
+            })
+        )
+
+        afterSuite(
+            KotlinClosure2({ desc: TestDescriptor, result: TestResult ->
+                if (desc.parent == null) {
+                    println("Result: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)")
+                }
+            })
+        )
+    }
+}
+
+reporting {
+    reports {
+        @Suppress("UnstableApiUsage")
+        val testAggregateTestReport by getting(AggregateTestReport::class) {
+            testType = UNIT_TEST
+        }
+    }
 }
 
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
@@ -237,6 +282,10 @@ val codeQuality by tasks.creating(DefaultTask::class) {
     dependsOn("detekt")
     dependsOn("check")
     dependsOn(lint)
+}
+
+tasks.check {
+    dependsOn(tasks.named<TestReport>("testAggregateTestReport"))
 }
 
 /* -------------------------------------------------------------------------- */
