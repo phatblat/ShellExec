@@ -4,6 +4,9 @@ default:
 clean:
     ./gradlew clean
 
+lint:
+    ./gradlew lint --rerun-tasks
+
 build:
     ./gradlew build
 
