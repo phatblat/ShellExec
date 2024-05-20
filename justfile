@@ -8,6 +8,10 @@ clean:
     ./gradlew clean
     git clean -xd --force
 
+deps:
+    ./gradlew buildEnvironment
+    ./gradlew dependencies
+
 lint:
     ./gradlew validatePlugins
     ./gradlew detekt --rerun-tasks
