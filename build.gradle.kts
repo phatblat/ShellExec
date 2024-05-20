@@ -7,8 +7,6 @@
 // 🛃 Imports
 /* -------------------------------------------------------------------------- */
 
-@file:Suppress("SpellCheckingInspection")
-
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.gradle.api.file.DuplicatesStrategy.INCLUDE
@@ -20,13 +18,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 /* -------------------------------------------------------------------------- */
 
 plugins {
-    // Gradle built-in
-    java
+    id("jacoco")
+    id("java")
+    id("java-gradle-plugin")
+    id("jvm-test-suite")
     id("jvm-toolchains")
-    `jvm-test-suite`
-    jacoco
-    `java-gradle-plugin`
-    `maven-publish`
+    id("maven-publish")
 
     alias(libs.plugins.detekt)
     alias(libs.plugins.kotlin.jvm)
