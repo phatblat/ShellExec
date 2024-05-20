@@ -6,6 +6,7 @@ dirty:
 
 clean:
     ./gradlew clean
+    git clean -xd --force
 
 lint:
     ./gradlew validatePlugins
