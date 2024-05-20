@@ -166,13 +166,6 @@ gradlePlugin {
 // ✅ Test
 /* -------------------------------------------------------------------------- */
 
-tasks.test {
-    jvmArgs(
-        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-        "--add-opens", "java.base/java.util=ALL-UNNAMED"
-    )
-}
-
 tasks.named<Test>("test") {
     useJUnitPlatform {
         includeEngines("spek2", "junit-jupiter")
