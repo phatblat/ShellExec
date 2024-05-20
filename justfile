@@ -5,10 +5,12 @@ clean:
     ./gradlew clean
 
 lint:
-    ./gradlew lint --rerun-tasks
+    ./gradlew validatePlugins
+    ./gradlew detekt --rerun-tasks
 
 build:
     ./gradlew build
 
 test:
     ./gradlew test --rerun
+    ./gradlew testAggregateTestReport

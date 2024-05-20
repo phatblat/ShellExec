@@ -267,30 +267,11 @@ javaLauncher.map {
     }
 }
 
-val lint by tasks.creating(DefaultTask::class) {
-    description = "Runs detekt and validateTaskProperties"
-    group = "Verification"
-    // Does this task come from java-gradle-plugin?
-    dependsOn("validatePlugins")
-    dependsOn("detekt")
-}
-
-val codeQuality by tasks.creating(DefaultTask::class) {
-    description = "Runs all code quality checks."
-    dependsOn("detekt")
-    dependsOn("check")
-    dependsOn(lint)
-}
-
-tasks.check {
-    dependsOn(tasks.named<TestReport>("testAggregateTestReport"))
-}
-
 /* -------------------------------------------------------------------------- */
 // Release
 /* -------------------------------------------------------------------------- */
 
-val release by tasks.creating(DefaultTask::class) {
+val release: Task by tasks.creating {
     description = "Performs release actions."
     doLast { logger.lifecycle("Release task not implemented.") }
 }
