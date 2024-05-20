@@ -21,6 +21,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     // Gradle built-in
+    java
+    id("jvm-toolchains")
+    `jvm-test-suite`
     jacoco
     `java-gradle-plugin`
     `maven-publish`
@@ -66,16 +69,6 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.stdlib.jdk8)
-
-    testImplementation(libs.kotlin.test.asProvider().get())
-    testImplementation(libs.kotlin.test.junit5)
-
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.spek2.dsl)
-
-    testRuntimeOnly(libs.junit.jupiter.engine)
-    testRuntimeOnly(libs.spek2.runner.junit5)
 }
 
 /* -------------------------------------------------------------------------- */
@@ -165,6 +158,26 @@ gradlePlugin {
 /* -------------------------------------------------------------------------- */
 // ✅ Test
 /* -------------------------------------------------------------------------- */
+
+testing {
+    @Suppress("UnstableApiUsage")
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter()
+            dependencies {
+                implementation(libs.kotlin.test.asProvider().get())
+                implementation(libs.kotlin.test.junit5)
+
+                implementation(platform(libs.junit.bom))
+                implementation(libs.junit.jupiter.api)
+                implementation(libs.spek2.dsl)
+
+                runtimeOnly(libs.junit.jupiter.engine)
+                runtimeOnly(libs.spek2.runner.junit5)
+            }
+        }
+    }
+}
 
 tasks.named<Test>("test") {
     useJUnitPlatform {
