@@ -136,10 +136,9 @@ base {
 }
 
 // https://plugins.gradle.org/docs/publish-plugin#examples
+@Suppress("UnstableApiUsage")
 gradlePlugin {
-    @Suppress("UnstableApiUsage")
     website = projectUrl
-    @Suppress("UnstableApiUsage")
     vcsUrl = projectUrl
     description = project.description
 
@@ -149,7 +148,6 @@ gradlePlugin {
             implementationClass = "$javaPackage.$pluginClass"
             displayName = project.name
             description = project.description
-            @Suppress("UnstableApiUsage")
             tags.set(labels)
             version = project.version.toString()
         }
