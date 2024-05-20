@@ -25,6 +25,9 @@ lint:
     ./gradlew detekt --rerun-tasks
     ./gradlew ktlintCheck
 
+format:
+    ./gradlew ktlintFormat
+
 build:
     ./gradlew assemble
 
