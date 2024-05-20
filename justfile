@@ -13,7 +13,7 @@ lint:
     ./gradlew detekt --rerun-tasks
 
 build:
-    ./gradlew build
+    ./gradlew assemble
 
 test:
     ./gradlew test --rerun
