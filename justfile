@@ -18,3 +18,14 @@ build:
 test:
     ./gradlew test --rerun
     ./gradlew testAggregateTestReport
+
+example:
+    ./gradlew --project-dir example/ --continue \
+        customPath \
+        customTask \
+        emptyCommand \
+        errorLogging \
+        failingCommand \
+        helloWorld \
+        lolBoxFortune \
+        successfulCommand || true
