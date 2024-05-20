@@ -8,7 +8,12 @@
 /* -------------------------------------------------------------------------- */
 
 import io.gitlab.arturbosch.detekt.Detekt
-import org.gradle.api.file.DuplicatesStrategy
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import org.gradle.api.attributes.TestSuiteType.UNIT_TEST
+import org.gradle.api.file.DuplicatesStrategy.INCLUDE
+import org.gradle.api.tasks.testing.TestResult.ResultType
+import org.gradle.api.tasks.testing.TestResult.ResultType.*
+import org.gradle.api.tasks.wrapper.Wrapper.DistributionType.BIN
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /* -------------------------------------------------------------------------- */
@@ -16,15 +21,17 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 /* -------------------------------------------------------------------------- */
 
 plugins {
-    // Gradle built-in
-    jacoco
-    `java-gradle-plugin`
-    `maven-publish`
+    id("jacoco")
+    id("java")
+    id("java-gradle-plugin")
+    id("jvm-test-suite")
+    id("jvm-toolchains")
+    id("maven-publish")
+    id("test-report-aggregation")
 
-    // Gradle plugin portal - https://plugins.gradle.org/
-    kotlin("jvm") version "1.5.31"
-    id("com.gradle.plugin-publish") version "0.10.1" //"1.0.0-rc-2"
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.publish)
 }
 
 /* -------------------------------------------------------------------------- */
@@ -39,46 +46,39 @@ val tags: String by project
 val labels = tags.split(",")
 val license: String by project
 
-val jvmTarget = JavaVersion.VERSION_1_8
-
-val commonsExecVersion: String by project
-val junitVersion: String by project
-val spekVersion: String by project
-val detektVersion: String by project
-val jacocoVersion: String by project
-val gradleWrapperVersion: String by project
+val jvmTarget = JavaVersion.VERSION_17
 
 tasks.wrapper {
-    gradleVersion = gradleWrapperVersion
-    distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = libs.versions.gradle.get()
+    distributionType = BIN
 }
 
 /* -------------------------------------------------------------------------- */
 // 👪 Dependencies
 /* -------------------------------------------------------------------------- */
 
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+val javaLauncher = javaToolchains.launcherFor {
+    languageVersion = JavaLanguageVersion.of(17)
+}
+//java.toolchain.languageVersion.get()
+
 repositories.gradlePluginPortal()
 
 dependencies {
-    api("org.apache.commons:commons-exec:$commonsExecVersion")
-    implementation(kotlin("stdlib"))
-    implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect"))
-
-    testImplementation(kotlin("test"))
-    testImplementation(kotlin("test-junit"))
-    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
-    testImplementation("org.junit.platform:junit-platform-runner")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
-    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+    implementation(libs.commons.exec)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlin.stdlib.jdk8)
 }
 
 /* -------------------------------------------------------------------------- */
 // 🏗 Assemble
 /* -------------------------------------------------------------------------- */
 
-tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "$jvmTarget" }
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = jvmTarget.toString()
+}
 
 java {
     sourceCompatibility = jvmTarget
@@ -109,9 +109,9 @@ afterEvaluate {
         dependsOn(updateVersionFile)
         val task = this as AbstractCopyTask
         // Workaround for error 👇🏻
-        // Execution failed for task ':processResources'.
+        // Execution failed for task ":processResources".
         //> Entry VERSION.txt is a duplicate but no duplicate handling strategy has been set. Please refer to https://docs.gradle.org/7.4.2/dsl/org.gradle.api.tasks.Copy.html#org.gradle.api.tasks.Copy:duplicatesStrategy for details.
-        task.duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        task.duplicatesStrategy = INCLUDE
     }
 }
 
@@ -132,45 +132,105 @@ artifacts.add("archives", javadocJar)
 
 base {
     // at.phatbl.shellexec-1.0.0.jar
-    archivesBaseName = artifactId
+    archivesName = artifactId
 }
 
-gradlePlugin.plugins.create(artifactId) {
-    id = javaPackage
-    implementationClass = "$javaPackage.$pluginClass"
-}
-
-pluginBundle {
+// https://plugins.gradle.org/docs/publish-plugin#examples
+gradlePlugin {
+    @Suppress("UnstableApiUsage")
     website = projectUrl
+    @Suppress("UnstableApiUsage")
     vcsUrl = projectUrl
     description = project.description
 
-    (plugins) {
-        artifactId {
+    plugins {
+        create(artifactId) {
             id = javaPackage
+            implementationClass = "$javaPackage.$pluginClass"
             displayName = project.name
-            tags = labels
+            description = project.description
+            @Suppress("UnstableApiUsage")
+            tags.set(labels)
             version = project.version.toString()
         }
     }
-    mavenCoordinates.artifactId = artifactId
 }
 
 /* -------------------------------------------------------------------------- */
 // ✅ Test
 /* -------------------------------------------------------------------------- */
 
-tasks.test {
-    jvmArgs(
-        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-        "--add-opens", "java.base/java.util=ALL-UNNAMED"
-    )
+testing {
+    @Suppress("UnstableApiUsage")
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter()
+            dependencies {
+                implementation(libs.kotlin.test.asProvider().get())
+                implementation(libs.kotlin.test.junit5)
+
+                implementation(platform(libs.junit.bom))
+                implementation(libs.junit.jupiter.api)
+                implementation(libs.spek2.dsl)
+
+                runtimeOnly(libs.junit.jupiter.engine)
+                runtimeOnly(libs.spek2.runner.junit5)
+            }
+        }
+    }
+}
+
+tasks.named<Test>("test") {
+    useJUnitPlatform {
+        includeEngines("spek2", "junit-jupiter")
+    }
+    testLogging {
+        showCauses = false
+        showExceptions = false
+        showStackTraces = false
+        showStandardStreams = false
+
+        val ansiReset = "\u001B[0m"
+        val ansiGreen = "\u001B[32m"
+        val ansiRed = "\u001B[31m"
+        val ansiYellow = "\u001B[33m"
+
+        fun getColoredResultType(resultType: ResultType): String =
+            when (resultType) {
+                SUCCESS -> "$ansiGreen $resultType $ansiReset"
+                FAILURE -> "$ansiRed $resultType $ansiReset"
+                SKIPPED -> "$ansiYellow $resultType $ansiReset"
+            }
+
+        afterTest(
+            KotlinClosure2({ desc: TestDescriptor, result: TestResult ->
+                println("${desc.className} | ${desc.displayName} = ${getColoredResultType(result.resultType)}")
+            })
+        )
+
+        afterSuite(
+            KotlinClosure2({ desc: TestDescriptor, result: TestResult ->
+                if (desc.parent == null) {
+                    println("Result: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)")
+                }
+            })
+        )
+    }
+}
+
+reporting {
+    reports {
+        @Suppress("UnstableApiUsage")
+        val testAggregateTestReport by getting(AggregateTestReport::class) {
+            testType = UNIT_TEST
+        }
+    }
 }
 
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html#sec:jacoco_getting_started
 jacoco {
-    toolVersion = jacocoVersion
-    reportsDirectory.set(file("$buildDir/reports/jacoco"))
+    toolVersion = libs.versions.jacoco.get()
+    reportsDirectory.set(layout.buildDirectory.dir("reports/jacoco"))
 }
 
 tasks.jacocoTestReport {
@@ -185,22 +245,28 @@ tasks.jacocoTestReport {
 
 val codeCoverageReport by tasks.creating(JacocoReport::class) {
     dependsOn("test")
-    // sourceSets(sourceSets["main"])
 }
 
 /* -------------------------------------------------------------------------- */
 // 🔍 Code Quality
 /* -------------------------------------------------------------------------- */
 
-// https://arturbosch.github.io/detekt/kotlindsl.html
+// https://detekt.dev/
 detekt {
-    toolVersion = detektVersion
-    config = files("$projectDir/detekt.yml")
+    toolVersion = libs.versions.detekt.get()
+    config.setFrom("$projectDir/detekt.yml")
 }
 
-tasks.withType<Detekt> {
-    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
-    exclude(".*test.*,.*/resources/.*,.*/tmp/.*")
+javaLauncher.map {
+    tasks.withType<Detekt>().configureEach {
+        jvmTarget = java.toolchain.languageVersion.get().toString()
+        jdkHome.set(file(it.executablePath))
+        exclude(".*test.*,.*/resources/.*,.*/tmp/.*")
+    }
+    tasks.withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = java.toolchain.languageVersion.get().toString()
+        jdkHome.set(file(it.executablePath))
+    }
 }
 
 val lint by tasks.creating(DefaultTask::class) {
@@ -213,10 +279,13 @@ val lint by tasks.creating(DefaultTask::class) {
 
 val codeQuality by tasks.creating(DefaultTask::class) {
     description = "Runs all code quality checks."
-    group = "🚇 Tube"
     dependsOn("detekt")
     dependsOn("check")
     dependsOn(lint)
+}
+
+tasks.check {
+    dependsOn(tasks.named<TestReport>("testAggregateTestReport"))
 }
 
 /* -------------------------------------------------------------------------- */
@@ -225,7 +294,6 @@ val codeQuality by tasks.creating(DefaultTask::class) {
 
 val release by tasks.creating(DefaultTask::class) {
     description = "Performs release actions."
-    group = "🚇 Tube"
     doLast { logger.lifecycle("Release task not implemented.") }
 }
 
@@ -247,6 +315,5 @@ publishing {
 
 val deploy: Task by tasks.creating {
     description = "Deploys plugin to the Gradle plugin portal."
-    group = "🚇 Tube"
     dependsOn("publishPlugins")
 }

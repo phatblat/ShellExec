@@ -11,34 +11,33 @@ A simpler extension point than [`Exec`](https://docs.gradle.org/current/dsl/org.
 
 :warning: Not compatible with `Exec` tasks yet (see [#11](https://github.com/phatblat/ShellExec/issues/11)), but the current API is very similar.
 
-## Example `build.gradle`
+## Example `build.gradle.kts`
 
-```gradle
-buildscript {
-    repositories.jcenter()
-    dependencies.classpath 'at.phatbl:shellexec:+'
-}
-
+```kts
 import at.phatbl.shellexec.ShellExec
 
-task lolCowFortune(type: ShellExec) {
-    command "fortune | cowsay | lolcat"
+buildscript {
+    repositories.gradlePluginPortal()
+    dependencies.classpath("at.phatbl:shellexec:+")
+}
+
+val lolBoxFortune by registering(ShellExec::class) {
+    command = "fortune | boxes --design parchment --no-color | lolcat --force"
 }
 ```
+
+> Note that the `boxes` and `lolcat` tools need to be installed for the above `lolBoxFortune` to work.
 
 ### Task Output
 
 ```text
-> Task :lolCowFortune
- _________________________________________
-/ Do not clog intellect's sluices with    \
-\ bits of knowledge of questionable uses. /
- -----------------------------------------
-        \   ^__^
-         \  (oo)\_______
-            (__)\       )\/\
-                ||----w |
-                ||     ||
+> Task :lolBoxFortune
+ ____________
+/\           \
+\_| Ship it. |
+  |          |
+  |   _______|_
+   \_/_________/
 
 
 BUILD SUCCESSFUL in 2s

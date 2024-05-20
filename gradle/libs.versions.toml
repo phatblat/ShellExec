@@ -1,0 +1,27 @@
+# https://docs.gradle.org/current/userguide/platforms.html#sub:conventional-dependencies-toml
+[versions]
+commons-exec = "1.4.0"
+detekt = "1.23.6"
+gradle = "8.7"
+kotlin = "1.9.22"
+jacoco = "0.8.12"
+junit = "5.10.2"
+spek2 = "2.0.19"
+
+[libraries]
+commons-exec = { module = "org.apache.commons:commons-exec", version.ref = "commons-exec" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+spek2-dsl = { module = "org.spekframework.spek2:spek-dsl-jvm", version.ref = "spek2" }
+spek2-runner-junit5 = { module = "org.spekframework.spek2:spek-runner-junit5", version.ref = "spek2" }
+
+[plugins]
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+publish = { id = "com.gradle.plugin-publish", version = "1.2.1" }
